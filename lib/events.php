@@ -39,7 +39,6 @@
 	
 	function file_tools_object_handler_delete($event, $type, $object)
 	{
-	
 		if(!empty($object) && ($object instanceof ElggObject))
 		{
 			if($object->getSubtype() == FILE_TOOLS_SUBTYPE)

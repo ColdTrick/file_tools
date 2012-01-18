@@ -1,7 +1,7 @@
 <?php
 
 	global $CONFIG;
-
+	
 	define("FILE_TOOLS_SUBTYPE", 		"folder");
 	define("FILE_TOOLS_RELATIONSHIP", 	"folder_of");
 	define("FILE_TOOLS_BASEURL", 		$CONFIG->wwwroot."pg/file_tools/");
@@ -12,8 +12,26 @@
 
 	function file_tools_init()
 	{
+		if(!isloggedin())
+		{			
+			if($_REQUEST['handler'] == 'file')
+			{
+				$page = explode('/', $_REQUEST['page']);
+				if($page[0] == 'read' && isset($page[1]))
+				{
+					if(!($entity = get_entity($page[1])))
+					{
+						gatekeeper();
+					}
+				}
+			}
+		}
+		
+		elgg_extend_view("metatags", "file_tools/list/metatags");
+		
 		// extend CSS
 		elgg_extend_view("css", "file_tools/css");
+		elgg_extend_view("css", "fancybox/css");
 		
 		// extend object view of file
 		elgg_extend_view("object/file", "file_tools/extend/file", 499);
@@ -52,7 +70,7 @@
 		$context = get_context();
 		$page_owner = page_owner_entity();
 		
-		if($context == "file")
+		/*if($context == "file")
 		{
 			elgg_extend_view("categories", "file_tools/extend/categories");
 		}
@@ -78,17 +96,56 @@
 					add_submenu_item(elgg_echo("file_tools:menu:group"), $CONFIG->wwwroot . "pg/file_tools/list/" . $page_owner->getGUID());
 				}
 			}
-		}
+		}*/
 		
-		/*
-		 * import 
-		 */
-		add_submenu_item(elgg_echo('file:all'), $CONFIG->wwwroot . "pg/file/all/");
-		if (can_write_to_container($_SESSION['guid'], page_owner()) && isloggedin())
+		//echo $context;
+		
+		if($context == "file")
 		{
-			add_submenu_item(elgg_echo('file:upload'), $CONFIG->wwwroot . "pg/file/new/". $page_owner->username);
+			if(get_plugin_setting("user_folder_structure", "file_tools") != "no")
+			{
+				remove_submenu_item(elgg_echo('file:upload'));
+				add_submenu_item(elgg_echo('file:upload'), $CONFIG->wwwroot . "pg/file_tools/file/new/" . $page_owner->username);
+			}
 			add_submenu_item(elgg_echo('file_tools:upload:new'), $CONFIG->wwwroot . "pg/file_tools/import/zip/".$page_owner->username);
 		}
+
+		//add_submenu_item(elgg_echo('file:all'), $CONFIG->wwwroot . "pg/file/all/");
+		//echo $context;
+		/*if(in_array($context, array('file', 'search')))
+		{
+			if (can_write_to_container($_SESSION['guid'], page_owner()) && isloggedin())
+			{
+				if(get_plugin_setting("user_folder_structure", "file_tools") != "no")
+				{
+					//remove_submenu_item(elgg_echo('file:upload'));
+					//add_submenu_item(elgg_echo('file:upload'), $CONFIG->wwwroot . "pg/file_tools/file/new/". $page_owner->username);
+				}
+				else
+				{
+					if ((page_owner() == $_SESSION['guid'] || !page_owner()) && isloggedin())
+					{
+						//add_submenu_item(sprintf(elgg_echo("file:yours"),$page_owner->name), $CONFIG->wwwroot . "pg/file/owner/" . $page_owner->username);
+					}
+					elseif (page_owner())
+					{
+						//add_submenu_item(sprintf(elgg_echo("file:user"),$page_owner->name), $CONFIG->wwwroot . "pg/file/owner/" . $page_owner->username);
+					}
+					
+					//add_submenu_item(elgg_echo('file:upload'), $CONFIG->wwwroot . "pg/file/new/". $page_owner->username);
+				}
+				
+				//add_submenu_item(elgg_echo('file_tools:upload:new'), $CONFIG->wwwroot . "pg/file_tools/import/zip/".$page_owner->username);
+			}
+		}
+			
+		if(($context == "groups") && ($page_owner instanceof ElggGroup) && ($page_owner->file_enable != "no"))
+		{
+			if($page_owner instanceof ElggGroup)
+			{
+				//add_submenu_item(elgg_echo("file_tools:menu:group"), $CONFIG->wwwroot . "pg/file_tools/list/" . $page_owner->getGUID());
+			}
+		}*/		
 	}
 	
 	function file_tools_page_handler($page)
@@ -138,9 +195,20 @@
 			case "import":
 				if(!empty($page[2]))
 				{
+					set_input("page_owner", $page[1]);
 					set_input("username", $page[2]);
 				}
 				include(dirname(__FILE__) . "/pages/import/zip.php");
+				break;
+			case "file":
+				if($page[1] == 'new')
+				{
+					include(dirname(__FILE__) . "/pages/file/new.php");
+				}
+				elseif($page[1] == 'download')
+				{
+					include(dirname(__FILE__) . "/pages/file/download.php");
+				}
 				break;
 			case "proc":
 				if(file_exists(dirname(__FILE__)."/procedures/".$page[1]."/".$page[2].".php"))
@@ -207,11 +275,11 @@
 	
 	// register actions
 	register_action("file_tools/folder/edit", false, dirname(__FILE__) . "/actions/folder/edit.php");
-	register_action("file_tools/folder/delete", false, dirname(__FILE__) . "/actions/folder/delete.php");
-	
+	register_action("file_tools/folder/delete", false, dirname(__FILE__) . "/actions/folder/delete.php");	
 	
 	//register_action("file_tools/import/upload", false,dirname(__FILE__)."/actions/import/upload.php");
 	register_action("file_tools/import/zip", false,dirname(__FILE__)."/actions/import/zip.php");
 	register_action("file_tools/folder/delete", false,dirname(__FILE__)."/actions/folder/delete.php");
+	register_action("file_tools/file/hide", false,dirname(__FILE__)."/actions/file/hide.php");
 	/*register_action("file_tools/import/delete", false,dirname(__FILE__)."/actions/zip/delete.php");
 	register_action("file_tools/import/bulkdelete", false,dirname(__FILE__)."/actions/zip/bulkdelete.php");*/

@@ -3,9 +3,6 @@
 	$files = $vars["files"];
 	$folder = $vars["folder"];
 	
-	$old_context = get_context();
-	set_context('search');
-	
 	$folder_content = elgg_view("file_tools/list/folder", $vars);	
 	
 	if(!empty($files))
@@ -16,18 +13,36 @@
 		
 		if(!empty($folder))
 		{
-			$baseurl .= "/" . $folder->guid;
+			$baseurl .= "/" . $folder->getGUID();
 		}
 
 		$files_content = elgg_view_entity_list($files, $vars, 0, false, false, false);
-		
+
+		/*$files_content = elgg_view('entities/entity_list',array(
+      		'entities' => $files,
+			'count' => count($files),
+			'offset' => 0,
+			'limit' => 0,
+			'baseurl' => $baseurl,
+			'fullview' => false,
+			'context' => get_context(),
+			'viewtypetoggle' => true,
+			'viewtype' => get_input('search_viewtype','list'),
+			'pagination' => false
+		));*/	
 	}
 	
-	set_context($old_context);
 ?>
 <div id="file_tools_list_files">
 	<div id="file_tools_list_files_overlay"></div>
-	<?php echo $folder_content . $files_content; ?>
+	<?php echo $folder_content . $files_content;
+	
+	if(!$files_content)
+	{
+		echo elgg_view("page_elements/contentwrapper", array("body" => elgg_echo("file_tools:list:files:none")));
+	}
+	
+	?>
 </div>
 
 <?php 

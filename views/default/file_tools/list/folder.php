@@ -44,7 +44,7 @@
 	
 <?php 
 
-	if($sub_folders = file_tools_get_sub_folders($folder, $vars['sort_by'], $vars['direction']))
+	if($sub_folders = file_tools_get_sub_folders($folder))
 	{
 		echo $sub_folders;
 	}

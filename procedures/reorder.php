@@ -6,9 +6,9 @@
 
 	if(isloggedin())
 	{
-		$folder_guid = get_input("folder_guid", 0);
-		$parent_guid = get_input("parent_guid", 0);
-		$order = str_replace("::", ",", get_input("order"));
+		$folder_guid = (int)get_input("folder_guid", 0);
+		$parent_guid = (int)get_input("parent_guid", 0);
+		$order = str_replace("file_tools_tree_element_", "", str_replace("::", ",", get_input("order")));
 		
 		if(!empty($folder_guid) && (!empty($parent_guid) || $parent_guid == 0))
 		{
@@ -35,6 +35,7 @@
 				{
 					// set new parent_guid
 					$folder->parent_guid = $parent_guid;
+					$folder->save();
 				}
 			}
 			
@@ -64,5 +65,3 @@
 			}
 		}
 	}
-
-?>

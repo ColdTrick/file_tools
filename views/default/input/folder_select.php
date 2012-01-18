@@ -1,6 +1,6 @@
 <?php 
 
-	$folder_guid = get_input('folder_guid');
+	$folder_guid = (int)get_input('folder_guid');
 
 	$owner_guid = $vars["owner_guid"];
 
@@ -26,6 +26,7 @@
 	else
 	{
 		$value = $folder_guid;
+		$folder_guid = null;
 	}
 	
 	if(empty($owner_guid))
@@ -39,9 +40,9 @@
 	
 	if(!empty($folders))
 	{
-		$options .= file_tools_build_select_options($folders, $value, 0, $folder_guid);
+		$options .= file_tools_build_select_options($folders, $value, 1, $folder_guid);
 	}
-
+	
 ?>
 <select name="<?php echo $name; ?>" id="<?php echo $id; ?>" class="<?php echo $class; ?>" <?php echo $js; ?>>
 	<?php echo $options; ?>

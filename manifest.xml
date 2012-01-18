@@ -8,3 +8,24 @@
 	<field key="licence" value="GNU Public License version 2" />
 	<field key="elgg_version" value="2010040201" />
 </plugin_manifest>
+
+<!-- 
+
+======================
+Features
+======================
+- Folders for users and for groups
+- Group admin can control who can manage folders in a group
+- Completely (forward and backward) compatible with the Folder plugin
+- Order files into folders
+- Drag files onto folders
+- Drag and drop folders to rearange folder structure
+- Delete a folder including subfolders (and optional all files in it)
+- Update folder access on all subfolders (optional including all files) 
+- Infinite folder structure (no limitations in length and depth)
+- Breadcrumb on file full view
+- Switching of view type (list/gallery)
+- Take over of default file menu options
+
+
+ -->

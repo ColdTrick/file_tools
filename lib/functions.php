@@ -1,4 +1,109 @@
-<?php 
+<?php
+
+	function file_tools_get_file_extension($file)
+	{
+		$result = '';
+		if($file->getSubtype() == 'file')
+		{
+			if($filename = $file->getFilename())
+			{
+				$exploded_filename = explode('.', $filename);
+				
+				$result = end($exploded_filename);
+			}
+		}
+		
+		return strtolower($result);
+	}
+
+	function file_tools_get_widget_files($owner)
+	{
+		$options = array(
+			"type" => "object",
+			"subtype" => 'file',
+			"owner_guid" => $owner,
+			"limit" => false,
+			"metadata_name_value_pairs" => array('name' => 'show_in_widget', 'value' => '0', 'operand' => '>')
+		);
+		
+		if($entities = elgg_get_entities_from_metadata($options))
+		{
+			return $entities;
+		}
+		
+		return false;
+	}
+	
+	function file_tools_get_zip_structure($folder, $prepend)
+	{
+		global $CONFIG;
+		$entries = array();
+		
+		if($prepend){
+			$prepend .= '/';
+		}
+		
+		if(!$folder)
+		{
+			$container_guid = page_owner();
+			$parent_guid = 0;
+		}
+		else
+		{
+			$container_guid = $folder->getContainer();
+			$parent_guid = $folder->getGUID();
+		}
+		
+		$options = array(
+			"type" => "object",
+			"subtype" => FILE_TOOLS_SUBTYPE,
+			//"container_guid" => $container_guid,
+			"limit" => false,
+			"metadata_name" => "parent_guid",
+			"metadata_value" => $parent_guid,
+		);
+		
+		// voor de hoogste map de sub bestanden nog ophalen		
+		if($entities = elgg_get_entities_from_metadata($options))
+		{
+			foreach($entities as $subfolder)
+			{
+				$title = $prepend . $subfolder->title;
+				$entries[] = array('directory' => $title, 'files' => file_tools_has_files($subfolder->getGUID()));
+				
+				$entries = array_merge($entries, file_tools_get_zip_structure($subfolder, $title));
+			}
+		}
+		
+		return $entries;
+	}
+	
+	function file_tools_has_files($folder)
+	{
+		$files_options = array(
+			"type" => "object",
+			"subtype" => "file",
+			"limit" => false,
+			//"container_guid" => get_loggedin_userid(),
+			"relationship" => FILE_TOOLS_RELATIONSHIP,
+			"relationship_guid" => $folder,
+			"inverse_relationship" => false			
+		);
+		
+		$file_guids = array();
+		
+		if($files = elgg_get_entities_from_relationship($files_options))
+		{
+			foreach($files as $file)
+			{
+				$file_guids[] = $file->getGUID();
+			}
+			
+			return $file_guids;
+		}
+		
+		return false;
+	}
 
 	function file_tools_get_folders($container_guid = 0)
 	{
@@ -17,7 +122,7 @@
 				"container_guid" => $container_guid,
 				"limit" => false
 			);
-			
+
 			if($folders = elgg_get_entities($options))
 			{
 				$parents = array();
@@ -133,7 +238,7 @@
 	}
 	
 	function file_tools_sort_folders($folders, $parent_guid = 0)
-	{
+	{		
 		$result = false;
 		
 		if(array_key_exists($parent_guid, $folders))
@@ -167,7 +272,7 @@
 		return $result;
 	}
 	
-	function file_tools_get_sub_folders($folder = false, $order_by = null, $direction = null)
+	function file_tools_get_sub_folders($folder = false)
 	{
 		global $CONFIG;
 		$result = false;
@@ -190,16 +295,8 @@
 			"limit" => false,
 			"metadata_name" => "parent_guid",
 			"metadata_value" => $parent_guid,
+			"order_by_metadata" => array('name' => 'order', 'direction' => 'ASC')
 		);
-		
-		if($order_by && $direction)
-		{
-			if($order_by != 'simpletype')
-			{
-				$options["joins"][] = "JOIN {$CONFIG->dbprefix}objects_entity oe on oe.guid = e.guid";
-				$options["order_by"] = $order_by . ' ' . $direction;
-			}
-		}
 		
 		if($folders = elgg_list_entities_from_metadata($options))
 		{
@@ -225,14 +322,14 @@
 		elseif(!empty($folder["children"]))
 		{
 			
-			$result .= "<li><a id='" . $folder["folder"]->getGUID() . "' title='" . $folder["folder"]->title . "' href='#'>" . $folder["folder"]->title . "</a>";
+			$result .= "<li><a id='file_tools_tree_element_" . $folder["folder"]->getGUID() . "' title='" . $folder["folder"]->title . "' href='javascript:void(0);'>" . $folder["folder"]->title . "</a>";
 			$result .= file_tools_display_folders($folder["children"]);
 			$result .= "</li>";
 		}
 		elseif(array_key_exists("folder", $folder))
 		{
 			$folder = $folder["folder"];
-			$result .= "<li><a id='" . $folder->getGUID() . "' title='" . $folder->title . "' href='#'>" . $folder->title . "</a></li>";
+			$result .= "<li><a id='file_tools_tree_element_" . $folder->getGUID() . "' title='" . $folder->title . "' href='javascript:void(0);'>" . $folder->title . "</a></li>";
 		}
 		
 		return $result;
@@ -349,7 +446,7 @@
 	 * 
 	 */
 	
-	function file_tools_allowed_extensions()
+	function file_tools_allowed_extensions($zip = false)
 	{
 		$result = false;
 		
@@ -368,7 +465,14 @@
 			$result = array('txt','jpg','jpeg','png','bmp','gif','pdf','doc','docx','xls','xlsx','pptx');
 		}
 		
-		return $result;
+		if(!$zip)
+		{
+			return $result;
+		}
+		
+		$result = implode(';*.', $result);
+		
+		return '*.'.$result;
 	}
 	
 	function file_tools_trim_array_values(&$value) 

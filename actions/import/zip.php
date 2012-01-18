@@ -2,13 +2,14 @@
 
 	global $CONFIG;
 	
-	$container_guid = (int)get_input('container_guid');
+	$page_owner = get_input('page_owner', get_loggedin_userid());
+	$container_guid = (int)get_input('container_guid', $page_owner);
 
 	set_time_limit(0);
 
 	$allowed_extensions = file_tools_allowed_extensions();
 	
-	$parent_guid = (int)get_input('file_tools_parent_guid');
+	$parent_guid = (int)get_input('parent_guid');
 	
 	if (isset($_FILES['zip_file']) && !empty($_FILES['zip_file']['name'])) 
 	{
@@ -40,4 +41,4 @@
 		register_error(elgg_echo('file_tools:error:nofilefound'));
 	}
 	
-	forward(REFERER);
+	forward('pg/file/owner/' . get_entity($page_owner)->username . '#' . $parent_guid);

@@ -1,4 +1,6 @@
 <?php
+	$page_owner = $vars["page_owner_entity"];
+	
 	echo elgg_view('input/securitytoken');
 	
 	$form_body .= '<label>'.elgg_echo("file_tools:upload:form:choose").'</label><br />';
@@ -6,11 +8,14 @@
 	
 	
 	$folders = file_tools_get_folders(page_owner_entity()->guid);
-	$options = file_tools_build_select_options($folders, get_input('folder_guid'));
 	
-	$form_body .= '<select name="file_tools_parent_guid">' . $options . '</select><br />';
+	$form_body .= '<label>'.elgg_echo("file_tools:forms:edit:parent") . '</label>	<br />';
+	$form_body .= elgg_view("input/folder_select", array("internalname" => "parent_guid", "value" => $tags, "internalid" => "file_tools_file_parent_guid")) . '<br />';
 	
-	$action = $vars['url'].'action/file_tools/import/zip';
+	$form_body .= '<label>' . elgg_echo('access') . '</label><br />';
+	$form_body .= elgg_view('input/access', array('internalname' => 'access_id', 'internalid' => 'file_tools_file_access_id')) . '<br />';
+	
+	$action = $vars['url'] . 'action/file_tools/import/zip';
 
 	$form_body .= elgg_view('input/hidden', array('internalname' => 'container_guid', 'value' => page_owner_entity()->guid));
 	

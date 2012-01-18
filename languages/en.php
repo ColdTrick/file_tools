@@ -1,7 +1,9 @@
 <?php 
 
 	$english = array(
-		'file_tools' => "File Tree",
+		'file_tools' => "File Tools",
+	
+		'file_tools:file:actions' => 'Actions',
 	
 		'file_tools:list:sort:type' => 'Type',
 		'file_tools:list:sort:time_created' => 'Time created',
@@ -50,11 +52,12 @@
 		'file_tools:list:tree:info:11' => "Dragging of files is only available in the list view, not in the gallery view!",
 		'file_tools:list:tree:info:12' => "You can update the access level on all subfolders and even (optional) on all files when editing a folder!",
 	
-		'file_tools:list:files:options' => 'Options',
 		'file_tools:list:files:options:sort_title' => 'Sorting',
 		'file_tools:list:files:options:view_title' => 'View',
 	
 		'file_tools:usersettings:time' => 'Time display',
+		'file_tools:usersettings:time:description' => 'Change the way the file/folder time is displayed ',
+		'file_tools:usersettings:time:default' => 'Default time display',
 		'file_tools:usersettings:time:date' => 'Date',
 		'file_tools:usersettings:time:days' => 'Days ago',
 		
@@ -66,6 +69,7 @@
 		'file_tools:forms:edit:parent' => "Select a parent folder",
 		'file_tools:forms:edit:change_children_access' => "Update access on all subfolders",
 		'file_tools:forms:edit:change_files_access' => "Update access on all files in this folder (and all subfolders if selected)",
+		'file_tools:forms:browse' => 'Browse..',
 		
 		'file_tools:folder:delete:confirm_files' => "Do you also wish to delete all files in the removed (sub)folders",
 	
@@ -113,23 +117,34 @@
 		//messages
 		'file_tools:error:fileuploadsuccess' => 'Zip file uploaded and extracted successfully.',
 		'file_tools:error:zipdeletesuccess' => 'Zip and it\'s files successfully deleted.',
-	
+
 		//settings
 		'file_tools:settings:allowed_extensions' => 'Allowed extensions (comma seperated)',
 	
 		'selectall' => 'select all',
+	
+		'file_tools:settings:user_folder_structure' => 'Use folder structure',
+	
+		'file:type:application' => 'Application',
+		'file:type:text' => 'Text',
 	);
 
 	add_translation("en", $english);
 	
 	// widget translation
 	$widget = array(
-		'widgets:file_tools:title' => "File Folders",
+		'widgets:file_tools:title' => "Featured Files",
 		'widgets:file_tools:description' => "Showcase your File folders",
 		
 		'widgets:file_tools:edit:select' => "Select which folders to display",
 		'widgets:file_tools:no_folders' => "No folders configured",
+		'widgets:file_tools:no_files' => "No files configured",
 		'widgets:file_tools:more' => "More file folders",
+	
+		'widget:file_tools:show_file' => 'Feature file (widget)',
+		'widget:file_tools:hide_file' => 'Unfeature file',
+	
+		'widgets:file_tools:more_files' => 'More files'
 	);
 	
 	add_translation("en", $widget);

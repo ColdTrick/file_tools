@@ -6,8 +6,8 @@
 
 	if(isloggedin())
 	{
-		$file_guid = get_input("file_guid", 0);
-		$folder_guid = get_input("folder_guid", 0);
+		$file_guid 		= (int)get_input("file_guid", 0);
+		$folder_guid 	= (int)str_replace('file_tools_tree_element_', '', get_input("folder_guid", 0));
 		
 		if(!empty($file_guid))
 		{
@@ -48,6 +48,22 @@
 						$file->parent_guid = $folder_guid;
 					}
 				}
+				else
+				{
+					echo 'cant edit<br />';
+				}
+			}
+			else
+			{
+				echo 'cant get entity<br />';
 			}
 		}
+		else
+		{
+			echo 'no fileguid<br />';
+		}
+	}
+	else
+	{
+		echo 'cant login<br />';
 	}

@@ -12,7 +12,7 @@
 	$folders = elgg_get_entities_from_metadata($folder_options);
 	$folder = $folders[0];*/
 	
-	echo "<div id='file_tools_breadcrumbs' class='contentWrapper filerepo_file'>";	
+	echo "<div id='file_tools_breadcrumbs'>";	
 	echo "<ul>";		
 	echo "<li><a href='" . $vars["url"] . "pg/file_tools/list/" . page_owner() . "'>" . elgg_echo("file_tools:list:folder:main") . "</a></li>";
 	
@@ -67,8 +67,11 @@
 		$edit_url = $vars["url"] . "pg/file_tools/folder/edit/" . $folder->getGUID();
 		$delete_url = $vars["url"] . "action/file_tools/folder/delete?folder_guid=" . $folder->getGUID();
 		
+		
+		$js = "onclick=\"if(confirm('". elgg_echo('question:areyousure') . "')){ file_tools_remove_folder_files(this); return true;} else { return false; }\""; 
+		
 		$edit_link = elgg_view("output/url", array("href" => $edit_url, "text" => elgg_echo("edit")));		
-		$delete_link = elgg_view("output/confirmlink", array("href" => $delete_url, "text" => elgg_echo("delete")));
+		$delete_link = elgg_view("output/url", array("href" => $delete_url, "text" => elgg_echo("delete"), "js" => $js, "is_action" => true));
 				
 		echo '<div id="file_tools_folder_preview">';
 
@@ -76,7 +79,12 @@
 		echo elgg_echo('description') . ': ' . $folder->description . '<br />';
 		echo elgg_echo('file_tools:list:sort:time_created') . ': ' . elgg_view_friendly_time($folder->time_created) . '<br />';
 		
-		echo $edit_link . ' ' . $delete_link . '</div>';
+		if($folder->canEdit())
+		{
+			echo $edit_link . ' | ' . $delete_link;
+		}
+		
+		echo '</div>';
 	}
 	
 	echo "<div class='clearfloat'></div>";

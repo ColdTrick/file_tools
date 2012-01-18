@@ -1,5 +1,7 @@
 <?php 
 
+	set_context('file');
+
 	gatekeeper();	
 
 	$page_owner = page_owner_entity();
