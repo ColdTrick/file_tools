@@ -17,19 +17,6 @@
 		}
 
 		$files_content = elgg_view_entity_list($files, $vars, 0, false, false, false);
-
-		/*$files_content = elgg_view('entities/entity_list',array(
-      		'entities' => $files,
-			'count' => count($files),
-			'offset' => 0,
-			'limit' => 0,
-			'baseurl' => $baseurl,
-			'fullview' => false,
-			'context' => get_context(),
-			'viewtypetoggle' => true,
-			'viewtype' => get_input('search_viewtype','list'),
-			'pagination' => false
-		));*/	
 	}
 	
 ?>
@@ -51,7 +38,7 @@ if(page_owner_entity()->canEdit() || (page_owner_entity() instanceof ElggGroup &
 <script type="text/javascript">
 
 	$(function(){
-		$("#file_tools_list_files .file_tools_file, #file_tools_list_files .file_tools_folder").draggable({
+		$("#file_tools_list_files .file_tools_file").draggable({
 			"revert": "invalid",
 			"opacity": 0.7,
 			"cursor": "move"
@@ -61,4 +48,3 @@ if(page_owner_entity()->canEdit() || (page_owner_entity() instanceof ElggGroup &
 </script>
 <?php 
 } 
-?>

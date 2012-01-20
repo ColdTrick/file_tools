@@ -10,9 +10,10 @@
 	$class 		= $vars["class"];
 	
 	$value 		= $vars["value"];
+	$current_folder	= $vars["folder"];
 	
 	$type 		= $vars['type'];
-	
+
 	if($type == 'folder')
 	{
 		if(!$value)
@@ -40,7 +41,11 @@
 	
 	if(!empty($folders))
 	{
-		$options .= file_tools_build_select_options($folders, $value, 1, $folder_guid);
+		$current_folder_guid = false;
+		if($vars["folder"]){
+			$current_folder_guid = $vars["folder"]->getGUID();
+		}
+		$options .= file_tools_build_select_options($folders, $value, 1, $current_folder_guid);
 	}
 	
 ?>

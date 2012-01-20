@@ -16,24 +16,6 @@
 		return strtolower($result);
 	}
 
-	function file_tools_get_widget_files($owner)
-	{
-		$options = array(
-			"type" => "object",
-			"subtype" => 'file',
-			"owner_guid" => $owner,
-			"limit" => false,
-			"metadata_name_value_pairs" => array('name' => 'show_in_widget', 'value' => '0', 'operand' => '>')
-		);
-		
-		if($entities = elgg_get_entities_from_metadata($options))
-		{
-			return $entities;
-		}
-		
-		return false;
-	}
-	
 	function file_tools_get_zip_structure($folder, $prepend)
 	{
 		global $CONFIG;
@@ -172,13 +154,13 @@
 		{
 			foreach($folder as $folder_item)
 			{
+				
 				$result .= file_tools_build_select_options($folder_item, $selected, $niveau, $skip);
 			}
 		}
 		else
 		{
 			$folder_item = $folder["folder"];
-			
 			if($skip != $folder_item->getGUID())
 			{
 				if($selected == $folder_item->getGUID())
@@ -195,6 +177,7 @@
 					$result .= file_tools_build_select_options($folder["children"], $selected, $niveau + 1, $skip);
 				}
 			}
+			
 		}
 
 		return $result;
@@ -403,7 +386,7 @@
 	function file_tools_replace_page_handler($handler, $function)
 	{
 		global $CONFIG;
-		
+	
 		if(!empty($CONFIG->pagehandler))
 		{
 			if(array_key_exists($handler, $CONFIG->pagehandler))
@@ -412,7 +395,7 @@
 				{
 					$CONFIG->backup_pagehandler = array();
 				}
-				
+	
 				$CONFIG->backup_pagehandler[$handler] = $CONFIG->pagehandler[$handler];
 			}
 		}
@@ -423,28 +406,24 @@
 	function file_tools_fallback_page_handler($page, $handler)
 	{
 		global $CONFIG;
-		
+	
 		$result = false;
-		
+	
 		if(!empty($CONFIG->backup_pagehandler))
 		{
 			if(array_key_exists($handler, $CONFIG->backup_pagehandler))
 			{
 				$function = $CONFIG->backup_pagehandler[$handler];
-				
+	
 				if(is_callable($function))
 				{
 					$result = $function($page, $handler);
 				}
 			}
 		}
-		
+	
 		return $result;
 	}
-
-	/*
-	 * 
-	 */
 	
 	function file_tools_allowed_extensions($zip = false)
 	{
@@ -967,13 +946,13 @@
 								
 								$filehandler->close();
 								
-								add_entity_relationship($container_guid, 'folder_of', $filehandler->getGUID());
+								add_entity_relationship($container_guid, FILE_TOOLS_RELATIONSHIP, $filehandler->getGUID());
 								
 								$extracted = true;
 								
 								if($parent == 0)
 								{
-									remove_entity_relationships($test_guid, FILE_TREE_RELATIONSHIP, true);
+									remove_entity_relationships($test_guid, FILE_TOOLS_RELATIONSHIP, true);
 								}
 							}
 						}

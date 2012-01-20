@@ -77,6 +77,7 @@ if(!empty($title) && !empty($owner_guid))
 			if($folder->save())
 			{
 				$post_fix = "/" . $folder->getGUID();
+				$forward_url = $folder->getURL();
 				system_message(elgg_echo("file_tools:action:edit:success"));
 			}
 			else
@@ -98,6 +99,8 @@ else
 {
 	register_error(elgg_echo("file_tools:action:edit:error:input"));
 }
+if(!empty($forward_url)){
+	forward($forward_url);
+}
 
-forward($CONFIG->wwwroot . "pg/file_tools/list/" . $owner_guid . $post_fix);
-?>
+forward(REFERER);

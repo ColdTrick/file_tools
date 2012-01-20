@@ -28,7 +28,7 @@
 		$title = "";
 		$desc = "";
 		
-		$parent = get_input("parent_guid", 0);
+		$parent = get_input("folder_guid", 0);
 		
 		if(!empty($parent) && ($parent_entity = get_entity($parent)))
 		{
@@ -48,12 +48,6 @@
 		
 		$submit_text = elgg_echo("save");
 	}
-	
-	if(empty($folder))
-	{
-		$form_data .= elgg_view("input/hidden", array("internalname" => "file_tools_parent_guid", "value" => $parent));
-	}
-	
 	$form_data .= elgg_view("input/hidden", array("internalname" => "page_owner", "value" => $page_owner->getGUID()));
 
 	$form_data .= "<div><label>" . elgg_echo("file_tools:forms:edit:title") . "</label></div>\n";
@@ -62,12 +56,8 @@
 	$form_data .= "<div><label>" . elgg_echo("file_tools:forms:edit:description") . "</label></div>\n";
 	$form_data .= elgg_view("input/longtext", array("internalname" => "description", "value" => $desc));
 	
-	if(!empty($folder))
-	{
-		$form_data .= "<div><label>" . elgg_echo("file_tools:forms:edit:parent") . "</label></div>\n";
-		
-		$form_data .= elgg_view("input/folder_select", array("internalname" => "file_tools_parent_guid", "value" => $parent, "owner_guid" => $page_owner->getGUID(), 'type' => 'folder'));
-	}
+	$form_data .= "<div><label>" . elgg_echo("file_tools:forms:edit:parent") . "</label></div>\n";
+	$form_data .= elgg_view("input/folder_select", array("internalname" => "file_tools_parent_guid", "folder" => $folder, "value" => $parent, "owner_guid" => $page_owner->getGUID(), 'type' => 'folder'));
 	
 	// set context to influence access
 	$context = get_context();

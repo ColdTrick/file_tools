@@ -62,7 +62,7 @@ $graphics_folder = $vars['url'] . 'mod/file_tools/_graphics/';
 	color: grey;
 }
 
-#file_tools_list_tree_info>div {
+#file_tools_list_tree_info > div {
 	background: url(<?php echo $vars["url"]; ?>_graphics/icon_customise_info.gif) top left no-repeat;
 	padding-left: 16px; 
 	color: #333333;
@@ -392,4 +392,25 @@ input[name="file_tools_file_action_check"]
 	z-index: 10;
 	
 	zoom: 1; /* IE hack */
+}
+
+#file_tools_file_upload_form .flash_wrapper {
+	background: #4690D6;
+	display: inline;
+    margin: 10px;
+    padding: 0px 6px;
+    float: left;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+}
+#file_tools_file_upload_form .flash_wrapper:hover {
+	background: #0054A7;
+}	
+
+/* fixes layout in widget */
+.collapsable_box  #filerepo_widget_layout {
+	margin: 0px;
+}
+.filerepo_widget_singleitem_more{
+	margin: 0 10px;
 }

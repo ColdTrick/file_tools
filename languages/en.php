@@ -22,8 +22,6 @@
 		'file_tools:group_tool_option:structure_management' => "Allow management of folders by members",
 		
 		// views
-		// admin settings
-		'file_tools:settings:replace_file' => "Replace My Files/Group Files with Folder view",	
 	
 		// object
 		'file_tools:object:files' => "%s file(s) in this folder",
@@ -90,14 +88,10 @@
 		'file_tools:actions:delete:error:delete' => "An unknown error occured while deleting the file folder",
 		'file_tools:actions:delete:success' => "The file folder was deleted successfully",
 	
-	
-	
-	
-	
-	
 		'file_tools:upload:new' => 'Upload zip file',
-		'file_tools:upload:uploadedzips' => 'View uploaded zip files',
 		'file_tools:upload:form:choose' => 'Choose file',
+		'file_tools:upload:form:info' => 'Click browse to upload (multiple) files',
+		'file_tools:upload:form:zip:info' => "You can upload a zip file. It will be extracted and each file will be separately imported. Also if you have folders in your zip they will be imported into each specific folder. File types that are not allowed will be skipped.",
 	
 		'file_tools:list:uploaded' => 'Uploaded',
 	
@@ -132,20 +126,22 @@
 	add_translation("en", $english);
 	
 	// widget translation
-	$widget = array(
-		'widgets:file_tools:title' => "Featured Files",
-		'widgets:file_tools:description' => "Showcase your File folders",
+	$widgets = array(
+		'widgets:file_tree:title' => "Folders",
+		'widgets:file_tree:description' => "Showcase your File folders",
 		
-		'widgets:file_tools:edit:select' => "Select which folders to display",
-		'widgets:file_tools:no_folders' => "No folders configured",
-		'widgets:file_tools:no_files' => "No files configured",
-		'widgets:file_tools:more' => "More file folders",
+		'widgets:file_tree:edit:select' => "Select which folders to display",
+		'widgets:file_tree:no_folders' => "No folders configured",
+		'widgets:file_tree:no_files' => "No files configured",
+		'widgets:file_tree:more' => "More file folders",
 	
+		'widget:file:edit:show_only_featured' => 'Show only featured files',
+		
 		'widget:file_tools:show_file' => 'Feature file (widget)',
 		'widget:file_tools:hide_file' => 'Unfeature file',
 	
 		'widgets:file_tools:more_files' => 'More files'
 	);
 	
-	add_translation("en", $widget);
-?>
+	add_translation("en", $widgets);
+	

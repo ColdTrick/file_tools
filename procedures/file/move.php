@@ -50,20 +50,20 @@
 				}
 				else
 				{
-					echo 'cant edit<br />';
+					//echo 'cant edit<br />';
 				}
 			}
 			else
 			{
-				echo 'cant get entity<br />';
+				//echo 'cant get entity<br />';
 			}
 		}
 		else
 		{
-			echo 'no fileguid<br />';
+			//echo 'no fileguid<br />';
 		}
 	}
 	else
 	{
-		echo 'cant login<br />';
+		//echo 'cant login<br />';
 	}

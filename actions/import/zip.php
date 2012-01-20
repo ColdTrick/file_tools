@@ -1,7 +1,5 @@
 <?php
 
-	global $CONFIG;
-	
 	$page_owner = get_input('page_owner', get_loggedin_userid());
 	$container_guid = (int)get_input('container_guid', $page_owner);
 

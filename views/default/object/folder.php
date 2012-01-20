@@ -3,8 +3,15 @@
 	$folder = $vars['entity'];
 	$context = get_context();
 	
-
-	if(get_plugin_usersetting('file_tools_time_display') == 'date')
+	$time_preference = "date";
+	
+	if($user_time_preference = get_plugin_usersetting('file_tools_time_display')){
+		$time_preference = $user_time_preference;
+	} elseif($site_time_preference = get_plugin_setting("file_tools_default_time_display", "file_tools")) {
+		$time_preference = $site_time_preference;
+	}
+	
+	if($time_preference == 'date')
 	{
 		$friendlytime 	= date('d-m-Y G:i', $vars['entity']->time_created);
 	}
@@ -22,6 +29,11 @@
 	
 	$delete_url = $vars["url"] . "action/file_tools/folder/delete?folder_guid=" . $folder->getGUID();
 	$edit_url 	= $vars["url"] . "pg/file_tools/folder/edit/" . $folder->getGUID();
+	
+	if(get_context() == "search")
+	{
+		echo elgg_view("input/hidden", array("internalname" => "folder_guid", "value" => $folder->getGUID()));
+	}
 ?>
 <div class="file_tools_folder" id="file_<?php echo $folder->getGUID(); ?>">
 	<div class="file_tools_folder_title">
@@ -39,26 +51,29 @@
 		?>
 		<a class="file_tools_load_folder" rel="<?php echo $folder->getGUID(); ?>" href="<?php echo $href; ?>"><?php echo $title; ?></a>
 	</div>
-	
-	<div class="file_tools_file_etc"><?php echo $friendlytime;?> <span><?php echo elgg_echo('folder');?></span></div>
-	
 	<?php 
-	if($context != 'widget' && $folder->canEdit())
-	{
-	?>
-	<div class="file_tools_folder_actions">
-		<span><?php echo elgg_echo('file_tools:file:actions');?></span>
-		<ul>
-			<?php 
-			echo '<li>' . elgg_view("output/url", array("href" => $edit_url, "text" => elgg_echo("edit"))) . '</li>';?>
-			<?php
-			$js = "onclick=\"if(confirm('". elgg_echo('question:areyousure') . "')){ file_tools_remove_folder_files(this); return true;} else { return false; }\""; 
-			echo '<li>' . elgg_view("output/url", array("href" => $delete_url, "text" => elgg_echo("delete"), "js" => $js, "is_action" => true)) . '</li>';
-			?>
-		</ul>
-	</div>
-	<input style="float: right;" type="checkbox" name="file_tools_file_action_check" value="<?php echo $folder->getGUID(); ?>" />
+	
+	if(get_context() != "widget"){ ?>
+		<div class="file_tools_file_etc"><?php echo $friendlytime;?> <span><?php echo elgg_echo('folder');?></span></div>
+		
+		<?php 
+		if($context != 'widget' && $folder->canEdit())
+		{
+		?>
+		<div class="file_tools_folder_actions">
+			<span><?php echo elgg_echo('file_tools:file:actions');?></span>
+			<ul>
+				<?php 
+				echo '<li>' . elgg_view("output/url", array("href" => $edit_url, "text" => elgg_echo("edit"))) . '</li>';?>
+				<?php
+				$js = "onclick=\"if(confirm('". elgg_echo('question:areyousure') . "')){ file_tools_remove_folder_files(this); return true;} else { return false; }\""; 
+				echo '<li>' . elgg_view("output/url", array("href" => $delete_url, "text" => elgg_echo("delete"), "js" => $js, "is_action" => true)) . '</li>';
+				?>
+			</ul>
+		</div>
+		<input style="float: right;" type="checkbox" name="file_tools_file_action_check" value="<?php echo $folder->getGUID(); ?>" />
 	<?php 
+		}
 	}
 	?>
 </div>

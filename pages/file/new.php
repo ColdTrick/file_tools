@@ -13,7 +13,7 @@
 		
 		// get data
 		// build page elements
-		$title_text = elgg_echo("file_tools:new:title");
+		$title_text = elgg_echo("file:upload");
 		$title = elgg_view_title($title_text);
 		
 		$body = elgg_view("file_tools/forms/upload", array("page_owner_entity" => $page_owner));

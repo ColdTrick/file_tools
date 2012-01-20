@@ -52,7 +52,7 @@
 		{
 			if($folder_guid == 0)
 			{
-				if(get_plugin_setting("user_folder_structure", "file_tools") != "no")
+				if(get_plugin_setting("user_folder_structure", "file_tools") == "yes")
 				{
 					$files_options["wheres"] = $wheres;
 				}
@@ -71,7 +71,7 @@
 			}	
 		}
 
-		if(get_plugin_setting("user_folder_structure", "file_tools") != "no")
+		if(get_plugin_setting("user_folder_structure", "file_tools") == "yes")
 		{
 			if(!$draw_page)
 			{
@@ -85,7 +85,7 @@
 				// default lists all unsorted files
 				if($folder_guid === false)
 				{
-					if(get_plugin_setting("user_folder_structure", "file_tools") != "no")
+					if(get_plugin_setting("user_folder_structure", "file_tools") == "yes")
 					{
 						$files_options["wheres"] = $wheres;
 					}
@@ -96,7 +96,7 @@
 				
 				// build page elements
 				$tree = '';
-				if(get_plugin_setting("user_folder_structure", "file_tools") != "no")
+				if(get_plugin_setting("user_folder_structure", "file_tools") == "yes")
 				{
 					$tree = elgg_view("file_tools/list/tree", array("folder" => $folder, "folders" => $folders));
 				}
@@ -112,64 +112,8 @@
 				$body .= '<a id="file_tools_action_bulk_download" href="javascript:void(0);">Download selected</a>
 							<a id="file_tools_select_all" style="float: right;" href="javascript:void(0);">Select all</a>
 						</div>';
-				
-				$body .= '<a href="#file_tools_list_new_filess" id="inline_fancy_test"></a>';
-				
-				$body .= '<div style="display: none;"><div id="file_tools_list_new_filess">';
-					//$body .= '<a href="javascript:void(0);" class="file_tools_close_form">close</a>';
-					$body .= elgg_view("file_tools/forms/upload", array("page_owner_entity" => $page_owner));			
-				$body .= '</div></div>';
+			
 	
-				$body .= '<div id="file_tools_list_new_folder" class="file_tools_form_toggle">';
-					//$body .= '<a href="javascript:void(0);" class="file_tools_close_form">close</a>';
-					$body .= elgg_view("file_tools/forms/edit", array("page_owner_entity" => $page_owner));			
-				$body .= '</div>';
-	
-				$body .= '<div id="file_tools_list_new_zip" class="file_tools_form_toggle">';
-					//$body .= '<a href="javascript:void(0);" class="file_tools_close_form">close</a>';
-					$body .= elgg_view("file_tools/forms/import/zip", array("page_owner_entity" => $page_owner));		
-				$body .= '</div>';
-	
-				if(get_plugin_setting("replace_file", "file_tools") != "yes")
-				{
-					if(get_loggedin_userid() == $page_owner_guid)
-					{
-						$title_text = elgg_echo("file_tools:menu:mine");
-					}
-					else
-					{
-						$title_text = sprintf(elgg_echo("file_tools:menu:user"), $page_owner->name);
-					}
-	
-					// remove menu items
-					/*unset($CONFIG->submenu);
-	
-					if ((page_owner() == $_SESSION['guid'] || !page_owner()) && isloggedin())
-					{
-						add_submenu_item(sprintf(elgg_echo("file:yours"),$page_owner->name), $CONFIG->wwwroot . "pg/file/owner/" . $page_owner->username);
-					}
-					elseif (page_owner())
-					{
-						add_submenu_item(sprintf(elgg_echo("file:user"),$page_owner->name), $CONFIG->wwwroot . "pg/file/owner/" . $page_owner->username);
-					}
-	
-					if (can_write_to_container($_SESSION['guid'], page_owner()) && isloggedin())
-					{
-						add_submenu_item(elgg_echo('file:upload'), $CONFIG->wwwroot . "pg/file/new/". $page_owner->username);
-					}*/
-				}
-				else
-				{
-					/*if(get_loggedin_userid() == $page_owner_guid)
-					{
-						$title_text = elgg_echo("file:yours");
-					}
-					else
-					{
-						$title_text = sprintf(elgg_echo("file:user"), $page_owner->name);
-					}*/
-				}
-
 				$title = elgg_view_title($title_text);
 
 				page_draw($title_text, elgg_view_layout("two_column_left_sidebar", "", $title . $body, $tree));
@@ -183,7 +127,6 @@
 			$title = elgg_view_title($title_text);
 
 			$body = elgg_list_entities(array('types' => 'object', 'subtypes' => 'file', 'container_guid' => page_owner(), 'limit' => 10, 'offset' => $offset, 'full_view' => false));
-
 
 			page_draw($title_text, elgg_view_layout("two_column_left_sidebar", "", $title . $body, $tree));
 		}

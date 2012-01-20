@@ -3,15 +3,17 @@
 	
 	echo elgg_view('input/securitytoken');
 	
+	$form_body .= elgg_echo("file_tools:upload:form:zip:info").'<br /><br />';
 	$form_body .= '<label>'.elgg_echo("file_tools:upload:form:choose").'</label><br />';
 	$form_body .= elgg_view("input/file",array('internalname' => 'zip_file')).'<br />';
 	
 	
 	$folders = file_tools_get_folders(page_owner_entity()->guid);
 	
-	$form_body .= '<label>'.elgg_echo("file_tools:forms:edit:parent") . '</label>	<br />';
-	$form_body .= elgg_view("input/folder_select", array("internalname" => "parent_guid", "value" => $tags, "internalid" => "file_tools_file_parent_guid")) . '<br />';
-	
+	if(get_plugin_setting("user_folder_structure", "file_tools") == "yes"){
+		$form_body .= '<label>'.elgg_echo("file_tools:forms:edit:parent") . '</label>	<br />';
+		$form_body .= elgg_view("input/folder_select", array("internalname" => "parent_guid", "value" => $tags, "internalid" => "file_tools_file_parent_guid")) . '<br />';
+	}
 	$form_body .= '<label>' . elgg_echo('access') . '</label><br />';
 	$form_body .= elgg_view('input/access', array('internalname' => 'access_id', 'internalid' => 'file_tools_file_access_id')) . '<br />';
 	

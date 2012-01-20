@@ -2,16 +2,6 @@
 
 	$folder = $vars["entity"];
 	
-	/*$folder_options = array(
-			"type" => "object",
-			"subtype" => FILE_TOOLS_SUBTYPE,
-			"owner_guid" => page_owner(),
-			"limit" => 1
-		);
-	
-	$folders = elgg_get_entities_from_metadata($folder_options);
-	$folder = $folders[0];*/
-	
 	echo "<div id='file_tools_breadcrumbs'>";	
 	echo "<ul>";		
 	echo "<li><a href='" . $vars["url"] . "pg/file_tools/list/" . page_owner() . "'>" . elgg_echo("file_tools:list:folder:main") . "</a></li>";
