@@ -384,6 +384,7 @@ input[name="file_tools_file_action_check"]
     right: 22px;
     top: 18px;
     z-index: 8;
+    list-style: none;
 }
 
 .file_tools_file_actions:hover,
@@ -413,4 +414,7 @@ input[name="file_tools_file_action_check"]
 }
 .filerepo_widget_singleitem_more{
 	margin: 0 10px;
+}
+.file_tools_file ui-draggable {
+	border: 1px solid #CCC;
 }
