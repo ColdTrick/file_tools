@@ -93,14 +93,6 @@
 		'file_tools:upload:form:info' => 'Click browse to upload (multiple) files',
 		'file_tools:upload:form:zip:info' => "You can upload a zip file. It will be extracted and each file will be separately imported. Also if you have folders in your zip they will be imported into each specific folder. File types that are not allowed will be skipped.",
 	
-		'file_tools:list:uploaded' => 'Uploaded',
-	
-		'file_tools:allfilesincluded' => 'all files included',
-		'file_tools:deleteselectedfiles' => 'delete selected files',
-		'file_tools:nofilesfound' => 'No zip files uploaded.',
-		'file_tools:confirmtext' => 'Are you sure?',
-		'file_tools:deletezipandfiles:confirmtext' => 'Are you sure you want to remove this zip and all it\'s files?',
-		
 		//errors
 		'file_tools:error:pageowner' => 'Error retrieving page owner.',
 		'file_tools:error:nofilesextracted' => 'There were no allowed files found to extract.',
@@ -110,8 +102,7 @@
 	
 		//messages
 		'file_tools:error:fileuploadsuccess' => 'Zip file uploaded and extracted successfully.',
-		'file_tools:error:zipdeletesuccess' => 'Zip and it\'s files successfully deleted.',
-
+		
 		//settings
 		'file_tools:settings:allowed_extensions' => 'Allowed extensions (comma seperated)',
 	

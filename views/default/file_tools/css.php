@@ -415,6 +415,6 @@ input[name="file_tools_file_action_check"]
 .filerepo_widget_singleitem_more{
 	margin: 0 10px;
 }
-.file_tools_file ui-draggable {
+.file_tools_file.ui-draggable {
 	border: 1px solid #CCC;
 }
