@@ -1,14 +1,12 @@
 <?php 
 
 	gatekeeper();
-
-	$page_owner_guid = get_input("page_owner", get_loggedin_userid());
-	$page_owner = get_entity($page_owner_guid);
+	
+	$page_owner = page_owner_entity();
 	
 	if(!empty($page_owner) && (($page_owner instanceof ElggUser) || ($page_owner instanceof ElggGroup)))
 	{
 		// set page owner & context
-		set_page_owner($page_owner_guid);
 		set_context("file");
 		
 		// get data

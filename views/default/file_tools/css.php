@@ -321,12 +321,6 @@ a.progressCancel:hover {
 	display: none;
 }
 
-.file_tools_close_form
-{
-	float: right; 
-	margin-right: 20px;
-}
-
 .file_tools_file_actions, .file_tools_folder_actions
 {
 	position: relative;

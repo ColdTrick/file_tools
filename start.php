@@ -27,10 +27,11 @@
 			}
 		}
 				
-		elgg_extend_view("metatags", "file_tools/list/metatags");
-		
 		// extend CSS
 		elgg_extend_view("css", "file_tools/css");
+		if(get_plugin_setting("user_folder_structure", "file_tools") == "yes"){
+			elgg_extend_view("forms/groups/edit", "file_tools/group_settings");
+		}
 				
 		// register page handler for nice URL's
 		register_page_handler("file_tools", "file_tools_page_handler");
@@ -48,7 +49,7 @@
 		// need to keep file_tree for the widget name to be compatible with previous filetree plugin users
 		add_widget_type("file_tree", elgg_echo("widgets:file_tree:title"), elgg_echo("widgets:file_tree:description"), "dashboard,profile,groups");
 		if(is_callable("add_widget_title_link")){
-			add_widget_title_link("file_tree", "[BASEURL]pg/file_tree/list/[GUID]");
+			add_widget_title_link("file_tree", "[BASEURL]pg/file/owner/[USERNAME]");
 		}
 		
 		// take over default file view?
@@ -102,9 +103,9 @@
 				{
 					if(!empty($page[2]))
 					{
-						set_input("page_owner", $page[2]);
+						set_input("username", $page[2]);
 					}
-					include(dirname(__FILE__) . "/pages/new.php");
+					include(dirname(__FILE__) . "/pages/folder/new.php");
 					break;
 				}
 				elseif($page[1] == 'edit')
@@ -128,6 +129,10 @@
 			case "file":
 				if($page[1] == 'new')
 				{
+					if(!empty($page[2]))
+					{
+						set_input("username", $page[2]);
+					}
 					include(dirname(__FILE__) . "/pages/file/new.php");
 				}
 				elseif($page[1] == 'download')
@@ -199,6 +204,7 @@
 	register_plugin_hook("access:collections:write", "all", "file_tools_write_acl_plugin_hook", 550);
 	
 	// register actions
+	register_action("file_tools/groups/save_sort", false, dirname(__FILE__) . "/actions/groups/save_sort.php");
 	register_action("file_tools/folder/edit", false, dirname(__FILE__) . "/actions/folder/edit.php");
 	register_action("file_tools/folder/delete", false, dirname(__FILE__) . "/actions/folder/delete.php");	
 	register_action("file_tools/import/zip", false,dirname(__FILE__)."/actions/import/zip.php");

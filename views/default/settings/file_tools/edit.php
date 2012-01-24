@@ -31,3 +31,23 @@
 		$options = array("date" => elgg_echo("file_tools:usersettings:time:date"), "days" => elgg_echo("file_tools:usersettings:time:days"));
 	
 		echo elgg_view("input/pulldown", array("internalname" => "params[file_tools_default_time_display]", "options_values" => $options, "value" => $settings->file_tools_default_time_display));
+		
+	?>
+	<div>
+		<?php echo elgg_echo("file_tools:settings:sort:default"); ?>
+	</div>
+	<?php
+	echo elgg_view('input/pulldown', array('internalname' => 'params[sort]',
+											'value' =>  $settings->sort,
+											'options_values' => array(
+																'e.time_created' 	=> elgg_echo('file_tools:list:sort:time_created'), 
+																'oe.title' 			=> elgg_echo('title'), 
+																'oe.description'	=> elgg_echo('description'), 
+																'simpletype' 		=> elgg_echo('file_tools:list:sort:type'))));
+	echo "<br />";
+	echo elgg_view('input/pulldown', array('internalname' => 'params[sort_direction]',
+											'value' =>  $settings->sort_direction,
+											'options_values' => array(
+																'asc' 	=> elgg_echo('file_tools:list:sort:asc'), 
+																'desc'	=> elgg_echo('file_tools:list:sort:desc')))); 
+	

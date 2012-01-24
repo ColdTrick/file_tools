@@ -11,11 +11,31 @@
 	$folder_guid 		= get_input("folder_guid", 0);
 	$draw_page 			= get_input("draw_page", true);
 
-	$sort_by 			= get_input('sort_by', 'e.time_created');
-	$direction 			= get_input('direction', 'ASC');
-	$time_option 		= get_input("time_option", 'date');
-
-	$vars['time_option'] = $time_option;
+	$sort_by 			= get_input('sort_by');
+	$direction 			= get_input('direction');
+	
+	if(empty($sort_by)){
+		$sort_value = 'e.time_created';
+		if($page_owner instanceof ElggGroup && !empty($page_owner->file_tools_sort)){
+			$sort_value = $page_owner->file_tools_sort;
+		} elseif($site_sort_default = get_plugin_setting("sort", "file_tools")){
+			$sort_value = $site_sort_default;
+		}
+		
+		$sort_by = $sort_value;
+	} 
+	
+	if(empty($direction)){
+		$sort_direction_value = 'asc';
+		if($page_owner instanceof ElggGroup && !empty($page_owner->file_tools_sort_direction)){
+			$sort_direction_value = $page_owner->file_tools_sort_direction;
+		} elseif($site_sort_direction_default = get_plugin_setting("sort_direction", "file_tools")){
+			$sort_direction_value = $site_sort_direction_default;
+		}
+		
+		$direction = $sort_direction_value;
+	}
+	
 	if(!empty($page_owner) && (($page_owner instanceof ElggUser) || ($page_owner instanceof ElggGroup)))
 	{
 		// set page owner & context
@@ -75,7 +95,7 @@
 		{
 			if(!$draw_page)
 			{
-				echo elgg_view("file_tools/list/files", array("folder" => $folder, "files" => $files, 'sort_by' => $sort_by, 'direction' => $direction, 'time_option' => $time_option));
+				echo elgg_view("file_tools/list/files", array("folder" => $folder, "files" => $files, 'sort_by' => $sort_by, 'direction' => $direction));
 			}
 			else
 			{			
@@ -106,11 +126,11 @@
 	
 				if(page_owner_entity()->canEdit())
 				{
-					$body .= '<a id="file_tools_action_bulk_delete" href="javascript:void(0);">Delete selected</a> | ';
+					$body .= '<a id="file_tools_action_bulk_delete" href="javascript:void(0);">' . elgg_echo("file_tools:list:delete_selected") . '</a> | ';
 				} 
 	
-				$body .= '<a id="file_tools_action_bulk_download" href="javascript:void(0);">Download selected</a>
-							<a id="file_tools_select_all" style="float: right;" href="javascript:void(0);">Select all</a>
+				$body .= '<a id="file_tools_action_bulk_download" href="javascript:void(0);">' . elgg_echo("file_tools:list:download_selected") . '</a>
+							<a id="file_tools_select_all" style="float: right;" href="javascript:void(0);">' . elgg_echo("file_tools:list:select_all") . '</a>
 						</div>';
 			
 	

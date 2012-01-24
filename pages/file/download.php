@@ -32,18 +32,30 @@
 				
 				if($entity_subtype == 'file')
 				{
-					$zip->addFile($entity->getFilenameOnFilestore(), $entity->getGUID() . '_' . $entity->originalfilename);
+					if($zip->statName($entity->originalfilename) === false){
+						$zip->addFile($entity->getFilenameOnFilestore(), $entity->originalfilename);
+					} else {
+						$ext_pos = strrpos($entity->originalfilename, ".");
+						$file_name = substr($entity->originalfilename, 0, $ext_pos) . "_" . $entity->getGUID() . substr($entity->originalfilename, $ext_pos);
+						$zip->addFile($entity->getFilenameOnFilestore(), $file_name);
+					}
 				}
 				elseif($entity_subtype == 'folder')
 				{
 					$zip->addEmptyDir($entity->title);
-					if($main_filed = file_tools_has_files($entity->getGUID()))
+					if($main_files = file_tools_has_files($entity->getGUID()))
 					{
-						foreach($main_filed as $guid)
+						foreach($main_files as $guid)
 						{
 							if($file = get_entity($guid))
 							{
-								$zip->addFile($file->getFilenameOnFilestore(), $entity->title . '/' . $file->getGUID() . '_' . $file->originalfilename);
+								if($zip->statName( $entity->title . '/' . $file->originalfilename) === false){
+									$zip->addFile($file->getFilenameOnFilestore(), $entity->title . '/' . $file->originalfilename);
+								} else {
+									$ext_pos = strrpos($file->originalfilename, ".");
+									$file_name = substr($file->originalfilename, 0, $ext_pos) . "_" . $file->getGUID() . substr($file->originalfilename, $ext_pos);
+									$zip->addFile($file->getFilenameOnFilestore(), $entity->title . '/' . $file_name);
+								}
 							}
 						}
 					}
@@ -58,7 +70,13 @@
 							{
 								if($entity = get_entity($guid))
 								{
-									$zip->addFile($entity->getFilenameOnFilestore(), $directory['directory'] . '/' . $entity->originalfilename);
+									if($zip->statName( $directory['directory'] . '/' . $entity->originalfilename) === false){
+										$zip->addFile($entity->getFilenameOnFilestore(), $directory['directory'] . '/' . $entity->originalfilename);
+									} else {
+										$ext_pos = strrpos($entity->originalfilename, ".");
+										$file_name = substr($entity->originalfilename, 0, $ext_pos) . "_" . $entity->getGUID() . substr($entity->originalfilename, $ext_pos);
+										$zip->addFile($entity->getFilenameOnFilestore(), $directory['directory'] . '/' . $file_name);
+									}
 								}
 							}
 						}

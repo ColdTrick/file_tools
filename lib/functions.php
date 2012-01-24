@@ -689,7 +689,7 @@
 	
 	
 	
-	function check_foldertitle_exists($title, $parent_guid = 0, $container_guid)
+	function file_tools_check_foldertitle_exists($title, $parent_guid = 0, $container_guid)
 	{
 		global $CONFIG;
 		
@@ -748,7 +748,7 @@
 		if($count == 1)
 		{
 			$zdir = sanitise_string($zdir);
-			$entity = check_foldertitle_exists($zdir, $parent_guid, $container_guid);
+			$entity = file_tools_check_foldertitle_exists($zdir, $parent_guid, $container_guid);
 
 			if(!$entity)
 			{
@@ -782,7 +782,7 @@
 			foreach($sub_folders as $folder)
 			{
 				$folder = sanitise_string($folder);
-				if($entity = check_foldertitle_exists($folder, $parent, $container_guid))
+				if($entity = file_tools_check_foldertitle_exists($folder, $parent, $container_guid))
 				{
 					$parent = $entity->getGUID();
 				}
@@ -816,7 +816,7 @@
 		}
 	}
 	
-	function unzip($file, $parent_guid, $container_guid)
+	function file_tools_unzip($file, $parent_guid, $container_guid)
 	{
 		$extracted = false;
 		
@@ -860,7 +860,7 @@
 	            foreach($folder_array as $folder)
 	            {
 	            	$folder = sanitize_string($folder);
-		            if($entity = check_foldertitle_exists($folder, $parent, $container_guid))
+		            if($entity = file_tools_check_foldertitle_exists($folder, $parent, $container_guid))
 					{
 						$parent = $entity->getGUID();
 					}

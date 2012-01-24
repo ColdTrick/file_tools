@@ -57,6 +57,22 @@
 		$edit_url = $vars["url"] . "pg/file_tools/folder/edit/" . $folder->getGUID();
 		$delete_url = $vars["url"] . "action/file_tools/folder/delete?folder_guid=" . $folder->getGUID();
 		
+		$time_preference = "date";
+		
+		if($user_time_preference = get_plugin_usersetting('file_tools_time_display')){
+			$time_preference = $user_time_preference;
+		} elseif($site_time_preference = get_plugin_setting("file_tools_default_time_display", "file_tools")) {
+			$time_preference = $site_time_preference;
+		}
+		
+		if($time_preference == 'date')
+		{
+			$friendlytime 	= date('d-m-Y G:i', $folder->time_created);
+		}
+		else
+		{
+			$friendlytime 	= elgg_view_friendly_time($folder->time_created);
+		}
 		
 		$js = "onclick=\"if(confirm('". elgg_echo('question:areyousure') . "')){ file_tools_remove_folder_files(this); return true;} else { return false; }\""; 
 		
@@ -66,8 +82,10 @@
 		echo '<div id="file_tools_folder_preview">';
 
 		echo elgg_echo('title') . ': ' . $folder->title . '<br />';
-		echo elgg_echo('description') . ': ' . $folder->description . '<br />';
-		echo elgg_echo('file_tools:list:sort:time_created') . ': ' . elgg_view_friendly_time($folder->time_created) . '<br />';
+		if(!empty($folder->description)){
+			echo elgg_echo('description') . ': ' . $folder->description . '<br />';
+		}
+		echo elgg_echo('file_tools:list:sort:time_created') . ': ' . $friendlytime . '<br />';
 		
 		if($folder->canEdit())
 		{

@@ -91,9 +91,20 @@
 		{
 			file_tools_load_folder(0);
 		}
+
+		$('#file_tools_list_new_folder_toggle').live('click', function()
+		{
+			var link = "<?php echo $vars["url"]; ?>pg/file_tools/folder/new/<?php echo $page_owner->username; ?>";
+			if(file_tools_get_selected_tree_folder_id() != undefined) {
+				link = link + '?folder_guid=' + file_tools_get_selected_tree_folder_id();				
+	    	}
+			window.location = link;
+			e.preventDefault();
+		});
 		
 		$(window).hashchange(function()
 		{
+			file_tools_show_loader($("#file_tools_list_folder"));
 			file_tools_load_folder(window.location.hash.substring(1));
 		});
 		
@@ -107,37 +118,15 @@
 		});
 		<?php }?>
 	
-		$('#file_tools_list_new_folder_toggle').live('click', function()
-		{
-			var link = "<?php echo $vars["url"]; ?>pg/file_tools/folder/new/";
-			if(file_tools_get_selected_tree_folder_id() != undefined) {
-				link = link + '?folder_guid=' + file_tools_get_selected_tree_folder_id();				
-	    	}
-			window.location = link;
-			e.preventDefault();
-		});
-	
-		$('.file_tools_close_form').live('click', function()
-		{
-			$(this).parent().hide();
-		});
-	
 		$('.file_tools_load_folder').live('click', function()
 		{
 			folder_guid = $(this).attr('rel');
 			file_tools_select_node(folder_guid);
 		});
 	
-		$('select[name="file_view_time"]').change(function()
-		{
-			time_option = $(this).val();
-	
-			var folder_url = "<?php echo $vars["url"];?>pg/file_tools/list/<?php echo page_owner();?>?folder_guid=" + file_tools_get_selected_tree_folder_id() + "&search_viewtype=<?php echo get_input("search_viewtype", "list"); ?>&sort_by=" + $('select[name="file_sort"]').val() + "&direction=" + $('select[name="file_sort_direction"]').val() + "&time_option=" + time_option;
-			$("#file_tools_list_files_container").load(folder_url);
-		});
-	
 		$('select[name="file_sort"], select[name="file_sort_direction"]').change(function()
 		{
+			file_tools_show_loader($("#file_tools_list_folder"));
 			var folder_url = "<?php echo $vars["url"];?>pg/file_tools/list/<?php echo page_owner();?>?folder_guid=" + file_tools_get_selected_tree_folder_id() + "&search_viewtype=<?php echo get_input("search_viewtype", "list"); ?>&sort_by=" + $('select[name="file_sort"]').val() + "&direction=" + $('select[name="file_sort_direction"]').val();
 			$("#file_tools_list_files_container").load(folder_url);
 		});
@@ -169,13 +158,13 @@
 		
 					if(!response.valid)
 					{
-						alert('Not all files could be deleted.');
+						alert('<?php echo elgg_echo("file_tools:list:alert:not_all_deleted"); ?>');
 					}
 				});
 			}
 			else
 			{
-				alert('First select some files.');
+				alert('<?php echo elgg_echo("file_tools:list:alert:none_selected"); ?>');
 			}
 		});
 	
@@ -195,7 +184,7 @@
 			}
 			else
 			{
-				alert('First select some files.');
+				alert('<?php echo elgg_echo("file_tools:list:alert:none_selected"); ?>');
 			}
 		});
 	
@@ -206,17 +195,26 @@
 			{
 				$('input[name="file_tools_file_action_check"]').attr('checked', true);
 				checked = true;
-				$(this).html('Deselect all');
+				$(this).html("<?php echo elgg_echo("file_tools:list:deselect_all"); ?>");
 			}
 			else
 			{
 				$('input[name="file_tools_file_action_check"]').attr('checked', false);
 				checked = false;
-				$(this).html('Select all');
+				$(this).html("<?php echo elgg_echo("file_tools:list:select_all"); ?>");
 			}
 		});
 	});
 
+	function file_tools_show_loader(elem){
+		var overlay_width = elem.outerWidth();
+		var margin_left = elem.css("margin-left");
+			
+		$("#file_tools_list_files_overlay").css("width", overlay_width).css("left", margin_left).show();
+	}
+	
+		
+	
 	$(function () 
 	{		
 		var requested_id = window.location.hash.substring(1);
@@ -299,12 +297,10 @@
 				}
 				var folder_guid = $(this).attr("id");
 				var selected_folder_guid = file_tools_get_selected_tree_folder_id();
-				var overlay_width = $(ui.draggable).outerWidth();
-				var margin_left = $(ui.draggable).css("margin-left");
 
+				file_tools_show_loader($(ui.draggable));
+				
 				$(ui.draggable).hide();
-					
-				$("#file_tools_list_files_overlay").css("width", overlay_width).css("left", margin_left).show();
 				
 				$.post(file_move_url, {"file_guid": file_guid, "folder_guid": folder_guid}, function(data)
 				{
@@ -352,15 +348,40 @@
 
 	<span><?php echo elgg_echo('file_tools:list:files:options:sort_title');?></span><br />
 	
-	<?php echo elgg_view('input/pulldown', array('internalname' => 'file_sort',
-												'value' => 'e.time_created',
+	<?php 
+	$sort_value = 'e.time_created';
+	if(is_array($_SESSION["file_tools"]) && !empty($_SESSION["file_tools"]["sort"])){
+		$sort_value = $_SESSION["file_tools"]["sort"];
+	} else {
+		if($page_owner instanceof ElggGroup && !empty($page_owner->file_tools_sort)){
+			$sort_value = $page_owner->file_tools_sort;
+		} elseif($site_sort_default = get_plugin_setting("sort", "file_tools")){
+			$sort_value = $site_sort_default;
+		}
+	}
+	
+	echo elgg_view('input/pulldown', array('internalname' => 'file_sort',
+												'value' => $sort_value,
 												'options_values' => array(
 																	'oe.title' 			=> elgg_echo('title'), 
 																	'oe.description'	=> elgg_echo('description'), 
 																	'e.time_created' 	=> elgg_echo('file_tools:list:sort:time_created'), 
 																	'simpletype' 		=> elgg_echo('file_tools:list:sort:type')))); ?>
 
-	<?php echo elgg_view('input/pulldown', array('internalname' => 'file_sort_direction',
+	<?php 
+	$sort_direction_value = 'asc';
+	if(is_array($_SESSION["file_tools"]) && !empty($_SESSION["file_tools"]["sort_direction"])){
+		$sort_direction_value = $_SESSION["file_tools"]["sort_direction"];
+	} else {
+		if($page_owner instanceof ElggGroup && !empty($page_owner->file_tools_sort_direction)){
+			$sort_direction_value = $page_owner->file_tools_sort_direction;
+		} elseif($site_sort_direction_default = get_plugin_setting("sort_direction", "file_tools")){
+			$sort_direction_value = $site_sort_direction_default;
+		}
+	}
+	
+	echo elgg_view('input/pulldown', array('internalname' => 'file_sort_direction',
+											'value' => $sort_direction_value,
 												'options_values' => array(
 																	'asc' 	=> elgg_echo('file_tools:list:sort:asc'), 
 																	'desc'	=> elgg_echo('file_tools:list:sort:desc')))); ?><br />

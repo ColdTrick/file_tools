@@ -20,7 +20,7 @@
 			$prefix = "file/";
 			$file = $_FILES['zip_file'];
 			
-			if(!unzip($file, $parent_guid, $container_guid))
+			if(!file_tools_unzip($file, $parent_guid, $container_guid))
 			{
 				register_error(elgg_echo('file_tools:error:nofilesextracted'));
 			}

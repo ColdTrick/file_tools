@@ -35,7 +35,14 @@
 		
 		'file_tools:list:folder:main' => "Main folder",
 		'file_tools:list:files:none' => "No files found in this folder",
+		'file_tools:list:select_all' => 'Select all',
+		'file_tools:list:deselect_all' => 'Deselect all',
+		'file_tools:list:download_selected' => 'Download selected',
+		'file_tools:list:delete_selected' => 'Delete selected',
+		'file_tools:list:alert:not_all_deleted' => 'Not all files could be deleted',
+		'file_tools:list:alert:none_selected' => 'No items selected',
 		
+	
 		'file_tools:list:tree:info' => "Did you know?",
 		'file_tools:list:tree:info:1' => "You can drag and drop files on to the folders to organize them!",
 		'file_tools:list:tree:info:2' => "You can double click on any folder to expand all of its subfolders!",
@@ -105,10 +112,8 @@
 		
 		//settings
 		'file_tools:settings:allowed_extensions' => 'Allowed extensions (comma seperated)',
-	
-		'selectall' => 'select all',
-	
 		'file_tools:settings:user_folder_structure' => 'Use folder structure',
+		'file_tools:settings:sort:default' => 'Default folder sorting options',
 	
 		'file:type:application' => 'Application',
 		'file:type:text' => 'Text',
