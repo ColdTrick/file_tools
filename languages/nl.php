@@ -1,5 +1,12 @@
 <?php
 $language = array (
+  'file_tools:list:select_all' => 'Alles selecteren',
+  'file_tools:list:deselect_all' => 'Alles deselecteren',
+  'file_tools:list:download_selected' => 'Download selectie',
+  'file_tools:list:delete_selected' => 'Verwijder selectie',
+  'file_tools:list:alert:not_all_deleted' => 'Niet alle bestanden konden worden verwijderd',
+  'file_tools:list:alert:none_selected' => 'Geen items geselecteerd',
+  'file_tools:settings:sort:default' => 'Standaard map sortering',
   'file_tools:error:pageowner' => 'Geen eigenaar gevonden',
   'file_tools:error:nofilesextracted' => 'Geen bestanden om te importeren',
   'file_tools:error:cantopenfile' => 'Zip bestand kon niet worden geopend.',
@@ -7,7 +14,6 @@ $language = array (
   'file_tools:error:nofilefound' => 'Kies een bestand om te uploaden.',
   'file_tools:error:fileuploadsuccess' => 'Zip bestand geupload en succesvol uitgepakt.',
   'file_tools:settings:allowed_extensions' => 'Toegestane extensies (komma gescheiden)',
-  'selectall' => 'Alles selecteren',
   'widgets:file_tree:title' => 'Mappen',
   'widgets:file_tree:description' => 'Toont je mappen',
   'widgets:file_tree:edit:select' => 'Selecteer welke mappen getoond moeten worden.',
