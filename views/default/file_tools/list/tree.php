@@ -266,7 +266,7 @@
 						var order = parent_node.children("ul").children("li").children("a").makeDelimitedList("id");
 
 						file_tools_reorder(folder_guid, parent_guid, order);
-					},
+					}
 				},
 				types : {
 					"default" : {
