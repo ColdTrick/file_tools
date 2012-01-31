@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest>
 	<field key="author" value="ColdTrick IT Solutions" />
-	<field key="version" value="0.3" />
+	<field key="version" value="0.3.1" />
 	<field key="description" value="File Tools"/>
 	<field key="website" value="http://www.coldtrick.com" />
 	<field key="copyright" value="(C) ColdTrick 2010 - 2012" />
@@ -11,6 +11,12 @@
 
 <!-- 
 = Version History =
+
+0.3.1 (2012-01-31):
+ - fixed: incorrect forward after zip upload in group 
+ - fixed: incorrect access for zip uploaded files
+ - fixed: incorrect forward after multiupload
+
 0.3 (2012-01-24):
  - added: default sorting options for site and group admins
  - added: more loading indicator moments (sorting, folder change)

@@ -27,6 +27,7 @@
 			else
 			{
 				system_message(elgg_echo('file_tools:error:fileuploadsuccess'));
+				forward('pg/file/owner/' . get_entity($container_guid)->username . '#' . $parent_guid);
 			}
 		}
 		else
@@ -39,4 +40,4 @@
 		register_error(elgg_echo('file_tools:error:nofilefound'));
 	}
 	
-	forward('pg/file/owner/' . get_entity($page_owner)->username . '#' . $parent_guid);
+	forward(REFERER);

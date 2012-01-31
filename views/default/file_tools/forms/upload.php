@@ -45,8 +45,9 @@
 	{
 		if (this.getStats().files_queued === 0)
 		{
-			folder_guid = $("#file_tools_list_tree a.clicked").attr("id");
-			window.location.reload(true);
+			var returnUrl = "<?php echo $vars["url"] . "pg/file/owner/" . page_owner_entity()->username . "#"; ?>";
+			var folder_guid = $('#file_tools_file_parent_guid').val();
+			window.location.href = returnUrl + folder_guid;
 		}
 	}
 	

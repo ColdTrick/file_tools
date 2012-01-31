@@ -42,14 +42,7 @@
 		$file->open("write");
 		$file->close();
 		
-		//if(
 		move_uploaded_file($uploaded_file['tmp_name'], $file->getFilenameOnFilestore());
-		/*)
-		{
-			echo '<pre>';
-			var_dump($file);
-			echo '</pre>';
-		}*/
 		
 		$guid = $file->save();
 		

@@ -733,15 +733,25 @@
 		$zdir = substr(zip_entry_name($zip_entry), 0, -1);
 		$container_entity = get_entity($container_guid);
 		
-		if($container_entity instanceof ElggUser)
-		{
-			$access_id = get_default_access();
+		$access_id = get_input("access_id", false);
+		if($access_id === false){
+			if($parent_guid != 0)
+			{
+				$access_id 				= get_entity($parent_guid)->access_id;
+			}
+			else
+			{
+				if($container_entity instanceof ElggUser)
+				{
+					$access_id = get_default_access();
+				}
+				elseif($container_entity instanceof ElggGroup)
+				{
+					$access_id = $container_entity->group_acl;
+				}
+			}
 		}
-		elseif($container_entity instanceof ElggGroup)
-		{
-			$access_id = $container_entity->group_acl;
-		}
-	            
+		     
 		$sub_folders = explode('/', $zdir);
 		$count = count($sub_folders);
 		
@@ -828,19 +838,22 @@
 		
 		$container_entity = get_entity($container_guid);
 		
-		if($parent_guid != 0)
-		{
-			$access_id 				= get_entity($parent_guid);
-		}
-		else
-		{
-			if($container_entity instanceof ElggUser)
+		$access_id = get_input("access_id", false);
+		if($access_id === false){
+			if($parent_guid != 0)
 			{
-				$access_id = get_default_access();
+				$access_id 				= get_entity($parent_guid)->access_id;
 			}
-			elseif($container_entity instanceof ElggGroup)
+			else
 			{
-				$access_id = $container_entity->group_acl;
+				if($container_entity instanceof ElggUser)
+				{
+					$access_id = get_default_access();
+				}
+				elseif($container_entity instanceof ElggGroup)
+				{
+					$access_id = $container_entity->group_acl;
+				}
 			}
 		}
 		
