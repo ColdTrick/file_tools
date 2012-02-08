@@ -47,4 +47,13 @@ Features
 - Take over of default file menu options
 
 
+= TODO = 
+
+// Needed in 1.8
+- Use max available space for file title in listing mode
+- Folder widget should be able to show (all) contents of a specific folder
+- events on upload
+- delete all ?? something wrong with it?
+
+
  -->
