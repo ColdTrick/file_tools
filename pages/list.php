@@ -2,8 +2,6 @@
 
 	global $CONFIG;
 
-	gatekeeper();
-
 	$old_context = get_context();
 
 	$page_owner_guid 	= get_input("page_owner");
