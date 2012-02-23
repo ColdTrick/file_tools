@@ -75,7 +75,8 @@
 		'file_tools:forms:edit:change_children_access' => "Update access on all subfolders",
 		'file_tools:forms:edit:change_files_access' => "Update access on all files in this folder (and all subfolders if selected)",
 		'file_tools:forms:browse' => 'Browse..',
-		
+		'file_tools:forms:empty_queue' => 'Empty queue',
+	
 		'file_tools:folder:delete:confirm_files' => "Do you also wish to delete all files in the removed (sub)folders",
 	
 		// actions

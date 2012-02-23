@@ -69,6 +69,7 @@ $language = array (
   'file_tools:forms:edit:change_children_access' => 'Pas de rechten aan op alle submappen',
   'file_tools:forms:edit:change_files_access' => 'Pas de rechten aan op alle bestanden in deze map (en alle submappen indien geselecteerd)',
   'file_tools:forms:browse' => 'Bladeren..',
+  'file_tools:forms:empty_queue' => 'Wachtrij legen',
   'file_tools:folder:delete:confirm_files' => 'Wil je ook alle bestanden verwijderen in de te verwijderen mappen?',
   'file_tools:action:edit:error:input' => 'Foute gegevens opgestuurd voor het bewerken van een map',
   'file_tools:action:edit:error:owner' => 'Geen eigenaar gevonden voor deze map',

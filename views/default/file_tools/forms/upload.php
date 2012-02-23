@@ -135,7 +135,7 @@
 			
 			
 			<div class="flash_wrapper"><span id="spanButtonPlaceHolder"></span></div>
-			<input id="btnCancel" class="submit_button" type="button" value="<?php echo elgg_echo('Empty queue'); ?>" onclick="swfu.cancelQueue();" />
+			<input id="btnCancel" class="submit_button" type="button" value="<?php echo elgg_echo('file_tools:forms:empty_queue'); ?>" onclick="swfu.cancelQueue();" />
 			
 			</label>
 		</p>
@@ -172,7 +172,7 @@
 		<p>
 			<label>
 				<?php echo elgg_echo('access'); ?><br />
-				<?php echo elgg_view('input/access', array('internalname' => 'access_id', 'value' => $access_id, 'internalid' => 'file_tools_file_access_id')); ?>
+				<?php echo elgg_view('input/access', array('internalname' => 'access_id', 'options' => get_write_access_array(), 'value' => $access_id, 'internalid' => 'file_tools_file_access_id')); ?>
 			</label>
 		</p>
 		
