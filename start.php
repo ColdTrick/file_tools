@@ -68,9 +68,11 @@
 		
 		if(get_context() == "file")
 		{
-			remove_submenu_item(elgg_echo('file:upload'));
-			add_submenu_item(elgg_echo('file:upload'), $CONFIG->wwwroot . "pg/file_tools/file/new/" . $page_owner->username);
-			add_submenu_item(elgg_echo('file_tools:upload:new'), $CONFIG->wwwroot . "pg/file_tools/import/zip/". $page_owner->username);
+			if (can_write_to_container($_SESSION['guid'], page_owner()) && isloggedin()){
+				remove_submenu_item(elgg_echo('file:upload'));
+				add_submenu_item(elgg_echo('file:upload'), $CONFIG->wwwroot . "pg/file_tools/file/new/" . $page_owner->username);
+				add_submenu_item(elgg_echo('file_tools:upload:new'), $CONFIG->wwwroot . "pg/file_tools/import/zip/". $page_owner->username);
+			}
 		}
 	}
 	
