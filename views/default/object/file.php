@@ -32,7 +32,7 @@
 		$friendlytime = elgg_view_friendly_time($vars['entity']->time_created);
 	}
 
-	$mime = $file->simpletype;
+	$mime = $file->mimetype;
 
 	if (!$title) {
 		$title = elgg_echo('untitled');
