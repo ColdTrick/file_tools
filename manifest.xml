@@ -1,59 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin_manifest>
-	<field key="author" value="ColdTrick IT Solutions" />
-	<field key="version" value="0.3.1" />
-	<field key="description" value="File Tools"/>
-	<field key="website" value="http://www.coldtrick.com" />
-	<field key="copyright" value="(C) ColdTrick 2010 - 2012" />
-	<field key="licence" value="GNU Public License version 2" />
-	<field key="elgg_version" value="2010040201" />
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>File Tools</name>
+	<author>ColdTrick IT Solutions</author>
+	<version>1.0 beta</version>
+	<description>Extend the functionality of file</description>
+	<website>http://www.coldtrick.com/</website>
+	<copyright>(C) ColdTrick IT Solutions 2011 - 2012</copyright>
+	<license>GNU Public License version 2</license>
+	
+	<requires>
+		<type>elgg_version</type>
+		<version>2011123101</version>
+	</requires>
+	
+	<requires>
+		<type>plugin</type>
+		<name>file</name>
+		<priority>after</priority>
+	</requires>
+	<requires>
+		<type>priority</type>
+		<plugin>file</plugin>
+		<priority>after</priority>
+	</requires>
+	
+ 	<category>ColdTrick</category>
 </plugin_manifest>
-
-<!-- 
-= Version History =
-
-0.3.1 (2012-01-31):
- - fixed: incorrect forward after zip upload in group 
- - fixed: incorrect access for zip uploaded files
- - fixed: incorrect forward after multiupload
-
-0.3 (2012-01-24):
- - added: default sorting options for site and group admins
- - added: more loading indicator moments (sorting, folder change)
- - changed: only postfix file when zip downloading if file already exists in zip
- - removed: some obsolete js and css
- - fixed: invalid file_tree widget title link
- - fixed: some untranslatable language keys
- - fixed: 2 functions that were not namespaced (to prevent conflicts)
- - fixed: preferred date time notation in folder details
-
-0.2 (2012-01-20):
- - initial release
-
-======================
-Features
-======================
-- Folders for users and for groups
-- Group admin can control who can manage folders in a group
-- Completely (forward and backward) compatible with the Folder plugin
-- Order files into folders
-- Drag files onto folders
-- Drag and drop folders to rearange folder structure
-- Delete a folder including subfolders (and optional all files in it)
-- Update folder access on all subfolders (optional including all files) 
-- Infinite folder structure (no limitations in length and depth)
-- Breadcrumb on file full view
-- Switching of view type (list/gallery)
-- Take over of default file menu options
-
-
-= TODO = 
-
-// Needed in 1.8
-- Use max available space for file title in listing mode
-- Folder widget should be able to show (all) contents of a specific folder
-- events on upload
-- delete all ?? something wrong with it?
-- forward na multiupload ??
-
- -->

@@ -1,0 +1,22 @@
+= Version History =
+
+0.3.1 (2012-01-31):
+
+- fixed: incorrect forward after zip upload in group 
+- fixed: incorrect access for zip uploaded files
+- fixed: incorrect forward after multiupload
+
+0.3 (2012-01-24):
+
+- added: default sorting options for site and group admins
+- added: more loading indicator moments (sorting, folder change)
+- changed: only postfix file when zip downloading if file already exists in zip
+- removed: some obsolete js and css
+- fixed: invalid file_tree widget title link
+- fixed: some untranslatable language keys
+- fixed: 2 functions that were not namespaced (to prevent conflicts)
+- fixed: preferred date time notation in folder details
+
+0.2 (2012-01-20):
+
+- initial release

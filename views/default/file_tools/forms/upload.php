@@ -5,20 +5,14 @@
 	 * @package ElggFile
 	 */
 
-	global $CONFIG;
+	$page_owner = elgg_extract("page_owner_entity", $vars, elgg_get_page_owner_entity());
+	$container_guid = $page_owner->getGUID();
 	
-	$action = "file/upload";
-	
-	if (defined('ACCESS_DEFAULT'))
-	{
-		$access_id = ACCESS_DEFAULT;
+	if(elgg_instanceof($page_owner, "group", null, "ElggGroup")){
+		$return_url = $vars["url"] . "file/group/" . $page_owner->getGUID();
+	} else {
+		$return_url = $vars["url"] . "file/owner/" . $page_owner->username;
 	}
-	else
-	{
-		$access_id = 0;
-	}
-	
-	$container_guid = page_owner_entity()->getGUID();
 ?>
 <script type="text/javascript" src="<?php echo $vars["url"]; ?>mod/file_tools/vendors/swfupload/swfupload.js"></script>
 <script type="text/javascript" src="<?php echo $vars["url"]; ?>mod/file_tools/vendors/swfupload/swfupload.queue.js"></script>
@@ -27,25 +21,19 @@
 <script type="text/javascript">
 
 
-	function file_start_upload()
-	{
-		if(swfu.startUpload())
-		{
+	function file_start_upload() {
+		if(swfu.startUpload()) {
 			console.log('upload');
-		}
-		else
-		{
+		} else {
 			console.log('no upload');
 		}
 
 		return false;
 	}
 
-	function uploadComplete(file)
-	{
-		if (this.getStats().files_queued === 0)
-		{
-			var returnUrl = "<?php echo $vars["url"] . "pg/file/owner/" . page_owner_entity()->username . "#"; ?>";
+	function uploadComplete(file) {
+		if (this.getStats().files_queued === 0) {
+			var returnUrl = "<?php echo $return_url; ?>";
 			var folder_guid = $('#file_tools_file_parent_guid').val();
 			window.location.href = returnUrl + folder_guid;
 		}
@@ -54,8 +42,7 @@
 	var swfu;
 	var filetypes = "<?php echo file_tools_allowed_extensions(true);?>";
 
-	$(document).ready(function()
-	{
+	$(document).ready(function() {
 		var settings = {
 			flash_url : "<?php echo $vars['url']; ?>mod/file_tools/vendors/swfupload/swfupload.swf",
 			//upload_url: "<?php echo $vars['url']; ?>pg/file_tools/proc/upload/multi",
@@ -101,13 +88,11 @@
 		
 		};
 
-		if($('#spanButtonPlaceHolder').length)
-		{
+		if($('#spanButtonPlaceHolder').length) {
 			swfu = new SWFUpload(settings);
 		}
-		$('#file_tools_submit_file_upload').click(function(e)
-		{		
-			swfu.addPostParam('container_guid', '<?php echo page_owner(); ?>');
+		$('#file_tools_submit_file_upload').click(function(e) {		
+			swfu.addPostParam('container_guid', '<?php echo $container_guid; ?>');
 			swfu.addPostParam('access_id', 		$('#file_tools_file_access_id').val());
 			swfu.addPostParam('tags', 			$('#file_tools_file_tags').val());
 			swfu.addPostParam('folder_guid', 	$('#file_tools_file_parent_guid').val());
@@ -118,10 +103,10 @@
 	});
 </script>
 
-<div class="contentWrapper">
-	<form id="file_tools_file_upload_form" action="<?php echo $vars['url']; ?>action/<?php echo $action; ?>" enctype="multipart/form-data" method="post">
-		<p>
-			<label>
+
+<form id="file_tools_file_upload_form" action="<?php echo $vars['url']; ?>action/file/upload" enctype="multipart/form-data" method="post" class="elgg-form">
+	<div>
+		<label>
 			<?php
 				echo elgg_view('input/securitytoken');
 				
@@ -134,50 +119,53 @@
 			</div>
 			
 			
-			<div class="flash_wrapper"><span id="spanButtonPlaceHolder"></span></div>
-			<input id="btnCancel" class="submit_button" type="button" value="<?php echo elgg_echo('file_tools:forms:empty_queue'); ?>" onclick="swfu.cancelQueue();" />
+			<div class="flash_wrapper">
+				<span id="spanButtonPlaceHolder"></span>
+			</div>
 			
-			</label>
-		</p>
+			<div class="clearfix"></div>
 			
-		<p>
-			<?php
-				echo "<input type=\"hidden\" name=\"container_guid\" value=\"{$container_guid}\" />";
-				
-				if (isset($vars['entity']))
-				{
-					echo "<input type=\"hidden\" name=\"file_guid\" value=\"{$vars['entity']->getGUID()}\" />";
-				}	
-			?>
-		</p>
-
+			<input id="btnCancel" class="elgg-button elgg-button-action" type="button" value="<?php echo elgg_echo('file_tools:forms:empty_queue'); ?>" onclick="swfu.cancelQueue();" />
 		
-		<p>
-			<label><?php echo elgg_echo("tags"); ?><br />
-			<?php
-				echo elgg_view("input/tags", array("internalname" => "tags", "value" => $tags, "internalid" => "file_tools_file_tags"));		
-			?>
-			</label>
-		</p>
+		</label>
+	</div>
+	
+	<div>
+		<?php
+			echo elgg_view("input/hidden", array("name" => "container_guid", "value" => $container_guid));	
+			
+			if (isset($vars['entity'])){
+				echo elgg_view("input/hidden", array("name" => "file_guid", "value" => $vars['entity']->getGUID()));
+			}	
+		?>
+	</div>
 
-		<?php if(get_plugin_setting("user_folder_structure", "file_tools") == "yes"){?>
-		<p>
-			<label><?php echo elgg_echo("file_tools:forms:edit:parent"); ?><br />
-			<?php
-				echo elgg_view("input/folder_select", array("internalname" => "parent_guid", "value" => get_input('parent_guid'), "internalid" => "file_tools_file_parent_guid"));		
-			?>
-			</label>
-		</p>
-		<?php }?>
-		<p>
-			<label>
-				<?php echo elgg_echo('access'); ?><br />
-				<?php echo elgg_view('input/access', array('internalname' => 'access_id', 'options' => get_write_access_array(), 'value' => $access_id, 'internalid' => 'file_tools_file_access_id')); ?>
-			</label>
-		</p>
-		
-		<p>
-			<input id="file_tools_submit_file_upload" type="submit" value="<?php echo elgg_echo("save"); ?>" />
-		</p>
-	</form>
-</div>
+	
+	<div>
+		<label><?php echo elgg_echo("tags"); ?><br />
+		<?php
+			echo elgg_view("input/tags", array("name" => "tags", "value" => $tags, "id" => "file_tools_file_tags"));		
+		?>
+		</label>
+	</div>
+
+	<?php if(elgg_get_plugin_setting("user_folder_structure", "file_tools") == "yes"){ ?>
+	<div>
+		<label><?php echo elgg_echo("file_tools:forms:edit:parent"); ?><br />
+		<?php
+			echo elgg_view("input/folder_select", array("internalname" => "parent_guid", "value" => get_input('parent_guid'), "internalid" => "file_tools_file_parent_guid"));		
+		?>
+		</label>
+	</div>
+	<?php }?>
+	<div>
+		<label>
+			<?php echo elgg_echo('access'); ?><br />
+			<?php echo elgg_view('input/access', array('name' => 'access_id', 'id' => 'file_tools_file_access_id')); ?>
+		</label>
+	</div>
+	
+	<div class="elgg-foot">
+		<?php echo elgg_view("input/submit", array("value" => elgg_echo("save"), "id" => "file_tools_submit_file_upload")); ?>
+	</div>
+</form>

@@ -74,3 +74,70 @@
 		
 		return $result;
 	}
+	
+	function file_tools_file_route_hook($hook, $type, $returnvalue, $params){
+		$result = $returnvalue;
+		
+		if(!empty($params) && is_array($params)){
+			$page = elgg_extract("segments", $params);
+			
+			switch($page[0]){
+				case "view":
+					if(!elgg_is_logged_in() && isset($page[1])){
+						if(!get_entity($page[1])){
+							gatekeeper();
+						}
+					}
+					break;
+				case "owner":
+					if(elgg_get_plugin_setting("user_folder_structure", "file_tools") == "yes"){
+						if(!empty($page[1])) {
+							$result = false;
+							
+							set_input("username", $page[1]);
+							include(dirname(dirname(__FILE__)) . "/pages/list.php");
+						}
+					}
+					break;
+				case "group":
+					if(elgg_get_plugin_setting("user_folder_structure", "file_tools") == "yes"){
+						if(!empty($page[1])) {
+							$result = false;
+							
+							set_input("page_owner", $page[1]);
+							include(dirname(dirname(__FILE__)) . "/pages/list.php");
+						}
+					}
+					break;
+			}
+		}
+		
+		return $result;
+	}
+	
+	function file_tools_title_menu_register_hook($hook, $type, $returnvalue, $params){
+		$result = $returnvalue;
+		
+		if(!empty($result) && is_array($result)){
+			if(!($page_owner = elgg_get_page_owner_guid())){
+				$page_owner = elgg_get_logged_in_user_guid();
+			}
+			
+			foreach($result as $index => $menu_item){
+				if(($menu_item->getName() == "add") && ($menu_item->getText() == elgg_echo("file:upload"))){
+					$menu_item->setHref("file_tools/file/new/" . $page_owner);
+				}
+			}
+			
+			if(elgg_in_context("file")){
+				$result[] = ElggMenuItem::factory(array(
+					"name" => "zip_upload",
+					"href" => "file_tools/import/zip/" . $page_owner,
+					"text" => elgg_echo("file_tools:upload:new"),
+					"class" => "elgg-button elgg-button-action"
+				));
+			}
+		}
+		
+		return $result;
+	}
