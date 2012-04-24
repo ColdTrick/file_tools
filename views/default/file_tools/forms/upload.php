@@ -45,7 +45,7 @@
 	$(document).ready(function() {
 		var settings = {
 			flash_url : "<?php echo $vars['url']; ?>mod/file_tools/vendors/swfupload/swfupload.swf",
-			//upload_url: "<?php echo $vars['url']; ?>pg/file_tools/proc/upload/multi",
+			//upload_url: "<?php echo $vars['url']; ?>file_tools/proc/upload/multi",
 			upload_url: "<?php echo $vars['url']; ?>mod/file_tools/procedures/upload/multi.php",
 			post_params: {
 				"PHPSESSID" 	: '<?php echo session_id();?>'
@@ -153,7 +153,7 @@
 	<div>
 		<label><?php echo elgg_echo("file_tools:forms:edit:parent"); ?><br />
 		<?php
-			echo elgg_view("input/folder_select", array("internalname" => "parent_guid", "value" => get_input('parent_guid'), "internalid" => "file_tools_file_parent_guid"));		
+			echo elgg_view("input/folder_select", array("name" => "parent_guid", "value" => get_input('parent_guid'), "id" => "file_tools_file_parent_guid"));		
 		?>
 		</label>
 	</div>

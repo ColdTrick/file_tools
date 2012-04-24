@@ -2,12 +2,12 @@
 
 	gatekeeper();
 	
-	$page_owner = page_owner_entity();
+	$page_owner = elgg_get_page_owner_entity();
 	
 	if(!empty($page_owner) && (($page_owner instanceof ElggUser) || ($page_owner instanceof ElggGroup)))
 	{
 		// set page owner & context
-		set_context("file");
+		elgg_set_context("file");
 		
 		// get data
 		// build page elements
@@ -20,7 +20,7 @@
 		$page_data = $title . $body;
 		
 		// draw page
-		page_draw($title_text, elgg_view_layout("two_column_left_sidebar", "", $page_data));
+		echo elgg_view_page($title_text, elgg_view_layout("one_sidebar", array('content' => $page_data)));
 	}
 	else
 	{

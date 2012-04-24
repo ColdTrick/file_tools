@@ -1,13 +1,13 @@
 <?php
 
 	$folder = $vars['entity'];
-	$context = get_context();
+	$context = elgg_get_context();
 	
 	$time_preference = "date";
 	
-	if($user_time_preference = get_plugin_usersetting('file_tools_time_display')){
+	if($user_time_preference = elgg_get_plugin_user_setting('file_tools_time_display')){
 		$time_preference = $user_time_preference;
-	} elseif($site_time_preference = get_plugin_setting("file_tools_default_time_display", "file_tools")) {
+	} elseif($site_time_preference = elgg_get_plugin_setting("file_tools_default_time_display", "file_tools")) {
 		$time_preference = $site_time_preference;
 	}
 	
@@ -28,11 +28,11 @@
 	}
 	
 	$delete_url = $vars["url"] . "action/file_tools/folder/delete?folder_guid=" . $folder->getGUID();
-	$edit_url 	= $vars["url"] . "pg/file_tools/folder/edit/" . $folder->getGUID();
+	$edit_url 	= $vars["url"] . "file_tools/folder/edit/" . $folder->getGUID();
 	
-	if(get_context() == "search")
+	if(elgg_get_context() == "search")
 	{
-		echo elgg_view("input/hidden", array("internalname" => "folder_guid", "value" => $folder->getGUID()));
+		echo elgg_view("input/hidden", array("name" => "folder_guid", "value" => $folder->getGUID()));
 	}
 ?>
 <div class="file_tools_folder" id="file_<?php echo $folder->getGUID(); ?>">
@@ -53,7 +53,7 @@
 	</div>
 	<?php 
 	
-	if(get_context() != "widget"){ ?>
+	if(elgg_get_context() != "widget"){ ?>
 		<div class="file_tools_file_etc"><?php echo $friendlytime;?> <span><?php echo elgg_echo('folder');?></span></div>
 		
 		<?php 
@@ -66,8 +66,8 @@
 				<?php 
 				echo '<li>' . elgg_view("output/url", array("href" => $edit_url, "text" => elgg_echo("edit"))) . '</li>';?>
 				<?php
-				$js = "onclick=\"if(confirm('". elgg_echo('question:areyousure') . "')){ file_tools_remove_folder_files(this); return true;} else { return false; }\""; 
-				echo '<li>' . elgg_view("output/url", array("href" => $delete_url, "text" => elgg_echo("delete"), "js" => $js, "is_action" => true)) . '</li>';
+				$onclick = "if(confirm('". elgg_echo('question:areyousure') . "')){ file_tools_remove_folder_files(this); return true;} else { return false; }"; 
+				echo '<li>' . elgg_view("output/url", array("href" => $delete_url, "text" => elgg_echo("delete"), "onclick" => $onclick, "is_action" => true)) . '</li>';
 				?>
 			</ul>
 		</div>

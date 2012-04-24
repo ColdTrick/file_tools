@@ -9,7 +9,7 @@
 		$selected_id = $folder->getGUID();
 	}
 	
-	$page_owner = page_owner_entity();
+	$page_owner = elgg_get_page_owner_entity();
 ?>
 <script type="text/javascript" src="<?php echo $vars["url"]; ?>mod/file_tools/vendors/jstree/jquery.tree.js"></script>
 <script type="text/javascript" src="<?php echo $vars["url"]; ?>mod/file_tools/vendors/hashchange/jquery.hashchange.js"></script>
@@ -26,7 +26,7 @@
 	function file_tools_add_folder()
 	{
 		var parent_guid = $("#file_tools_list_tree a.clicked").attr("id");
-		var forward_url = "<?php echo $vars["url"]; ?>pg/file_tools/folder/new/<?php echo page_owner();?>"
+		var forward_url = "<?php echo $vars["url"]; ?>file_tools/folder/new/<?php echo elgg_get_page_owner_guid();?>"
 		
 		if(parent_guid)
 		{
@@ -38,7 +38,7 @@
 	
 	function file_tools_reorder(folder_guid, parent_guid, order)
 	{
-		var reorder_url = "<?php echo $vars["url"];?>pg/file_tools/reorder";
+		var reorder_url = "<?php echo $vars["url"];?>file_tools/reorder";
 		$.post(reorder_url, {"folder_guid": folder_guid, "parent_guid": parent_guid, "order": order}, function()
 		{
 			file_tools_load_folder(file_tools_get_selected_tree_folder_id());
@@ -47,7 +47,7 @@
 	
 	function file_tools_load_folder(folder_guid)
 	{
-		var folder_url = "<?php echo $vars["url"];?>pg/file_tools/list/<?php echo page_owner();?>?folder_guid=" + folder_guid + "&search_viewtype=<?php echo get_input("search_viewtype", "list"); ?>";
+		var folder_url = "<?php echo $vars["url"];?>file_tools/list/<?php echo elgg_get_page_owner_guid();?>?folder_guid=" + folder_guid + "&search_viewtype=<?php echo get_input("search_viewtype", "list"); ?>";
 		$("#file_tools_list_files_container").load(folder_url);
 	}	
 	
@@ -86,7 +86,7 @@
 	
 	$(function()
 	{
-		<?php if(get_plugin_setting("user_folder_structure", "file_tools") == "yes"){?>
+		<?php if(elgg_get_plugin_setting("user_folder_structure", "file_tools") == "yes"){?>
 		if(window.location.hash.substring(1) == '')
 		{
 			file_tools_load_folder(0);
@@ -94,7 +94,7 @@
 
 		$('#file_tools_list_new_folder_toggle').live('click', function()
 		{
-			var link = "<?php echo $vars["url"]; ?>pg/file_tools/folder/new/<?php echo $page_owner->username; ?>";
+			var link = "<?php echo $vars["url"]; ?>file_tools/folder/new/<?php echo $page_owner->username; ?>";
 			if(file_tools_get_selected_tree_folder_id() != undefined) {
 				link = link + '?folder_guid=' + file_tools_get_selected_tree_folder_id();				
 	    	}
@@ -108,7 +108,7 @@
 			file_tools_load_folder(window.location.hash.substring(1));
 		});
 		
-		$("a[href*='pg/file_tools/file/new'], a[href*='pg/file_tools/import/zip']").live("click",function(e)
+		$("a[href*='file_tools/file/new'], a[href*='file_tools/import/zip']").live("click",function(e)
 		{
 			var link = $(this).attr('href');
 		
@@ -127,7 +127,7 @@
 		$('select[name="file_sort"], select[name="file_sort_direction"]').change(function()
 		{
 			file_tools_show_loader($("#file_tools_list_folder"));
-			var folder_url = "<?php echo $vars["url"];?>pg/file_tools/list/<?php echo page_owner();?>?folder_guid=" + file_tools_get_selected_tree_folder_id() + "&search_viewtype=<?php echo get_input("search_viewtype", "list"); ?>&sort_by=" + $('select[name="file_sort"]').val() + "&direction=" + $('select[name="file_sort_direction"]').val();
+			var folder_url = "<?php echo $vars["url"];?>file_tools/list/<?php echo elgg_get_page_owner_guid();?>?folder_guid=" + file_tools_get_selected_tree_folder_id() + "&search_viewtype=<?php echo get_input("search_viewtype", "list"); ?>&sort_by=" + $('select[name="file_sort"]').val() + "&direction=" + $('select[name="file_sort_direction"]').val();
 			$("#file_tools_list_files_container").load(folder_url);
 		});
 	
@@ -148,7 +148,7 @@
 					data.push($(value).val());
 				});
 				
-				$.getJSON("<?php echo $vars["url"]; ?>pg/file_tools/proc/file/delete", {check: JSON.stringify(data)}, function(response)
+				$.getJSON("<?php echo $vars["url"]; ?>file_tools/proc/file/delete", {check: JSON.stringify(data)}, function(response)
 				{
 					$.each(response.deleted, function(i, guid)
 					{
@@ -180,7 +180,7 @@
 					data.push($(value).val());
 				});
 	
-				window.location = '<?php echo $vars['url']; ?>pg/file_tools/file/download?guids=' + data.join('-');
+				window.location = '<?php echo $vars['url']; ?>file_tools/file/download?guids=' + data.join('-');
 			}
 			else
 			{
@@ -289,7 +289,7 @@
 			"tolerance": "pointer",
 			"drop": function(event, ui) {
 	
-				var file_move_url = "<?php echo $vars["url"];?>pg/file_tools/proc/file/move";
+				var file_move_url = "<?php echo $vars["url"];?>file_tools/proc/file/move";
 				var file_guid = $(ui.draggable).prev("input").val();
 				if(file_guid == undefined)
 				{
@@ -335,7 +335,7 @@
 		?>
 			<div>
 			<?php
-				echo elgg_view("input/button", array('value' => elgg_echo("file_tools:new:title"), 'internalid' => 'file_tools_list_new_folder_toggle')); 
+				echo elgg_view("input/button", array('value' => elgg_echo("file_tools:new:title"), 'id' => 'file_tools_list_new_folder_toggle')); 
 			?>
 			</div>
 			<?php 
@@ -355,12 +355,12 @@
 	} else {
 		if($page_owner instanceof ElggGroup && !empty($page_owner->file_tools_sort)){
 			$sort_value = $page_owner->file_tools_sort;
-		} elseif($site_sort_default = get_plugin_setting("sort", "file_tools")){
+		} elseif($site_sort_default = elgg_get_plugin_setting("sort", "file_tools")){
 			$sort_value = $site_sort_default;
 		}
 	}
 	
-	echo elgg_view('input/pulldown', array('internalname' => 'file_sort',
+	echo elgg_view('input/dropdown', array('name' => 'file_sort',
 												'value' => $sort_value,
 												'options_values' => array(
 																	'oe.title' 			=> elgg_echo('title'), 
@@ -375,12 +375,12 @@
 	} else {
 		if($page_owner instanceof ElggGroup && !empty($page_owner->file_tools_sort_direction)){
 			$sort_direction_value = $page_owner->file_tools_sort_direction;
-		} elseif($site_sort_direction_default = get_plugin_setting("sort_direction", "file_tools")){
+		} elseif($site_sort_direction_default = elgg_get_plugin_setting("sort_direction", "file_tools")){
 			$sort_direction_value = $site_sort_direction_default;
 		}
 	}
 	
-	echo elgg_view('input/pulldown', array('internalname' => 'file_sort_direction',
+	echo elgg_view('input/dropdown', array('name' => 'file_sort_direction',
 											'value' => $sort_direction_value,
 												'options_values' => array(
 																	'asc' 	=> elgg_echo('file_tools:list:sort:asc'), 

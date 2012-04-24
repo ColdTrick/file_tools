@@ -4,7 +4,7 @@
 	 * jQuery call to move a file in a folder
 	 */
 
-	if(isloggedin())
+	if(elgg_is_logged_in())
 	{
 		$file_guid 		= (int)get_input("file_guid", 0);
 		$folder_guid 	= (int)str_replace('file_tools_tree_element_', '', get_input("folder_guid", 0));

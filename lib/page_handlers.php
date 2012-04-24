@@ -59,8 +59,8 @@
 				}
 				break;
 			default:
-				forward("pg/file_tools/list/" . get_loggedin_userid());
+				forward("file_tools/list/" . elgg_get_logged_in_user_guid());
 		}
 	
-		return true;
+		return TRUE;
 	}

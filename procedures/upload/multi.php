@@ -13,7 +13,7 @@
 	$container_guid = (int) get_input('container_guid', 0);
 	if ($container_guid == 0)
 	{
-		$container_guid = get_loggedin_userid();
+		$container_guid = elgg_get_logged_in_user_guid();
 	}
 	
 	$tags = explode(',', $tags);
@@ -26,7 +26,7 @@
 		$file->description 		= $uploaded_file['name'];
 		$file->access_id 		= $access_id;
 		$file->container_guid 	= $container_guid;
-		$file->owner_guid 		= get_loggedin_userid();
+		$file->owner_guid 		= elgg_get_logged_in_user_guid();
 		$file->tags 			= $tags;
 		$file->folder_guid 		= $folder_guid;
 		

@@ -14,7 +14,7 @@
 				$forward = false;
 				
 				// set context and page_owner
-				set_context("file");
+				elgg_set_context("file");
 				set_page_owner($folder->getContainer());
 				
 				// build page elements
@@ -31,7 +31,7 @@
 
 	if(!$forward)
 	{
-		page_draw($title_text, elgg_view_layout("two_column_left_sidebar", "", $page_data));
+	    echo elgg_view_page($title_text, elgg_view_layout("one_sidebar", array('content' => $page_data)));
 	}
 	else
 	{

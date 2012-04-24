@@ -4,7 +4,7 @@
 
 	gatekeeper();	
 
-	$page_owner = page_owner_entity();
+	$page_owner = elgg_get_page_owner_entity();
 
 	if($page_owner)
 	{
@@ -28,12 +28,12 @@
 			}
 			
 			$files .= '<ul>';
-			$uploaded_files = elgg_view('page_elements/contentwrapper', array('body' => $files));
+			$uploaded_files = $files;
 		}
 
-		$body = elgg_view_layout("two_column_left_sidebar", "", $page_data.$uploaded_files);
+		$body = elgg_view_layout("one_sidebar", array('content' => $page_data.$uploaded_files));
 
-		page_draw($title_text, $body);
+		echo elgg_view_page($title_text, $body);
 		$_SESSION['extracted_files'] = null;
 	}
 	else 

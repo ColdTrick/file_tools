@@ -4,7 +4,7 @@
 	
 	echo "<div id='file_tools_breadcrumbs'>";	
 	echo "<ul>";		
-	echo "<li><a href='" . $vars["url"] . "pg/file_tools/list/" . page_owner() . "'>" . elgg_echo("file_tools:list:folder:main") . "</a></li>";
+	echo "<li><a href='" . $vars["url"] . "file_tools/list/" . page_owner() . "'>" . elgg_echo("file_tools:list:folder:main") . "</a></li>";
 	
 	if($folder)
 	{	
@@ -54,14 +54,14 @@
 	
 	if($folder)
 	{		
-		$edit_url = $vars["url"] . "pg/file_tools/folder/edit/" . $folder->getGUID();
+		$edit_url = $vars["url"] . "file_tools/folder/edit/" . $folder->getGUID();
 		$delete_url = $vars["url"] . "action/file_tools/folder/delete?folder_guid=" . $folder->getGUID();
 		
 		$time_preference = "date";
 		
-		if($user_time_preference = get_plugin_usersetting('file_tools_time_display')){
+		if($user_time_preference = elgg_get_plugin_user_setting('file_tools_time_display')){
 			$time_preference = $user_time_preference;
-		} elseif($site_time_preference = get_plugin_setting("file_tools_default_time_display", "file_tools")) {
+		} elseif($site_time_preference = elgg_get_plugin_setting("file_tools_default_time_display", "file_tools")) {
 			$time_preference = $site_time_preference;
 		}
 		
@@ -74,10 +74,10 @@
 			$friendlytime 	= elgg_view_friendly_time($folder->time_created);
 		}
 		
-		$js = "onclick=\"if(confirm('". elgg_echo('question:areyousure') . "')){ file_tools_remove_folder_files(this); return true;} else { return false; }\""; 
+		$onclick = "if(confirm('". elgg_echo('question:areyousure') . "')){ file_tools_remove_folder_files(this); return true;} else { return false; }"; 
 		
 		$edit_link = elgg_view("output/url", array("href" => $edit_url, "text" => elgg_echo("edit")));		
-		$delete_link = elgg_view("output/url", array("href" => $delete_url, "text" => elgg_echo("delete"), "js" => $js, "is_action" => true));
+		$delete_link = elgg_view("output/url", array("href" => $delete_url, "text" => elgg_echo("delete"), "onclick" => $onclick, "is_action" => true));
 				
 		echo '<div id="file_tools_folder_preview">';
 

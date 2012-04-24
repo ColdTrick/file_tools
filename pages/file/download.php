@@ -2,7 +2,7 @@
 
 	global $CONFIG;
 	
-	$user_guid = get_loggedin_userid();
+	$user_guid = elgg_get_logged_in_user_guid();
 	
 	$zip_dir = $CONFIG->dataroot . 'file_tools/zip_temp/';
 	
