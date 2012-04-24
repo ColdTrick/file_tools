@@ -2,7 +2,7 @@
 
 	$widget = $vars["entity"];
 	
-	if($folders = file_tools_get_folders($widget->getOwner())){
+	if($folders = file_tools_get_folders($widget->owner_guid)){
 		$selected_folders = $widget->getMetadata("folder_guids");
 		if(!empty($selected_folders) && !is_array($selected_folders)){
 			$selected_folders = array($selected_folders);
