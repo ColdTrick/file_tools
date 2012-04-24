@@ -8,7 +8,7 @@
 
 	global $CONFIG;
 	
-	$context = get_context();
+	$context = elgg_get_context();
 	
 	$file = $vars['entity'];
 
@@ -20,9 +20,9 @@
 
 	$time_preference = "date";
 	
-	if($user_time_preference = get_plugin_usersetting('file_tools_time_display')){
+	if($user_time_preference = elgg_get_plugin_user_setting('file_tools_time_display')){
 		$time_preference = $user_time_preference;
-	} elseif($site_time_preference = get_plugin_setting("file_tools_default_time_display", "file_tools")) {
+	} elseif($site_time_preference = elgg_get_plugin_setting("file_tools_default_time_display", "file_tools")) {
 		$time_preference = $site_time_preference;
 	}
 	
@@ -42,7 +42,7 @@
 	
 	$download_url = $vars['url'] . "mod/file/download.php?file_guid=" . $file_guid;
 	$delete_url = $vars["url"] . "action/file/delete?file=" . $file_guid;
-	$edit_url = $vars["url"] . "pg/file/edit/" . $file_guid;
+	$edit_url = $vars["url"] . "file/edit/" . $file_guid;
 
 	if(strpos($mime, 'image') !== false) {
 		$file_icon = '<img src="' . $vars['url'] . 'mod/file/thumbnail.php?file_guid=' . $file_guid . '&size=small" />';
@@ -50,14 +50,14 @@
 		$file_icon = elgg_view("file/icon", array("mimetype" => $mime, 'thumbnail' => $file->thumbnail, 'file_guid' => $file_guid, 'size' => 'small'));
 	}
 	
-	if(!$vars["full"] && get_context() == "search")
+	if(!$vars["full"] && elgg_get_context() == "search")
 	{
-		echo elgg_view("input/hidden", array("internalname" => "file_guid", "value" => $file->getGUID()));
+		echo elgg_view("input/hidden", array("name" => "file_guid", "value" => $file->getGUID()));
 	}
 	
 	if($vars["full"] == false || $context == "search")
 	{
-		if(get_plugin_setting("user_folder_structure", "file_tools") == "yes" && get_input('search_viewtype') !== "gallery")
+		if(elgg_get_plugin_setting("user_folder_structure", "file_tools") == "yes" && get_input('search_viewtype') !== "gallery")
 		{
 			
 			?>
@@ -124,7 +124,7 @@
 				echo "<p class=\"filerepo_timestamp\"><small><a href=\"{$vars['url']}pg/file/owner/{$owner->username}\">{$owner->username}</a> {$friendlytime}</small></p>";
 
 				//get the number of comments
-				$numcomments = elgg_count_comments($vars['entity']);
+				$numcomments = $vars['entity']->countComments();
 				if ($numcomments)
 					echo "<p class=\"filerepo_comments\"><a href=\"{$file->getURL()}\">" . sprintf(elgg_echo("comments")) . " (" . $numcomments . ")</a></p>";
 
@@ -148,9 +148,9 @@
 			} else {
 				echo "<p class=\"filerepo_title\">{$title}</p>";
 				echo "<a href=\"{$file->getURL()}\">" . elgg_view("file/icon", array("mimetype" => $mime, 'thumbnail' => $file->thumbnail, 'file_guid' => $file_guid, 'size' => 'large')) . "</a>";
-				echo "<p class=\"filerepo_timestamp\"><small><a href=\"{$vars['url']}pg/file/owner/{$owner->username}\">{$owner->name}</a> {$friendlytime}</small></p>";
+				echo "<p class=\"filerepo_timestamp\"><small><a href=\"{$vars['url']}file/owner/{$owner->username}\">{$owner->name}</a> {$friendlytime}</small></p>";
 				//get the number of comments
-				$numcomments = elgg_count_comments($file);
+				$numcomments = $file->countComments();
 				if ($numcomments)
 					echo "<p class=\"filerepo_comments\"><a href=\"{$file->getURL()}\">" . sprintf(elgg_echo("comments")) . " (" . $numcomments . ")</a></p>";
 
@@ -160,8 +160,8 @@
 			
 		} else {
 			$info = "<p><a href=\"{$file->getURL()}\">{$title}</a> <a style=\"float: right; margin-right:10px;\" href=\"{$vars['url']}mod/file/download.php?file_guid={$file_guid}\">download</a></p>";
-			$info .= "<p class=\"owner_timestamp\"><a href=\"{$vars['url']}pg/file/owner/{$owner->username}\">{$owner->name}</a> {$friendlytime}";
-			$numcomments = elgg_count_comments($file);			
+			$info .= "<p class=\"owner_timestamp\"><a href=\"{$vars['url']}file/owner/{$owner->username}\">{$owner->name}</a> {$friendlytime}";
+			$numcomments = $file->countComments();			
 				if ($numcomments)
 				{
 					$info .= ", <a href=\"{$file->getURL()}\">" . sprintf(elgg_echo("comments")) . " (" . $numcomments . ")</a>";
@@ -170,7 +170,7 @@
 
 			$icon = "<a href=\"{$file->getURL()}\">" . $file_icon . "</a>";
 
-			echo elgg_view_listing($icon, $info);
+			echo elgg_view('page/components/image_block', array('image' => $icon, 'body' => $info));
 		}
 	}
 	else
@@ -196,9 +196,9 @@
 		<div class="filerepo_title"><h2><a href="<?php echo $vars['url']; ?>mod/file/download.php?file_guid=<?php echo $file_guid; ?>"><?php echo $title; ?></a></h2></div>
 		<div class="filerepo_owner">
 			<?php
-				echo elgg_view("profile/icon",array('entity' => $owner, 'size' => 'tiny'));
+				echo elgg_view_entity_icon($owner, 'tiny');
 			?>
-			<p class="filerepo_owner_details"><b><a href="<?php echo $vars['url']; ?>pg/file/owner/<?php echo $owner->username; ?>"><?php echo $owner->name; ?></a></b><br />
+			<p class="filerepo_owner_details"><b><a href="<?php echo $vars['url']; ?>file/owner/<?php echo $owner->username; ?>"><?php echo $owner->name; ?></a></b><br />
 			<small><?php echo $friendlytime; ?></small></p>
 		</div>
 		</div>
@@ -215,7 +215,7 @@
 		?></div><?php
 	}
 
-	$categories = elgg_view('categories/view',$vars);
+	$categories = elgg_view('output/categories',$vars);
 	if (!empty($categories))
 	{
 		?><div class="filerepo_categories"><?php
@@ -241,7 +241,7 @@
 	{
 ?>
 	<div class="filerepo_controls">
-		<p><a href="<?php echo $vars['url']; ?>pg/file/edit/<?php echo $file->getGUID(); ?>"><?php echo elgg_echo('edit'); ?></a>&nbsp;
+		<p><a href="<?php echo $vars['url']; ?>file/edit/<?php echo $file->getGUID(); ?>"><?php echo elgg_echo('edit'); ?></a>&nbsp;
 		<?php 
 			echo elgg_view('output/confirmlink',array(				
 				'href' => $vars['url'] . "action/file/delete?file=" . $file->getGUID(),
@@ -259,8 +259,4 @@
 </div>
 
 <?php
-	if($vars['full']) 
-	{
-		echo elgg_view_comments($file);		
-	}
 }

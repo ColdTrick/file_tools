@@ -23,6 +23,9 @@
 		<plugin>file</plugin>
 		<priority>after</priority>
 	</requires>
-	
+	<requires>
+		<type>plugin</type>
+		<name>categories</name>
+	</requires>
  	<category>ColdTrick</category>
 </plugin_manifest>
