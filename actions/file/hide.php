@@ -30,7 +30,7 @@
 		"inverse_relationship" => true
 	);
 	
-	if(stristr($_SERVER["HTTP_REFERER"], "pg/file")){
+	if(stristr($_SERVER["HTTP_REFERER"], "file")){
 	
 		$folders = elgg_get_entities_from_relationship($options);
 		if(!empty($folders)){

@@ -1,6 +1,6 @@
 <?php
 
-	$page_owner = get_input('page_owner', get_loggedin_userid());
+	$page_owner = get_input('page_owner', elgg_get_logged_in_user_guid());
 	$container_guid = (int)get_input('container_guid', $page_owner);
 
 	set_time_limit(0);
@@ -27,7 +27,7 @@
 			else
 			{
 				system_message(elgg_echo('file_tools:error:fileuploadsuccess'));
-				forward('pg/file/owner/' . get_entity($container_guid)->username . '#' . $parent_guid);
+				forward('file/owner/' . get_entity($container_guid)->username . '#' . $parent_guid);
 			}
 		}
 		else
