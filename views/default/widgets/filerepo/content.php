@@ -63,7 +63,7 @@ $('a.show_file_desc').click(function () {
             foreach($files as $f){
             	
                 $mime = $f->mimetype;
-                echo "<a href=\"{$f->getURL()}\">" . elgg_view("file/icon", array("mimetype" => $mime, 'thumbnail' => $f->thumbnail, 'file_guid' => $f->guid)) . "</a>";
+                echo "<a href=\"{$f->getURL()}\">" . elgg_view("icon/object/file", array("entity" => $f)) . "</a>";
             				
             }
             

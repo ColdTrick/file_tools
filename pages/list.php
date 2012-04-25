@@ -122,7 +122,7 @@
 				$body = '<div id="file_tools_list_files_container">' . elgg_view("ajax/loader") . '</div>
 						<div class="contentWrapper">';
 	
-				if(page_owner_entity()->canEdit())
+				if(elgg_get_page_owner_entity()->canEdit())
 				{
 					$body .= '<a id="file_tools_action_bulk_delete" href="javascript:void(0);">' . elgg_echo("file_tools:list:delete_selected") . '</a> | ';
 				} 

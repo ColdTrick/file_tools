@@ -15,13 +15,13 @@
 				
 				// set context and page_owner
 				elgg_set_context("file");
-				set_page_owner($folder->getContainer());
+				set_page_owner($folder->getContainerGUID());
 				
 				// build page elements
 				$title_text = elgg_echo("file_tools:edit:title");
 				$title = elgg_view_title($title_text);
 				
-				$edit = elgg_view("file_tools/forms/edit", array("folder" => $folder, "page_owner_entity" => page_owner_entity()));
+				$edit = elgg_view("file_tools/forms/edit", array("folder" => $folder, "page_owner_entity" => elgg_get_page_owner_entity()));
 				
 				// build page
 				$page_data = $title . $edit;

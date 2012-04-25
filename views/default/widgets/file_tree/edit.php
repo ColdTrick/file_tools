@@ -12,7 +12,7 @@
 		
 		echo elgg_echo("widgets:file_tree:edit:select");
 		echo "<div class='file_tree_widget_edit_folder_wrapper'>";
-		echo elgg_view("input/hidden", array("internalname" => "params[folder_guids][]", "value" => "")); // needed to be able to empty the list
+		echo elgg_view("input/hidden", array("name" => "params[folder_guids][]", "value" => "")); // needed to be able to empty the list
 		echo file_tools_build_widget_options($folders, "params[folder_guids][]", $selected_folders);
 		echo "</div>";
 	}

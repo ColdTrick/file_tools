@@ -41,13 +41,13 @@
 	}
 	
 	$download_url = $vars['url'] . "mod/file/download.php?file_guid=" . $file_guid;
-	$delete_url = $vars["url"] . "action/file/delete?file=" . $file_guid;
+	$delete_url = $vars["url"] . "action/file/delete?guid=" . $file_guid;
 	$edit_url = $vars["url"] . "file/edit/" . $file_guid;
 
 	if(strpos($mime, 'image') !== false) {
 		$file_icon = '<img src="' . $vars['url'] . 'mod/file/thumbnail.php?file_guid=' . $file_guid . '&size=small" />';
 	} else {
-		$file_icon = elgg_view("file/icon", array("mimetype" => $mime, 'thumbnail' => $file->thumbnail, 'file_guid' => $file_guid, 'size' => 'small'));
+		$file_icon = elgg_view("icon/object/file", array("entity" => $file, 'size' => 'small'));
 	}
 	
 	if(!$vars["full"] && elgg_get_context() == "search")
@@ -121,7 +121,7 @@
 			if ($vars['entity']->smallthumb) {
 				echo "<p class=\"filerepo_title\">" . $file->title . "</p>";
 				echo "<p><a href=\"{$file->getURL()}\"><img src=\"{$vars['url']}mod/file/thumbnail.php?size=medium&file_guid={$vars['entity']->getGUID()}\" border=\"0\" /></a></p>";
-				echo "<p class=\"filerepo_timestamp\"><small><a href=\"{$vars['url']}pg/file/owner/{$owner->username}\">{$owner->username}</a> {$friendlytime}</small></p>";
+				echo "<p class=\"filerepo_timestamp\"><small><a href=\"{$vars['url']}file/owner/{$owner->username}\">{$owner->username}</a> {$friendlytime}</small></p>";
 
 				//get the number of comments
 				$numcomments = $vars['entity']->countComments();
@@ -132,10 +132,10 @@
 				//if the user can edit, display edit and delete links
 				if ($file->canEdit()) {
 					echo "<div class=\"filerepo_controls\"><p>";
-					echo "<a href=\"{$vars['url']}pg/file/edit/{$file->getGUID()}\">" . elgg_echo('edit') . "</a>&nbsp;";
+					echo "<a href=\"{$vars['url']}file/edit/{$file->getGUID()}\">" . elgg_echo('edit') . "</a>&nbsp;";
 					echo elgg_view('output/confirmlink',array(
 						
-							'href' => $vars['url'] . "action/file/delete?file=" . $file->getGUID(),
+							'href' => $vars['url'] . "action/file/delete?guid=" . $file->getGUID(),
 							'text' => elgg_echo("delete"),
 							'confirm' => elgg_echo("file:delete:confirm"),
 							'is_action' => true,
@@ -183,7 +183,7 @@
 			<a href="<?php echo $vars['url']; ?>mod/file/download.php?file_guid=<?php echo $file_guid; ?>">
 			<?php
 			
-				echo elgg_view("file/icon", array("mimetype" => $mime, 'thumbnail' => $file->thumbnail, 'file_guid' => $file_guid));
+				echo elgg_view("icon/object/file", array('entity' => $file));
 			?></a>					
 		</div>
 
@@ -244,7 +244,7 @@
 		<p><a href="<?php echo $vars['url']; ?>file/edit/<?php echo $file->getGUID(); ?>"><?php echo elgg_echo('edit'); ?></a>&nbsp;
 		<?php 
 			echo elgg_view('output/confirmlink',array(				
-				'href' => $vars['url'] . "action/file/delete?file=" . $file->getGUID(),
+				'href' => $vars['url'] . "action/file/delete?guid=" . $file->getGUID(),
 				'text' => elgg_echo("delete"),
 				'confirm' => elgg_echo("file:delete:confirm"),
 				'is_action' => true,

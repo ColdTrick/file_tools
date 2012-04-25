@@ -4,7 +4,7 @@
 	
 	echo "<div id='file_tools_breadcrumbs'>";	
 	echo "<ul>";		
-	echo "<li><a href='" . $vars["url"] . "file_tools/list/" . page_owner() . "'>" . elgg_echo("file_tools:list:folder:main") . "</a></li>";
+	echo "<li><a href='" . $vars["url"] . "file_tools/list/" . elgg_get_page_owner_guid() . "'>" . elgg_echo("file_tools:list:folder:main") . "</a></li>";
 	
 	if($folder)
 	{	

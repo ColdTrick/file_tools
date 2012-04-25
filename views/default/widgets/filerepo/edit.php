@@ -28,7 +28,7 @@ foreach ($options as $option)  {
 			"yes" => elgg_echo("option:yes")
 		);
 		echo elgg_echo("widget:file:edit:show_only_featured") . "<br />"; 
-		echo elgg_view("input/pulldown", array("internalname" => "params[featured_only]", "options_values" => $options, "value" => $vars["entity"]->featured_only));
+		echo elgg_view("input/dropdown", array("name" => "params[featured_only]", "options_values" => $options, "value" => $vars["entity"]->featured_only));
 	?>
 </p>
 <p>

@@ -210,10 +210,10 @@
 		$result = false;
 		
 		if(!$folder) {
-			$container_guid = page_owner();
+			$container_guid = elgg_get_page_owner_guid();
 			$parent_guid = 0;
 		} else {
-			$container_guid = $folder->getContainer();
+			$container_guid = $folder->getContainerGUID();
 			$parent_guid = $folder->getGUID();
 		}
 		

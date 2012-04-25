@@ -388,7 +388,7 @@
 </div>
 
 <?php
-if(isloggedin())
+if(elgg_is_logged_in())
 {
 	?>
 	<div class="contentWrapper">
