@@ -64,8 +64,8 @@
 			<span><?php echo elgg_echo('file_tools:file:actions');?></span>
 			<ul>
 				<?php 
-				echo '<li>' . elgg_view("output/url", array("href" => $edit_url, "text" => elgg_echo("edit"))) . '</li>';?>
-				<?php
+				echo '<li>' . elgg_view("output/url", array("href" => $edit_url, "text" => elgg_echo("edit"))) . '</li>';
+				
 				$onclick = "if(confirm('". elgg_echo('question:areyousure') . "')){ file_tools_remove_folder_files(this); return true;} else { return false; }"; 
 				echo '<li>' . elgg_view("output/url", array("href" => $delete_url, "text" => elgg_echo("delete"), "onclick" => $onclick, "is_action" => true)) . '</li>';
 				?>
