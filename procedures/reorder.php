@@ -4,7 +4,7 @@
 	 * jQuery call to reorder a folder
 	 */
 
-	if(isloggedin())
+	if(elgg_is_logged_in())
 	{
 		$folder_guid = (int)get_input("folder_guid", 0);
 		$parent_guid = (int)get_input("parent_guid", 0);

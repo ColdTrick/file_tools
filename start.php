@@ -32,7 +32,7 @@
 		// need to keep file_tree for the widget name to be compatible with previous filetree plugin users
 		elgg_register_widget_type ("file_tree", elgg_echo("widgets:file_tree:title"), elgg_echo("widgets:file_tree:description"), "dashboard,profile,groups");
 		if(is_callable("widget_manager_add_widget_title_link")){
-			widget_manager_add_widget_title_link("file_tree", "[BASEURL]pg/file/owner/[USERNAME]");
+			widget_manager_add_widget_title_link("file_tree", "[BASEURL]file/owner/[USERNAME]");
 		}
 	}
 

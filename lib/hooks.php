@@ -62,7 +62,7 @@
 		if(!empty($params) && is_array($params))
 		{
 			
-			if((get_context() == "file_tools") && ($page_owner = page_owner_entity()) && ($page_owner instanceof ElggGroup))
+			if((elgg_get_context() == "file_tools") && ($page_owner = elgg_get_page_owner_entity()) && ($page_owner instanceof ElggGroup))
 			{
 				$result = array(
 					$page_owner->group_acl => elgg_echo("groups:group") . ": " . $page_owner->name,

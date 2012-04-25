@@ -210,10 +210,10 @@
 		$result = false;
 		
 		if(!$folder) {
-			$container_guid = page_owner();
+			$container_guid = elgg_get_page_owner_guid();
 			$parent_guid = 0;
 		} else {
-			$container_guid = $folder->getContainer();
+			$container_guid = $folder->getContainerGUID();
 			$parent_guid = $folder->getGUID();
 		}
 		
@@ -314,7 +314,7 @@
 	function file_tools_allowed_extensions($zip = false) {
 		$result = false;
 		
-		$allowed_extensions_settings = trim(get_plugin_setting('allowed_extensions', 'file_tools'));
+		$allowed_extensions_settings = trim(elgg_get_plugin_setting('allowed_extensions', 'file_tools'));
 		
 		if(!empty($allowed_extensions_settings)) {
 			$allowed_extensions_settings = strtolower($allowed_extensions_settings);
@@ -323,7 +323,7 @@
 			
 			$result = $allowed_extensions;	
 		} else {
-			$result = array('txt','jpg','jpeg','png','bmp','gif','pdf','doc','docx','xls','xlsx','pptx');
+			$result = array('txt','jpg','jpeg','png','bmp','gif','pdf','doc','docx','xls','xlsx','pptx','odt','ods','odp');
 		}
 		
 		if(!$zip) {
@@ -733,7 +733,7 @@
 																
 								$filehandler->title 			= $folder;
 								$filehandler->originalfilename 	= $folder;	
-								$filehandler->owner_guid		= get_loggedin_userid();
+								$filehandler->owner_guid		= elgg_get_logged_in_user_guid();
 								
 								$filehandler->container_guid 	= $container_guid;
 								$filehandler->access_id			= $access_id;

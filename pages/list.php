@@ -2,7 +2,7 @@
 
 	global $CONFIG;
 
-	$old_context = get_context();
+	$old_context = elgg_get_context();
 
 	$page_owner_guid 	= get_input("page_owner");
 	$page_owner 		= get_entity($page_owner_guid);
@@ -16,7 +16,7 @@
 		$sort_value = 'e.time_created';
 		if($page_owner instanceof ElggGroup && !empty($page_owner->file_tools_sort)){
 			$sort_value = $page_owner->file_tools_sort;
-		} elseif($site_sort_default = get_plugin_setting("sort", "file_tools")){
+		} elseif($site_sort_default = elgg_get_plugin_setting("sort", "file_tools")){
 			$sort_value = $site_sort_default;
 		}
 		
@@ -27,7 +27,7 @@
 		$sort_direction_value = 'asc';
 		if($page_owner instanceof ElggGroup && !empty($page_owner->file_tools_sort_direction)){
 			$sort_direction_value = $page_owner->file_tools_sort_direction;
-		} elseif($site_sort_direction_default = get_plugin_setting("sort_direction", "file_tools")){
+		} elseif($site_sort_direction_default = elgg_get_plugin_setting("sort_direction", "file_tools")){
 			$sort_direction_value = $site_sort_direction_default;
 		}
 		
@@ -38,7 +38,7 @@
 	{
 		// set page owner & context
 		set_page_owner($page_owner_guid);
-		set_context("file");
+		elgg_set_context("file");
 
 		group_gatekeeper();
 
@@ -70,7 +70,7 @@
 		{
 			if($folder_guid == 0)
 			{
-				if(get_plugin_setting("user_folder_structure", "file_tools") == "yes")
+				if(elgg_get_plugin_setting("user_folder_structure", "file_tools") == "yes")
 				{
 					$files_options["wheres"] = $wheres;
 				}
@@ -89,7 +89,7 @@
 			}	
 		}
 
-		if(get_plugin_setting("user_folder_structure", "file_tools") == "yes")
+		if(elgg_get_plugin_setting("user_folder_structure", "file_tools") == "yes")
 		{
 			if(!$draw_page)
 			{
@@ -103,7 +103,7 @@
 				// default lists all unsorted files
 				if($folder_guid === false)
 				{
-					if(get_plugin_setting("user_folder_structure", "file_tools") == "yes")
+					if(elgg_get_plugin_setting("user_folder_structure", "file_tools") == "yes")
 					{
 						$files_options["wheres"] = $wheres;
 					}
@@ -114,7 +114,7 @@
 				
 				// build page elements
 				$tree = '';
-				if(get_plugin_setting("user_folder_structure", "file_tools") == "yes")
+				if(elgg_get_plugin_setting("user_folder_structure", "file_tools") == "yes")
 				{
 					$tree = elgg_view("file_tools/list/tree", array("folder" => $folder, "folders" => $folders));
 				}
@@ -122,7 +122,7 @@
 				$body = '<div id="file_tools_list_files_container">' . elgg_view("ajax/loader") . '</div>
 						<div class="contentWrapper">';
 	
-				if(page_owner_entity()->canEdit())
+				if(elgg_get_page_owner_entity()->canEdit())
 				{
 					$body .= '<a id="file_tools_action_bulk_delete" href="javascript:void(0);">' . elgg_echo("file_tools:list:delete_selected") . '</a> | ';
 				} 
@@ -134,7 +134,7 @@
 	
 				$title = elgg_view_title($title_text);
 
-				page_draw($title_text, elgg_view_layout("two_column_left_sidebar", "", $title . $body, $tree));
+				echo elgg_view_page($title_text, elgg_view_layout("one_sidebar", array('content' => $title . $body, 'sidebar' => $tree)));
 			}
 		}
 		else
@@ -144,9 +144,9 @@
 			$offset = (int)get_input('offset', 0);
 			$title = elgg_view_title($title_text);
 
-			$body = elgg_list_entities(array('types' => 'object', 'subtypes' => 'file', 'container_guid' => page_owner(), 'limit' => 10, 'offset' => $offset, 'full_view' => false));
+			$body = elgg_list_entities(array('types' => 'object', 'subtypes' => 'file', 'container_guid' => elgg_get_page_owner_guid(), 'limit' => 10, 'offset' => $offset, 'full_view' => false));
 
-			page_draw($title_text, elgg_view_layout("two_column_left_sidebar", "", $title . $body, $tree));
+			echo elgg_view_page($title_text, elgg_view_layout("one_sidebar", array('content' => $title . $body, 'sidebar' => $tree)));
 		}
 	}
 	else
