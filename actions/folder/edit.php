@@ -34,7 +34,7 @@ if(!empty($title) && !empty($owner_guid))
 			// create a new folder
 			$folder = new ElggObject();
 			$folder->subtype = FILE_TOOLS_SUBTYPE;
-			$folder->owner_guid = get_loggedin_userid();
+			$folder->owner_guid = elgg_get_logged_in_user_guid();
 			$folder->container_guid = $owner_guid;
 			$folder->access_id = $access_id;
 

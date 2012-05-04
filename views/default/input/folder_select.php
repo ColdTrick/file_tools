@@ -4,8 +4,8 @@
 
 	$owner_guid = $vars["owner_guid"];
 
-	$name 		= $vars["internalname"];
-	$id 		= $vars["internalid"];
+	$name 		= $vars["name"];
+	$id 		= $vars["id"];
 	$js 		= $vars["js"];
 	$class 		= $vars["class"];
 	
@@ -32,7 +32,7 @@
 	
 	if(empty($owner_guid))
 	{
-		$owner_guid = page_owner();
+		$owner_guid = elgg_get_page_owner_guid();
 	}
 
 	$folders = file_tools_get_folders($owner_guid);

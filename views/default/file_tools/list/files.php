@@ -26,14 +26,14 @@
 	
 	if(!$files_content)
 	{
-		echo elgg_view("page_elements/contentwrapper", array("body" => elgg_echo("file_tools:list:files:none")));
+		echo elgg_echo("file_tools:list:files:none");
 	}
 	
 	?>
 </div>
 
 <?php 
-if(page_owner_entity()->canEdit() || (page_owner_entity() instanceof ElggGroup && page_owner_entity()->isMember()))
+if(elgg_get_page_owner_entity()->canEdit() || (elgg_get_page_owner_entity() instanceof ElggGroup && elgg_get_page_owner_entity()->isMember()))
 {?>
 <script type="text/javascript">
 

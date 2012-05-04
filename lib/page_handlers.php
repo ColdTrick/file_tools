@@ -35,8 +35,7 @@
 				}
 			case "import":
 				if(!empty($page[2])) {
-					set_input("page_owner", $page[1]);
-					set_input("username", $page[2]);
+					elgg_set_page_owner_guid($page[2]);
 				}
 				include(dirname(dirname(__FILE__)) . "/pages/import/zip.php");
 				break;
@@ -59,8 +58,8 @@
 				}
 				break;
 			default:
-				forward("pg/file_tools/list/" . get_loggedin_userid());
+				forward("file_tools/list/" . elgg_get_logged_in_user_guid());
 		}
 	
-		return true;
+		return TRUE;
 	}
