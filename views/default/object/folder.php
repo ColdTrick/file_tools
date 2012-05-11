@@ -1,79 +1,72 @@
 <?php
 
-	$folder = $vars['entity'];
-	$context = elgg_get_context();
+	$folder = elgg_extract("entity", $vars);
+	$full_view = elgg_extract("full_view", $vars, false);
 	
 	$time_preference = "date";
 	
-	if($user_time_preference = elgg_get_plugin_user_setting('file_tools_time_display')){
+	if($user_time_preference = elgg_get_plugin_user_setting('file_tools_time_display', null, "file_tools")){
 		$time_preference = $user_time_preference;
 	} elseif($site_time_preference = elgg_get_plugin_setting("file_tools_default_time_display", "file_tools")) {
 		$time_preference = $site_time_preference;
 	}
 	
-	if($time_preference == 'date')
-	{
-		$friendlytime 	= date('d-m-Y G:i', $vars['entity']->time_created);
-	}
-	else
-	{
-		$friendlytime 	= elgg_view_friendly_time($vars['entity']->time_created);
+	if($time_preference == 'date') {
+		$friendlytime 	= date(elgg_echo("friendlytime:date_format"), $folder->time_created);
+	} else {
+		$friendlytime 	= elgg_view_friendly_time($folder->time_created);
 	}
 	
-	$title 			= $folder->title;
+	$title = $folder->title;
 	
-	if(strlen($title) > 20)
-	{
-		$title 	= substr($title, 0, 20) . '..';
+	$entity_menu = "";
+	if(!elgg_in_context("widgets")){
+		$entity_menu = elgg_view_menu("entity", array(
+			"entity" => $folder,
+			"handler" => "file_tools/folder",
+			"sort_by" => "priority",
+			"class" => "elgg-menu-hz"
+		));
 	}
 	
-	$delete_url = $vars["url"] . "action/file_tools/folder/delete?folder_guid=" . $folder->getGUID();
-	$edit_url 	= $vars["url"] . "file_tools/folder/edit/" . $folder->getGUID();
-	
-	if(elgg_get_context() == "search")
-	{
-		echo elgg_view("input/hidden", array("name" => "folder_guid", "value" => $folder->getGUID()));
-	}
-?>
-<div class="file_tools_folder" id="file_<?php echo $folder->getGUID(); ?>">
-	<div class="file_tools_folder_title">
-		<div class="file_tools_file_icon"><img src="<?php echo $vars['url'] . 'mod/file_tools/_graphics/folder_tiny.png';?>" /></div>
+	if($full_view){
+		// full view
+		$icon = elgg_view_entity_icon($folder, "small");
 		
-		<?php 
-		if($context == 'widget')
-		{
-			$href = $folder->getURL();
-		}
-		else
-		{
-			$href = 'javascript: void(0);';
-		}
-		?>
-		<a class="file_tools_load_folder" rel="<?php echo $folder->getGUID(); ?>" href="<?php echo $href; ?>"><?php echo $title; ?></a>
-	</div>
-	<?php 
-	
-	if(elgg_get_context() != "widget"){ ?>
-		<div class="file_tools_file_etc"><?php echo $friendlytime;?> <span><?php echo elgg_echo('folder');?></span></div>
+		$owner_link = elgg_view("output/url", array("text" => $folder->getOwnerEntity()->name, "href" => $folder->getOwnerEntity()->getURL()));
+		$owner_text = elgg_echo("byline", array($owner_link));
 		
-		<?php 
-		if($context != 'widget' && $folder->canEdit())
-		{
-		?>
-		<div class="file_tools_folder_actions">
-			<span><?php echo elgg_echo('file_tools:file:actions');?></span>
-			<ul>
-				<?php 
-				echo '<li>' . elgg_view("output/url", array("href" => $edit_url, "text" => elgg_echo("edit"))) . '</li>';
-				
-				$onclick = "if(confirm('". elgg_echo('question:areyousure') . "')){ file_tools_remove_folder_files(this); return true;} else { return false; }"; 
-				echo '<li>' . elgg_view("output/url", array("href" => $delete_url, "text" => elgg_echo("delete"), "onclick" => $onclick, "is_action" => true)) . '</li>';
-				?>
-			</ul>
-		</div>
-		<input style="float: right;" type="checkbox" name="file_tools_file_action_check" value="<?php echo $folder->getGUID(); ?>" />
-	<?php 
-		}
+		$subtitle = "$owner_text $friendlytime";
+		
+		$params = array(
+			"entity" => $folder,
+			"metadata" => $entity_menu,
+			"tags" => elgg_view("output/tags", array("value" => $folder->tags)),
+			"subtitle" => $subtitle
+		);
+		
+		$params = $params + $vars;
+		$summary = elgg_view("object/elements/summary", $params);
+		
+		echo elgg_view("object/elements/full", array(
+			"entity" => $folder,
+			"title" => false,
+			"icon" => $icon,
+			"summary" => $summary,
+			"body" => elgg_view("output/longtext", array("value" => $folder->description))
+		));
+	} else {
+		// summary view
+		$icon = elgg_view_entity_icon($folder, "tiny");
+		$icon_alt = elgg_view("input/checkbox", array("name" => "folder_guids[]", "value" => $folder->getGUID(), "default" => false));
+		
+		$params = array(
+			"entity" => $folder,
+			"metadata" => $entity_menu
+		);
+		
+		$params = $params + $vars;
+		$list_body = elgg_view("object/elements/summary", $params);
+		
+		echo elgg_view_image_block($icon, $list_body, array("class" => "file-tools-folder", "image_alt" => $icon_alt));
 	}
-	?>
-</div>

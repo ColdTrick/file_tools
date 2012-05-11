@@ -1,43 +1,35 @@
 <?php 
 
-	set_context('file');
-
 	gatekeeper();	
 
 	$page_owner = elgg_get_page_owner_entity();
 
-	if($page_owner)
-	{
+	if($page_owner) {
+		// make breadcrumb
+		elgg_push_breadcrumb(elgg_echo("file"), "file/all");
+		if(elgg_instanceof($page_owner, "group", null, "ElggGroup")){
+			elgg_push_breadcrumb($page_owner->name, "file/group/" . $page_owner->getGUID() . "/all");
+		} else {
+			elgg_push_breadcrumb($page_owner->name, "file/owner/" . $page_owner->username);
+		}
+		elgg_push_breadcrumb(elgg_echo("file_tools:upload:new"));
+		
+		// make page elements
+		elgg_register_title_button();
 		$title_text = elgg_echo("file_tools:upload:new");
 
-		$form = elgg_view("file_tools/forms/import/zip");
+		$form = elgg_view_form("file_tools/import/zip", array("enctype" => "multipart/form-data"));
+		
+		// build page
+		$body = elgg_view_layout("content", array(
+			"title" => $title_text,
+			"content" => $form,
+			"filter" => false
+		));
 
-		$title = elgg_view_title($title_text . $back_text);
-
-		$page_data = $title . $form;
-
-		if($_SESSION['extracted_files'])
-		{
-			$files = '<h3 class="settings">Extracted files</h3>';
-			$files .= '<p>'.count($_SESSION['extracted_files']).' file(s) extracted.</p>';
-			$files .= '<ul style="list-style: disc;">';
-			
-			foreach($_SESSION['extracted_files'] as $file)
-			{
-				$files .= '<li>'.$file.'</li>';
-			}
-			
-			$files .= '<ul>';
-			$uploaded_files = $files;
-		}
-
-		$body = elgg_view_layout("one_sidebar", array('content' => $page_data.$uploaded_files));
-
+		// draw page
 		echo elgg_view_page($title_text, $body);
-		$_SESSION['extracted_files'] = null;
-	}
-	else 
-	{
+	} else {
 		register_error(elgg_echo("file_tools:error:pageowner"));
-		forward();
+		forward(REFERER);
 	}

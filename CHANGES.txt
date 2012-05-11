@@ -1,4 +1,7 @@
 = Version History =
+x.x:
+
+- changed: plugin made Elgg 1.8.3 compatible
 
 0.3.1 (2012-01-31):
 

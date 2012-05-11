@@ -1,54 +1,36 @@
 <?php 
 
-	$folder_guid = (int)get_input('folder_guid');
+	$folder_guid = (int) get_input('folder_guid');
 
-	$owner_guid = $vars["owner_guid"];
-
-	$name 		= $vars["name"];
-	$id 		= $vars["id"];
-	$js 		= $vars["js"];
-	$class 		= $vars["class"];
+	$container_guid = elgg_extract("container_guid", $vars, elgg_get_page_owner_guid());
+	$current_folder	= elgg_extract("folder", $vars, $folder_guid);
+	$type = elgg_extract("type", $vars);
 	
-	$value 		= $vars["value"];
-	$current_folder	= $vars["folder"];
+	unset($vars["folder"]);
+	unset($vars["type"]);
+	unset($vars["container_guid"]);
 	
-	$type 		= $vars['type'];
-
-	if($type == 'folder')
-	{
-		if(!$value)
-		{
-			if($folder_guid)
-			{
-				$value = get_entity($folder_guid)->parent_guid;
+	if($type == 'folder') {
+		if(!elgg_extract("value", $vars)) {
+			if(!empty($current_folder)) {
+				$vars["value"] = get_entity($current_folder)->parent_guid;
 			}
 		}
-	}
-	else
-	{
-		$value = $folder_guid;
-		$folder_guid = null;
+	} elseif(!elgg_extract("value", $vars)) {
+		$vars["value"] = $current_folder;
 	}
 	
-	if(empty($owner_guid))
-	{
-		$owner_guid = elgg_get_page_owner_guid();
-	}
-
-	$folders = file_tools_get_folders($owner_guid);
-
-	$options = "<option value='0'>" . elgg_echo("file_tools:input:folder_select:main") . "</option>\n";
+	$folders = file_tools_get_folders($container_guid);
 	
-	if(!empty($folders))
-	{
-		$current_folder_guid = false;
-		if($vars["folder"]){
-			$current_folder_guid = $vars["folder"]->getGUID();
-		}
-		$options .= file_tools_build_select_options($folders, $value, 1, $current_folder_guid);
+	$options = array(
+		0 => elgg_echo("file_tools:input:folder_select:main")
+	);
+	
+	if(!empty($folders)) {
+		$options = $options + file_tools_build_select_options($folders, 1);
 	}
 	
-?>
-<select name="<?php echo $name; ?>" id="<?php echo $id; ?>" class="<?php echo $class; ?>" <?php echo $js; ?>>
-	<?php echo $options; ?>
-</select>
+	$vars["options_values"] = $options;
+	
+	echo elgg_view("input/dropdown", $vars);
+	

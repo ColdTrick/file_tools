@@ -4,9 +4,9 @@
 
 	$old_context = elgg_get_context();
 
-	$page_owner_guid 	= get_input("page_owner");
-	$page_owner 		= get_entity($page_owner_guid);
-	$folder_guid 		= get_input("folder_guid", 0);
+	$page_owner_guid 	= elgg_get_page_owner_guid();
+	$page_owner 		= elgg_get_page_owner_entity();
+	$folder_guid 		= (int) get_input("folder_guid", 0);
 	$draw_page 			= get_input("draw_page", true);
 
 	$sort_by 			= get_input('sort_by');
@@ -34,12 +34,7 @@
 		$direction = $sort_direction_value;
 	}
 	
-	if(!empty($page_owner) && (($page_owner instanceof ElggUser) || ($page_owner instanceof ElggGroup)))
-	{
-		// set page owner & context
-		set_page_owner($page_owner_guid);
-		elgg_set_context("file");
-
+	if(!empty($page_owner) && (($page_owner instanceof ElggUser) || ($page_owner instanceof ElggGroup))) {
 		group_gatekeeper();
 
 		$wheres = array();
@@ -57,99 +52,67 @@
 
 		$files_options["joins"][] = "JOIN {$CONFIG->dbprefix}objects_entity oe on oe.guid = e.guid";
 
-		if($sort_by == 'simpletype')
-		{
+		if($sort_by == 'simpletype') {
 			$files_options["order_by_metadata"] = array('name' => 'mimetype', 'direction' => $direction);
-		}
-		else
-		{
+		} else {
 			$files_options["order_by"] = $sort_by . ' ' . $direction;
 		}
 
-		if($folder_guid !== false)
-		{
-			if($folder_guid == 0)
-			{
-				if(elgg_get_plugin_setting("user_folder_structure", "file_tools") == "yes")
-				{
-					$files_options["wheres"] = $wheres;
-				}
+		$folder = false;
+		if($folder_guid !== false) {
+			if($folder_guid == 0) {
+				$files_options["wheres"] = $wheres;
 				
 				$files = elgg_get_entities($files_options);	
-			} 
-			else
-			{
+			} else {
 				$folder = get_entity($folder_guid);
 
 				$files_options["relationship"] = FILE_TOOLS_RELATIONSHIP;
 				$files_options["relationship_guid"] = $folder_guid;
 				$files_options["inverse_relationship"] = false;
-
+				
 				$files = elgg_get_entities_from_relationship($files_options);	
 			}	
 		}
 
-		if(elgg_get_plugin_setting("user_folder_structure", "file_tools") == "yes")
-		{
-			if(!$draw_page)
-			{
-				echo elgg_view("file_tools/list/files", array("folder" => $folder, "files" => $files, 'sort_by' => $sort_by, 'direction' => $direction));
-			}
-			else
-			{			
-				// get data for tree
-				$folders = file_tools_get_folders($page_owner_guid, $vars['vars']);
-	
-				// default lists all unsorted files
-				if($folder_guid === false)
-				{
-					if(elgg_get_plugin_setting("user_folder_structure", "file_tools") == "yes")
-					{
-						$files_options["wheres"] = $wheres;
-					}
-					
-					$files = elgg_get_entities($files_options);
-				}
-				
-				
-				// build page elements
-				$tree = '';
-				if(elgg_get_plugin_setting("user_folder_structure", "file_tools") == "yes")
-				{
-					$tree = elgg_view("file_tools/list/tree", array("folder" => $folder, "folders" => $folders));
-				}
-	
-				$body = '<div id="file_tools_list_files_container">' . elgg_view("ajax/loader") . '</div>
-						<div class="contentWrapper">';
-	
-				if(elgg_get_page_owner_entity()->canEdit())
-				{
-					$body .= '<a id="file_tools_action_bulk_delete" href="javascript:void(0);">' . elgg_echo("file_tools:list:delete_selected") . '</a> | ';
-				} 
-	
-				$body .= '<a id="file_tools_action_bulk_download" href="javascript:void(0);">' . elgg_echo("file_tools:list:download_selected") . '</a>
-							<a id="file_tools_select_all" style="float: right;" href="javascript:void(0);">' . elgg_echo("file_tools:list:select_all") . '</a>
-						</div>';
+		if(!$draw_page) {
+			echo elgg_view("file_tools/list/files", array("folder" => $folder, "files" => $files, 'sort_by' => $sort_by, 'direction' => $direction));
+		} else {
+			// build breadcrumb
+			elgg_push_breadcrumb(elgg_echo('file'), "file/all");
+			elgg_push_breadcrumb($page_owner->name);
 			
-	
-				$title = elgg_view_title($title_text);
+			// register title button to add a new file
+			elgg_register_title_button();
+			
+			// get data for tree
+			$folders = file_tools_get_folders($page_owner_guid);
 
-				echo elgg_view_page($title_text, elgg_view_layout("one_sidebar", array('content' => $title . $body, 'sidebar' => $tree)));
+			// build page elements
+			$title_text = elgg_echo("file:user", array($page_owner->name));
+			
+			$body = "<div id='file_tools_list_files_container'>" . elgg_view("graphics/ajax_loader", array("hidden" => false)) . "</div>";
+			
+			// make sidebar
+			$sidebar = elgg_view("file_tools/list/tree", array("folder" => $folder, "folders" => $folders));
+			$sidebar .= elgg_view("file_tools/sidebar/sort_options");
+			$sidebar .= elgg_view("file_tools/sidebar/info");
+			
+			// build page params
+			$params = array(
+				'title' => $title_text,
+				'content' => $body, 
+				'sidebar' => $sidebar
+			);
+			
+			if(elgg_instanceof($page_owner, "user")){
+				$params["filter_context"] = "mine";
+			} else {
+				$params["filter"] = false;
 			}
+			
+			echo elgg_view_page($title_text, elgg_view_layout("content", $params));
 		}
-		else
-		{
-			$title_text = elgg_echo("file:yours");
-
-			$offset = (int)get_input('offset', 0);
-			$title = elgg_view_title($title_text);
-
-			$body = elgg_list_entities(array('types' => 'object', 'subtypes' => 'file', 'container_guid' => elgg_get_page_owner_guid(), 'limit' => 10, 'offset' => $offset, 'full_view' => false));
-
-			echo elgg_view_page($title_text, elgg_view_layout("one_sidebar", array('content' => $title . $body, 'sidebar' => $tree)));
-		}
-	}
-	else
-	{
+	} else {
 		forward();
 	}

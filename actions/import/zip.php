@@ -1,43 +1,35 @@
 <?php
 
-	$page_owner = get_input('page_owner', elgg_get_logged_in_user_guid());
-	$container_guid = (int)get_input('container_guid', $page_owner);
-
+	$container_guid = (int) get_input("container_guid", 0);
+	$parent_guid = get_input("parent_guid");
+	
 	set_time_limit(0);
-
-	$allowed_extensions = file_tools_allowed_extensions();
 	
-	$parent_guid = (int)get_input('parent_guid');
+	$forward_url = REFERER;
 	
-	if (isset($_FILES['zip_file']) && !empty($_FILES['zip_file']['name'])) 
-	{
-		$extracted = false;
+	if (!empty($container_guid) && get_uploaded_file("zip_file")) {
+		$extension_array = explode(".", $_FILES["zip_file"]["name"]);	
 		
-		$extension_array = explode('.', $_FILES['zip_file']['name']);	
-		
-		if(end($extension_array) == 'zip')
-		{		
-			$prefix = "file/";
-			$file = $_FILES['zip_file'];
+		if(end($extension_array) == "zip") {
+			$file = $_FILES["zip_file"];
 			
-			if(!file_tools_unzip($file, $parent_guid, $container_guid))
-			{
-				register_error(elgg_echo('file_tools:error:nofilesextracted'));
+			if(file_tools_unzip($file, $container_guid, $parent_guid)) {
+				system_message(elgg_echo("file:saved"));
+				
+				$container = get_entity($container_guid);
+				if(elgg_instanceof($container, "group")){
+					$forward_url = "file/group/" . $container->getGUID() . "/all#" . $parent_guid;
+				} else {
+					$forward_url = "file/owner/" . $container->username . "#" . $parent_guid;
+				}
+			} else {
+				register_error(elgg_echo("file:uploadfailed"));
 			}
-			else
-			{
-				system_message(elgg_echo('file_tools:error:fileuploadsuccess'));
-				forward('file/owner/' . get_entity($container_guid)->username . '#' . $parent_guid);
-			}
+		} else {
+			register_error(elgg_echo("file:uploadfailed"));
 		}
-		else
-		{
-			register_error(elgg_echo('file_tools:error:nozipfilefound'));
-		}
-	}
-	else
-	{
-		register_error(elgg_echo('file_tools:error:nofilefound'));
+	} else {
+		register_error(elgg_echo("file:cannotload"));
 	}
 	
-	forward(REFERER);
+	forward($forward_url);

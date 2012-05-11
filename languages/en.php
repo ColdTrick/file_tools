@@ -111,6 +111,19 @@
 		//messages
 		'file_tools:error:fileuploadsuccess' => 'Zip file uploaded and extracted successfully.',
 		
+		// move
+		'file_tools:action:move:success:file' => "The file was moved successfully",
+		'file_tools:action:move:success:folder' => "The folder was moved successfully",
+		
+		// buld delete
+		'file_tools:action:bulk_delete:success:files' => "Successfully removed %s files",
+		'file_tools:action:bulk_delete:error:files' => "There was an error whil removing some files",
+		'file_tools:action:bulk_delete:success:folders' => "Successfully removed %s folders",
+		'file_tools:action:bulk_delete:error:folders' => "There was an error whil removing some folders",
+		
+		// reorder
+		'file_tools:action:folder:reorder:success' => "Successfully reordered the folder(s)",
+		
 		//settings
 		'file_tools:settings:allowed_extensions' => 'Allowed extensions (comma seperated)',
 		'file_tools:settings:user_folder_structure' => 'Use folder structure',

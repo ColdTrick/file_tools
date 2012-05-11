@@ -2,8 +2,8 @@
 	function file_tools_page_handler($page) {
 		switch($page[0]) {
 			case "list":
-				if(!empty($page[1])) {
-					set_input("page_owner", $page[1]);
+				if(elgg_is_xhr() && !empty($page[1])) {
+					elgg_set_page_owner_guid($page[1]);
 						
 					if(get_input("folder_guid", false) !== false) {
 						set_input("draw_page", false);
@@ -12,9 +12,10 @@
 					if(isset($page[2])) {
 						set_input("folder_guid", $page[2]);
 					}
+					
+					include(dirname(dirname(__FILE__)) . "/pages/list.php");
+					break;
 				}
-				include(dirname(dirname(__FILE__)) . "/pages/list.php");
-				break;
 			case "reorder":
 				include(dirname(dirname(__FILE__)) . "/procedures/reorder.php");
 				break;
@@ -33,12 +34,6 @@
 						break;
 					}
 				}
-			case "import":
-				if(!empty($page[2])) {
-					elgg_set_page_owner_guid($page[2]);
-				}
-				include(dirname(dirname(__FILE__)) . "/pages/import/zip.php");
-				break;
 			case "file":
 				if($page[1] == 'new') {
 					if(!empty($page[2])) {
@@ -58,7 +53,7 @@
 				}
 				break;
 			default:
-				forward("file_tools/list/" . elgg_get_logged_in_user_guid());
+				forward("file/all");
 		}
 	
 		return TRUE;
