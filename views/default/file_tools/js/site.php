@@ -227,6 +227,16 @@ elgg.file_tools.bulk_delete = function(e){
 	}
 }
 
+elgg.file_tools.bulk_download = function(e){
+	e.preventDefault();
+
+	$checkboxes = $('#file_tools_list_files input[type="checkbox"]:checked');
+
+	if($checkboxes.length){
+		elgg.forward("file/bulk_download?" + $checkboxes.serialize());
+	}
+}
+
 elgg.file_tools.new_folder = function(event){
 	event.preventDefault();
 
@@ -251,6 +261,7 @@ elgg.file_tools.init = function(){
 	$('#file_tools_breadcrumbs a').live("click", elgg.file_tools.breadcrumb_click);
 	$('#file_tools_select_all').live("click", elgg.file_tools.select_all);
 	$('#file_tools_action_bulk_delete').live("click", elgg.file_tools.bulk_delete);
+	$('#file_tools_action_bulk_download').live("click", elgg.file_tools.bulk_download);
 
 	$('#file_tools_list_new_folder_toggle').live('click', elgg.file_tools.new_folder);
 }

@@ -112,6 +112,11 @@
 						include(dirname(dirname(__FILE__)) . "/pages/import/zip.php");
 					}
 					break;
+				case "bulk_download":
+					$result = false;
+					
+					include(dirname(dirname(__FILE__)) . "/pages/file/download.php");
+					break;
 			}
 		}
 		
