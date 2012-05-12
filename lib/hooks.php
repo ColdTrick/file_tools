@@ -127,9 +127,18 @@
 			}
 			
 			if(elgg_in_context("file")){
+				$add_found = false;
+				
+				foreach($result as $menu_item){
+					if(($menu_item->getName() == "add") && $menu_item->getText() == elgg_echo("file:add")){
+						$add_found = true;
+						break;
+					}
+				}
+				
 				$parts = parse_url(current_page_url(), PHP_URL_PATH);
 				
-				if(stristr($parts, "file/zip/") === false){
+				if(($add_found && stristr($parts, "file/zip/") === false) || stristr($parts, "file/add/")){
 					$result[] = ElggMenuItem::factory(array(
 						"name" => "zip_upload",
 						"href" => "file/zip/" . $page_owner,

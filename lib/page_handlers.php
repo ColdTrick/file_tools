@@ -22,7 +22,7 @@
 			case "folder":
 				if($page[1] == 'new') {
 					if(!empty($page[2])) {
-						set_input("username", $page[2]);
+						elgg_set_page_owner_guid($page[2]);
 					}
 					include(dirname(dirname(__FILE__)) . "/pages/folder/new.php");
 					break;

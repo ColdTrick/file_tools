@@ -224,6 +224,18 @@ elgg.file_tools.bulk_delete = function(e){
 	}
 }
 
+elgg.file_tools.new_folder = function(event){
+	event.preventDefault();
+
+	var hash = window.location.hash.substr(1);
+	var link = elgg.get_site_url() + "file_tools/folder/new/" + elgg.get_page_owner_guid() + "?folder_guid=" + hash;
+	
+	$.fancybox({
+		href: link,
+		titleShow: false
+	});
+}
+
 elgg.file_tools.init = function(){
 	// uploadify functions
 	elgg.file_tools.uploadify.init();
@@ -236,6 +248,8 @@ elgg.file_tools.init = function(){
 	$('#file_tools_breadcrumbs a').live("click", elgg.file_tools.breadcrumb_click);
 	$('#file_tools_select_all').live("click", elgg.file_tools.select_all);
 	$('#file_tools_action_bulk_delete').live("click", elgg.file_tools.bulk_delete);
+
+	$('#file_tools_list_new_folder_toggle').live('click', elgg.file_tools.new_folder);
 }
 
 // register init hook

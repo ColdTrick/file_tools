@@ -88,20 +88,6 @@
 			elgg.file_tools.load_folder(0);
 		}
 
-		$('#file_tools_list_new_folder_toggle').live('click', function(e)
-		{
-			var link = "<?php echo $vars["url"]; ?>file_tools/folder/new/<?php echo $page_owner->username; ?>";
-			if(file_tools_get_selected_tree_folder_id() != undefined) {
-				link = link + '?folder_guid=' + file_tools_get_selected_tree_folder_id();				
-	    	}
-			//window.location = link;
-			$.fancybox({
-				href: link,
-				titleShow: false
-			});
-			e.preventDefault();
-		});
-		
 		$(window).hashchange(function(){
 			elgg.file_tools.load_folder(window.location.hash.substring(1));
 		});

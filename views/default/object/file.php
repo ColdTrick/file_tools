@@ -110,7 +110,10 @@
 		$file_icon_alt = "";
 		if(file_tools_use_folder_structure()){
 			$file_icon = elgg_view_entity_icon($file, "tiny", array("img_class" => "file-tools-icon-tiny"));
-			$file_icon_alt = elgg_view("input/checkbox", array("name" => "file_guids[]", "value" => $file->getGUID(), "default" => false));
+			
+			if(elgg_in_context("file_tools_selector")){
+				$file_icon_alt = elgg_view("input/checkbox", array("name" => "file_guids[]", "value" => $file->getGUID(), "default" => false));
+			}
 			
 			$excerpt = "";
 			$subtitle = "";

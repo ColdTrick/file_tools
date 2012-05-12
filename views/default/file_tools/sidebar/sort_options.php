@@ -44,4 +44,4 @@
 																		'asc' 	=> elgg_echo('file_tools:list:sort:asc'), 
 																		'desc'	=> elgg_echo('file_tools:list:sort:desc'))));
 	// output sorting module
-	echo elgg_view_module("aside", $title, $body, array("id" => "file_tools_list_files_sort_options"));
+	//echo elgg_view_module("aside", $title, $body, array("id" => "file_tools_list_files_sort_options"));

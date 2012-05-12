@@ -17,7 +17,11 @@
 			"pagination" => false
 		);
 		
+		elgg_push_context("file_tools_selector");
+		
 		$files_content = elgg_view_entity_list($entities, $params);
+		
+		elgg_pop_context();
 	}
 	
 	if(empty($files_content)){
