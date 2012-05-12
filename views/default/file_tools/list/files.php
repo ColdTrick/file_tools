@@ -63,9 +63,8 @@ if($page_owner->canEdit() || (elgg_instanceof($page_owner, "group") && $page_own
 	$(function(){
 		$("#file_tools_list_files .file-tools-file").draggable({
 			revert: "invalid",
-			opacity: 0.7,
-			cursor: "move"
-		}).css("cursor", "move");
+			opacity: 0.8
+		});
 
 		$("#file_tools_list_files .file-tools-folder").droppable({
 			accept: "#file_tools_list_files .file-tools-file",

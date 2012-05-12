@@ -23,3 +23,8 @@
 	position: absolute;
 	top: 0;
 }
+
+#file_tools_list_files .ui-draggable {
+	cursor: move;
+	background: white;
+}
