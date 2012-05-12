@@ -24,3 +24,6 @@
 - events on upload
 - delete all ?? something wrong with it?
 - forward na multiupload ??
+- bulk download
+- update folder tree
+- redirect na upload
