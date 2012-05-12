@@ -33,7 +33,7 @@
 			$files_content .= '<a id="file_tools_action_bulk_delete" href="javascript:void(0);">' . elgg_echo("file_tools:list:delete_selected") . '</a> | ';
 		}
 		
-		$files_content .= "<a id='file_tools_action_bulk_download' href='javascript:void(0);'>" . elgg_echo("file_tools:list:download_selected") . "</a>";
+		//$files_content .= "<a id='file_tools_action_bulk_download' href='javascript:void(0);'>" . elgg_echo("file_tools:list:download_selected") . "</a>";
 		
 		$files_content .= "<a id='file_tools_select_all' class='float-alt' href='javascript:void(0);'>";
 		$files_content .= "<span>" . elgg_echo("file_tools:list:select_all") . "</span>";
