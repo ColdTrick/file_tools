@@ -41,7 +41,9 @@ elgg.file_tools.uploadify.init = function(){
 			fileObjName: "upload",
 			auto: false,
 			onQueueComplete: function(queueData){
-				document.location.href = file_tools_uploadify_return_url;
+				var folder = $('#file_tools_file_parent_guid').val();
+				
+				document.location.href = file_tools_uploadify_return_url + "#" + folder;
 			},
 			onUploadStart: function(file){
 				$('#uploadify-button-wrapper').uploadify("settings", "formData", $('#file-tools-file-upload-form').serializeJSON());
