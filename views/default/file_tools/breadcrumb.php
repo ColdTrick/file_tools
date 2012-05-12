@@ -9,9 +9,9 @@
 		"class" => "elgg-menu-hz"
 	));	
 	
-	if($folder) {		
+	echo "</div>";
+	
+	if($folder) {
 		echo elgg_view_entity($folder, array("full_view" => true));
 	}
-	
-	echo "</div>";
 	
