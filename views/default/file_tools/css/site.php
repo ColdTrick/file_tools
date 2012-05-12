@@ -24,7 +24,8 @@
 	top: 0;
 }
 
-#file_tools_list_files .ui-draggable {
+#file_tools_list_files .ui-draggable,
+.file-tools-file.ui-draggable {
 	cursor: move;
 	background: white;
 }

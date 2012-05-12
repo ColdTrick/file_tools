@@ -63,7 +63,16 @@ if($page_owner->canEdit() || (elgg_instanceof($page_owner, "group") && $page_own
 	$(function(){
 		$("#file_tools_list_files .file-tools-file").draggable({
 			revert: "invalid",
-			opacity: 0.8
+			opacity: 0.8,
+			appendTo: "body",
+			helper: "clone",
+			start: function(event, ui) {
+				$(this).css("visibility", "hidden");
+				$(ui.helper).width($(this).width());
+			},
+			stop: function(event, ui) {
+				$(this).css("visibility", "visible");
+			}
 		});
 
 		$("#file_tools_list_files .file-tools-folder").droppable({
@@ -75,8 +84,6 @@ if($page_owner->canEdit() || (elgg_instanceof($page_owner, "group") && $page_own
 				drop_id = droppable.parent().attr("id").split("-").pop();
 				drag_id = draggable.parent().attr("id").split("-").pop();
 
-				draggable.parent().remove();
-				
 				elgg.action("file/move", {
 					data: {
 						file_guid: drag_id, 
@@ -90,6 +97,9 @@ if($page_owner->canEdit() || (elgg_instanceof($page_owner, "group") && $page_own
 						} else {
 							elgg.file_tools.load_folder(0);
 						}
+					},
+					success: function(result){
+						draggable.parent().remove();
 					}
 				});
 			}
