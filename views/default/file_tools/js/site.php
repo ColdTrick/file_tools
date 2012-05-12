@@ -85,7 +85,8 @@ elgg.file_tools.tree.init = function(){
 		$tree.tree({
 			rules: {
 				multiple: false,
-				drag_copy: false
+				drag_copy: false,
+				valid_children : [ "root" ]
 			},
 			ui: {
 				theme_name: "classic"
