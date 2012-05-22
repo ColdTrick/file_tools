@@ -332,7 +332,7 @@
 			
 			$result = $allowed_extensions;	
 		} else {
-			$result = array('txt','jpg','jpeg','png','bmp','gif','pdf','doc','docx','xls','xlsx','pptx','odt','ods','odp');
+			$result = array('txt','jpg','jpeg','png','bmp','gif','pdf','doc','docx','xls','xlsx','ppt','pptx','odt','ods','odp');
 		}
 		
 		if(!$zip) {
