@@ -2,7 +2,7 @@
 
 	$widget = $vars["entity"];
 	
-	if($folder_guids = $widget->getMetadata("folder_guids")){
+	if($folder_guids = $widget->folder_guids){
 		if(!is_array($folder_guids)){
 			$folder_guids = array($folder_guids);
 		}
@@ -22,7 +22,7 @@
 			echo elgg_view("output/url", array("href" => $vars["url"] . "file/owner/" . $widget->getOwnerEntity()->username, "text" => elgg_echo("widgets:file_tree:more")));
 			echo "</div>";
 		} else {
-			echo elgg_echo("widgets:file_tree:no_folders");
+			echo elgg_echo("notfound");
 		}
 	} else {
 		echo elgg_echo("widgets:file_tree:no_folders");
