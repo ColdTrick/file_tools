@@ -32,7 +32,7 @@
 	if(!empty($settings->allowed_extensions))	{
 		$allowed_extensions = $settings->allowed_extensions;
 	} else {
-		$allowed_extensions = "txt,jpg,jpeg,png,bmp,gif,pdf,doc,docx,xls,xlsx,pptx,odt,ods,odp";
+		$allowed_extensions = "txt,jpg,jpeg,png,bmp,gif,pdf,doc,docx,xls,xlsx,ppt,pptx,odt,ods,odp";
 	}
 	
 	// Allowed extensions
