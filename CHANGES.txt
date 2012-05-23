@@ -1,5 +1,5 @@
 = Version History =
-x.x:
+1.0 beta (2012-05-23):
 
 - added: group_files widget (from widget_manager)
 - added: index_file widget (from widget_maanger)
