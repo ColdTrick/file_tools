@@ -1,15 +1,13 @@
 <script type="text/javascript">
-$(document).ready(function () {
-
-$('a.show_file_desc').click(function () {
-	$(this.parentNode).children("[class=filerepo_listview_desc]").slideToggle("fast");
-	return false;
-});
-
-}); /* end document ready function */
+	$(document).ready(function () {
+	
+		$('a.show_file_desc').click(function () {
+			$(this.parentNode).children("[class=filerepo_listview_desc]").slideToggle("fast");
+			return false;
+		});
+	
+	}); /* end document ready function */
 </script>
-
-
 <?php
 
     //the page owner
@@ -25,7 +23,7 @@ $('a.show_file_desc').click(function () {
 	$get_view = (int) $vars['entity']->gallery_list;
 	if (!$get_view || $get_view == 1) {
 	    $view = "list";
-    }else{
+    } else{
         $view = "gallery";
     }
 
@@ -50,14 +48,13 @@ $('a.show_file_desc').click(function () {
 		);
 		$files = elgg_get_entities_from_metadata($options);
 	}
+	
 	//if there are some files, go get them
 	if ($files) {
-    	
     	echo "<div id=\"filerepo_widget_layout\">";
         
         if($view == "gallery"){
-        
-        echo "<div class=\"filerepo_widget_galleryview\">";
+        	echo "<div class=\"filerepo_widget_galleryview\">";
         	
             //display in gallery mode
             foreach($files as $f){
@@ -68,16 +65,11 @@ $('a.show_file_desc').click(function () {
             }
             
             echo "</div>";
-            
-        }else{
-        	    
-            //display in list mode
-
-            foreach($files as $f){
-            	
+        } else {
+        	//display in list mode
+			foreach($files as $f){
             	echo elgg_view_entity($f);
-            	            				
-        	}
+          	}
         }
         	
         //get a link to the users files
@@ -85,12 +77,6 @@ $('a.show_file_desc').click(function () {
         	
         echo "<div class=\"filerepo_widget_singleitem_more\"><a href=\"{$users_file_url}\">" . elgg_echo('file:more') . "</a></div>";
         echo "</div>";
-        	
-				
 	} else {
-		
 		echo "<div class=\"contentWrapper\">" . elgg_echo("file:none") . "</div>";
-		
 	}
-
-?>

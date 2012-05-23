@@ -58,7 +58,9 @@
 	} else {
 		// summary view
 		$icon = elgg_view_entity_icon($folder, "tiny");
-		$icon_alt = elgg_view("input/checkbox", array("name" => "folder_guids[]", "value" => $folder->getGUID(), "default" => false));
+		if(!elgg_in_context("widgets")){
+			$icon_alt = elgg_view("input/checkbox", array("name" => "folder_guids[]", "value" => $folder->getGUID(), "default" => false));
+		}
 		
 		$params = array(
 			"entity" => $folder,
