@@ -1,6 +1,8 @@
 = Version History =
 x.x:
 
+- added: group_files widget (from widget_manager)
+- added: index_file widget (from widget_maanger)
 - changed: plugin made Elgg 1.8.3 compatible
 
 0.3.1 (2012-01-31):

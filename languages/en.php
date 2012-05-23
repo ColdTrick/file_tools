@@ -117,9 +117,9 @@
 		
 		// buld delete
 		'file_tools:action:bulk_delete:success:files' => "Successfully removed %s files",
-		'file_tools:action:bulk_delete:error:files' => "There was an error whil removing some files",
+		'file_tools:action:bulk_delete:error:files' => "There was an error while removing some files",
 		'file_tools:action:bulk_delete:success:folders' => "Successfully removed %s folders",
-		'file_tools:action:bulk_delete:error:folders' => "There was an error whil removing some folders",
+		'file_tools:action:bulk_delete:error:folders' => "There was an error while removing some folders",
 		
 		// reorder
 		'file_tools:action:folder:reorder:success' => "Successfully reordered the folder(s)",
@@ -131,12 +131,9 @@
 	
 		'file:type:application' => 'Application',
 		'file:type:text' => 'Text',
-	);
 
-	add_translation("en", $english);
-	
-	// widget translation
-	$widgets = array(
+		// widgets
+		// file tree
 		'widgets:file_tree:title' => "Folders",
 		'widgets:file_tree:description' => "Showcase your File folders",
 		
@@ -150,8 +147,15 @@
 		'widget:file_tools:show_file' => 'Feature file (widget)',
 		'widget:file_tools:hide_file' => 'Unfeature file',
 	
-		'widgets:file_tools:more_files' => 'More files'
+		'widgets:file_tools:more_files' => 'More files',
+		
+		// Group files
+		'widgets:group_files:description' => "Show the latest group files",
+		
+		// index_file
+		'widgets:index_file:description' => "Show the latest files on your community",
+	
 	);
 	
-	add_translation("en", $widgets);
+	add_translation("en", $english);
 	

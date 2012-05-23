@@ -45,6 +45,25 @@
 		// add folder widget
 		// need to keep file_tree for the widget name to be compatible with previous filetree plugin users
 		elgg_register_widget_type ("file_tree", elgg_echo("widgets:file_tree:title"), elgg_echo("widgets:file_tree:description"), "dashboard,profile,groups");
+		
+		// group files
+		elgg_register_widget_type("group_files", elgg_echo("file:group"), elgg_echo("widgets:group_files:description"), "groups");
+		
+		// index files
+		elgg_register_widget_type("index_file", elgg_echo("file"), elgg_echo("widgets:index_file:description"), "index", true);
+	}
+	
+	function file_tools_pagesetup(){
+		$page_owner = elgg_get_page_owner_entity();
+		
+		if(elgg_instanceof($page_owner, "group")){
+			// check if the group hase files enabled
+			if($page_owner->files_enable == "no"){
+				// no, so remove the widgets
+				elgg_unregister_widget_type("file_tree");
+				elgg_unregister_widget_type("group_files");
+			}
+		}
 	}
 
 	function file_tools_folder_url_handler($entity) {
@@ -60,6 +79,7 @@
 	}
 
 	elgg_register_event_handler("init", "system", "file_tools_init");
+	elgg_register_event_handler("pagesetup", "system", "file_tools_pagesetup");
 	
 	// register events
 	elgg_register_event_handler("create", "object", "file_tools_object_handler");

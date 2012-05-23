@@ -1,5 +1,13 @@
 <?php
 $language = array (
+  'file_tools:action:move:success:file' => 'Het bestand is succesvol verplaatst',
+  'file_tools:action:move:success:folder' => 'De map is succesvol verplaatst',
+  'file_tools:action:bulk_delete:success:files' => 'Er zijn %s bestanden verwijderd',
+  'file_tools:action:bulk_delete:error:files' => 'Er is een fout opgetreden tijdens het verwijderen van bestanden',
+  'file_tools:action:bulk_delete:success:folders' => 'Er zijn %s mappen verwijderd',
+  'file_tools:action:bulk_delete:error:folders' => 'Er is een fout opgetreden tijdens het verwijderen van mappen',
+  'file_tools:action:folder:reorder:success' => 'De nieuwe map volgorde is opgeslagen',
+  'widgets:index_file:description' => 'Toon de laatste bestande van de community',
   'file_tools:list:select_all' => 'Alles selecteren',
   'file_tools:list:deselect_all' => 'Alles deselecteren',
   'file_tools:list:download_selected' => 'Download selectie',
@@ -89,5 +97,6 @@ $language = array (
   'file_tools:settings:user_folder_structure' => 'Gebruik de mappen structuur',
   'file:type:application' => 'Applicatie',
   'file:type:text' => 'Bestand',
+  'widgets:group_files:description' => 'Toon de laatste groep bestanden',
 );
 add_translation("nl", $language);

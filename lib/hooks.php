@@ -164,13 +164,30 @@
 			$widget = elgg_extract("entity", $params);
 			
 			if(!empty($widget) && elgg_instanceof($widget, "object", "widget", "ElggWidget")){
+				$owner = $widget->getOwnerEntity();
+				
 				switch($widget->handler){
 					case "file_tree":
-						if($widget->context == "groups"){
-							$result = "/file/group/" . $widget->getOwnerGUID() . "/all";
-						} else {
-							$result = "/file/owner/" . $widget->getOwnerEntity()->username;
+						if(elgg_instanceof($owner, "user")){
+							$result = "file/owner/" . $owner->username;
+						} elseif(elgg_instanceof($owner, "group")){
+							$result = "file/group/" . $owner->getGUID() . "/all";
 						}
+						
+						break;
+					case "filerepo":
+						if(elgg_instanceof($owner, "user")){
+							$result = "file/owner/" . $owner->username;
+						} elseif(elgg_instanceof($owner, "group")){
+							$result = "file/group/" . $owner->getGUID() . "/all";
+						}
+						
+						break;
+					case "group_files":
+						$result = "file/group/" . $owner->getGUID() . "/all";
+						break;
+					case "index_file":
+						$result = "file/all";
 						break;
 				}
 			}
