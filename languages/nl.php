@@ -1,5 +1,6 @@
 <?php
 $language = array (
+  'widgets:file_tree:edit:show_content' => 'Toon de inhoud van de map(pen)',
   'file_tools:action:move:success:file' => 'Het bestand is succesvol verplaatst',
   'file_tools:action:move:success:folder' => 'De map is succesvol verplaatst',
   'file_tools:action:bulk_delete:success:files' => 'Er zijn %s bestanden verwijderd',
