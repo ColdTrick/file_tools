@@ -1,6 +1,6 @@
 <?php 
 
-	$widget = $vars["entity"];
+	$widget = elgg_extract("entity", $vars);
 	
 	if($folders = file_tools_get_folders($widget->owner_guid)){
 		$selected_folders = $widget->folder_guids;
@@ -10,9 +10,23 @@
 			$selected_folders = array();
 		}
 		
+		// select folder(s) to display
 		echo elgg_echo("widgets:file_tree:edit:select");
-		echo "<div class='file_tree_widget_edit_folder_wrapper'>";
+		echo "<div>";
 		echo elgg_view("input/hidden", array("name" => "params[folder_guids][]", "value" => "")); // needed to be able to empty the list
 		echo file_tools_build_widget_options($folders, "params[folder_guids][]", $selected_folders);
+		echo "</div>";
+		
+		// display folder or folder content
+		$checkbox_options = array(
+			"name" => "params[show_content]", 
+			"value" => "1"
+		);
+		if(!empty($widget->show_content)){
+			$checkbox_options["checked"] = "checked";
+		}
+		echo "<div>";
+		echo elgg_view("input/checkbox", $checkbox_options);
+		echo elgg_echo("widgets:file_tree:edit:show_content");
 		echo "</div>";
 	}

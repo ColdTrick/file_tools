@@ -137,7 +137,8 @@
 		'widgets:file_tree:title' => "Folders",
 		'widgets:file_tree:description' => "Showcase your File folders",
 		
-		'widgets:file_tree:edit:select' => "Select which folders to display",
+		'widgets:file_tree:edit:select' => "Select which folder(s) to display",
+		'widgets:file_tree:edit:show_content' => "Show the content of the folder(s)",
 		'widgets:file_tree:no_folders' => "No folders configured",
 		'widgets:file_tree:no_files' => "No files configured",
 		'widgets:file_tree:more' => "More file folders",

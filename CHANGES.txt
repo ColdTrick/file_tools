@@ -1,4 +1,8 @@
 = Version History =
+x.x:
+
+- added: option to show folder content in the widget
+
 1.0 beta (2012-05-23):
 
 - added: group_files widget (from widget_manager)
