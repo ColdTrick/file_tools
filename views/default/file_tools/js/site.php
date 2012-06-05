@@ -37,7 +37,7 @@ elgg.file_tools.uploadify.init = function(){
 			buttonText: elgg.echo("file_tools:forms:browse"),
 			queueID: "uploadify-queue-wrapper",
 			fileTypeExts: "<?php echo file_tools_allowed_extensions(true); ?>",
-			fileSizeLimit: "50MB",
+			fileSizeLimit: "<?php echo file_tools_get_readable_file_size_limit(); ?>",
 			fileObjName: "upload",
 			auto: false,
 			onQueueComplete: function(queueData){

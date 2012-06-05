@@ -876,3 +876,20 @@
 		}
 	}
 	
+	function file_tools_get_readable_file_size_limit(){
+		$result = false;
+		
+		$size_units = array("B", "KB", "MB", "GB", "TB", "PB");
+		$i = 0;
+		
+		$file_size_limit = elgg_get_ini_setting_in_bytes("upload_max_filesize");
+		while($file_size_limit > 1024){
+			$i++;
+			$file_size_limit /= 1024;
+		}
+		
+		$result = $file_size_limit . $size_units[$i];
+		
+		return $result;
+	}
+	
