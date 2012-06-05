@@ -2,6 +2,7 @@
 
 	function file_tools_get_file_extension($file) {
 		$result = '';
+		
 		if($file->getSubtype() == 'file') {
 			if($filename = $file->getFilename()) {
 				$exploded_filename = explode('.', $filename);
@@ -323,13 +324,10 @@
 	function file_tools_allowed_extensions($zip = false) {
 		$result = false;
 		
-		$allowed_extensions_settings = trim(elgg_get_plugin_setting('allowed_extensions', 'file_tools'));
+		$allowed_extensions_settings = elgg_get_plugin_setting('allowed_extensions', 'file_tools');
+		$allowed_extensions_settings = string_to_tag_array($allowed_extensions_settings);
 		
 		if(!empty($allowed_extensions_settings)) {
-			$allowed_extensions_settings = strtolower($allowed_extensions_settings);
-			$allowed_extensions = explode(',', $allowed_extensions_settings);
-			array_walk($allowed_extensions, 'file_tools_trim_array_values');
-			
 			$result = $allowed_extensions;	
 		} else {
 			$result = array('txt','jpg','jpeg','png','bmp','gif','pdf','doc','docx','xls','xlsx','ppt','pptx','odt','ods','odp');
@@ -339,13 +337,9 @@
 			return $result;
 		}
 		
-		$result = implode(';*.', $result);
+		$result = implode(";*.", $result);
 		
-		return '*.'.$result;
-	}
-	
-	function file_tools_trim_array_values(&$value) { 
-	    $value = trim($value); 
+		return "*." . $result;
 	}
 	
 	if (!function_exists("mime_content_type")) {

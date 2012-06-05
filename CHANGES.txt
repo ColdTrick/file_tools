@@ -3,6 +3,7 @@ x.x:
 
 - added: option to show folder content in the widget
 - fixed: depricated notices
+- changed: better handling of file extensions
 
 1.0 beta (2012-05-23):
 

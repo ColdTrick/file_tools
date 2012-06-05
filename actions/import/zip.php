@@ -10,7 +10,7 @@
 	if (!empty($container_guid) && get_uploaded_file("zip_file")) {
 		$extension_array = explode(".", $_FILES["zip_file"]["name"]);	
 		
-		if(end($extension_array) == "zip") {
+		if(strtolower(end($extension_array)) == "zip") {
 			$file = $_FILES["zip_file"];
 			
 			if(file_tools_unzip($file, $container_guid, $parent_guid)) {

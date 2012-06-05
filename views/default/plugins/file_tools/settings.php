@@ -29,16 +29,12 @@
 	);
 	
 	// get settings
-	if(!empty($settings->allowed_extensions))	{
-		$allowed_extensions = $settings->allowed_extensions;
-	} else {
-		$allowed_extensions = "txt,jpg,jpeg,png,bmp,gif,pdf,doc,docx,xls,xlsx,ppt,pptx,odt,ods,odp";
-	}
+	$allowed_extensions = file_tools_allowed_extensions();
 	
 	// Allowed extensions
 	echo "<div>";
 	echo "<label>" . elgg_echo("file_tools:settings:allowed_extensions") . "</label>";
-	echo elgg_view("input/text", array("name" => "params[allowed_extensions]", "value" => $allowed_extensions));
+	echo elgg_view("input/tags", array("name" => "params[allowed_extensions]", "value" => $allowed_extensions));
 	echo "</div>";
 	
 	// Use folder structure
