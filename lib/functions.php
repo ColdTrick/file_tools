@@ -22,10 +22,10 @@
 		}
 		
 		if(!$folder) {
-			$container_guid = page_owner();
+			$container_guid = elgg_get_page_owner_guid();
 			$parent_guid = 0;
 		} else {
-			$container_guid = $folder->getContainer();
+			$container_guid = $folder->getContainerGUID();
 			$parent_guid = $folder->getGUID();
 		}
 		
@@ -274,7 +274,7 @@
 				$options = array(
 					"type" => "object",
 					"subtype" => FILE_TOOLS_SUBTYPE,
-					"container_guid" => $folder->getContainer(),
+					"container_guid" => $folder->getContainerGUID(),
 					"limit" => false,
 					"metadata_name" => "parent_guid",
 					"metadata_value" => $folder->getGUID()
@@ -304,7 +304,7 @@
 				$options = array(
 					"type" => "object",
 					"subtype" => "file",
-					"container_guid" => $folder->getContainer(),
+					"container_guid" => $folder->getContainerGUID(),
 					"limit" => false,
 					"relationship" => FILE_TOOLS_RELATIONSHIP,
 					"relationship_guid" => $folder->getGUID()
