@@ -4,6 +4,7 @@ x.x:
 - added: option to show folder content in the widget
 - fixed: depricated notices
 - fixed: max file upload size now listens to PHP setting
+- fixed: page_handler logic
 - changed: better handling of file extensions
 
 1.0 beta (2012-05-23):
