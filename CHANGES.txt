@@ -6,6 +6,7 @@ x.x:
 - fixed: max file upload size now listens to PHP setting
 - fixed: page_handler logic
 - changed: better handling of file extensions
+- removed: unused javascript function
 
 1.0 beta (2012-05-23):
 
