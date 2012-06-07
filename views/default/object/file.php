@@ -81,6 +81,7 @@
 		
 		$params = array(
 			"entity" => $file,
+			"title" => elgg_view("output/url", array("text" => $title, "href" => "file/download/" . $file->getGUID())),
 			"metadata" => $entity_menu,
 			"subtitle" => $subtitle,
 			"tags" => $tags
