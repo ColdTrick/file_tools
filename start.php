@@ -51,6 +51,8 @@
 		
 		// index files
 		elgg_register_widget_type("index_file", elgg_echo("file"), elgg_echo("widgets:index_file:description"), "index", true);
+		
+		elgg_register_plugin_hook_handler("register", "menu:entity", "file_tools_entity_menu_hook");
 	}
 	
 	function file_tools_pagesetup(){
@@ -95,7 +97,6 @@
 	
 	elgg_register_plugin_hook_handler("register", "menu:file_tools_folder_breadcrumb", "file_tools_folder_breadcrumb_hook");
 	elgg_register_plugin_hook_handler("register", "menu:file_tools_folder_sidebar_tree", "file_tools_folder_sidebar_tree_hook");
-	elgg_register_plugin_hook_handler("register", "menu:entity", "file_tools_entity_menu_hook");
 	
 	// register actions
 	elgg_register_action("file_tools/groups/save_sort", dirname(__FILE__) . "/actions/groups/save_sort.php");
