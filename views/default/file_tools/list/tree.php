@@ -25,13 +25,6 @@
 		return result;
 	}
 
-	function file_tools_reorder(folder_guid, parent_guid, order) {
-		var reorder_url = "<?php echo $vars["url"];?>file_tools/reorder";
-		$.post(reorder_url, {"folder_guid": folder_guid, "parent_guid": parent_guid, "order": order}, function() {
-			elgg.file_tools.load_folder(file_tools_get_selected_tree_folder_id());
-		});
-	}
-	
 	function file_tools_remove_folder_files(link) {
 		if(confirm("<?php echo elgg_echo("file_tools:folder:delete:confirm_files");?>")) {
 			var cur_href = $(link).attr("href"); 
