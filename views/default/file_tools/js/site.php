@@ -145,6 +145,19 @@ elgg.file_tools.tree.init = function(){
 					});
 				}
 			}
+		}).find("a").droppable({
+			accept: "#file_tools_list_files .file-tools-file",
+			hoverClass: "file-tools-tree-droppable-hover",
+			tolerance: "pointer",
+			drop: function(event, ui){
+				droppable = $(this);
+				draggable = ui.draggable;
+
+				drop_id = droppable.attr("href").substring(1);
+				drag_id = draggable.parent().attr("id").split("-").pop();
+
+				elgg.file_tools.move_file(drag_id, drop_id, draggable);
+			}
 		});
 	}
 }
@@ -180,6 +193,27 @@ elgg.file_tools.load_folder = function(folder_guid){
 		var new_add_link = elgg.get_site_url() + path.substring(1) + "?folder_guid=" + folder_guid;
 		
 		$('ul.elgg-menu-title li.elgg-menu-item-add a').attr("href", new_add_link);
+	});
+}
+
+elgg.file_tools.move_file = function(file_guid, to_folder_guid, draggable){
+	elgg.action("file/move", {
+		data: {
+			file_guid: file_guid, 
+			folder_guid: to_folder_guid
+		},
+		error: function(result){
+			var hash = elgg.parse_url(window.location.href, "fragment");
+
+			if(hash){
+				elgg.file_tools.load_folder(hash);
+			} else {
+				elgg.file_tools.load_folder(0);
+			}
+		},
+		success: function(result){
+			draggable.parent().remove();
+		}
 	});
 }
 

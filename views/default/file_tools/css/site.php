@@ -29,3 +29,7 @@
 	cursor: move;
 	background: white;
 }
+
+#file-tools-folder-tree .file-tools-tree-droppable-hover {
+	border: 1px solid red;
+}

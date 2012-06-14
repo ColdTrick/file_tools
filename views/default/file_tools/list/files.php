@@ -84,24 +84,7 @@ if($page_owner->canEdit() || (elgg_instanceof($page_owner, "group") && $page_own
 				drop_id = droppable.parent().attr("id").split("-").pop();
 				drag_id = draggable.parent().attr("id").split("-").pop();
 
-				elgg.action("file/move", {
-					data: {
-						file_guid: drag_id, 
-						folder_guid: drop_id
-					},
-					error: function(result){
-						var hash = elgg.parse_url(window.location.href, "fragment");
-
-						if(hash){
-							elgg.file_tools.load_folder(hash);
-						} else {
-							elgg.file_tools.load_folder(0);
-						}
-					},
-					success: function(result){
-						draggable.parent().remove();
-					}
-				});
+				elgg.file_tools.move_file(drag_id, drop_id, draggable);
 			}
 		});
 	});
