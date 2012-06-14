@@ -328,7 +328,7 @@
 		$allowed_extensions_settings = string_to_tag_array($allowed_extensions_settings);
 		
 		if(!empty($allowed_extensions_settings)) {
-			$result = $allowed_extensions;	
+			$result = $allowed_extensions_settings;	
 		} else {
 			$result = array('txt','jpg','jpeg','png','bmp','gif','pdf','doc','docx','xls','xlsx','ppt','pptx','odt','ods','odp');
 		}
