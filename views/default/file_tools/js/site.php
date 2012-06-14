@@ -26,20 +26,19 @@ elgg.provide("elgg.file_tools.tree");
 
 elgg.file_tools.uploadify.init = function(){
 	$uploadifyButton = $('#uploadify-button-wrapper');
-	
+
 	if($uploadifyButton.length){
 		$uploadifyButton.uploadify({
 			swf: "<?php echo $vars["url"]; ?>mod/file_tools/vendors/uploadify/uploadify.swf",
 			uploader: "<?php echo $vars["url"]; ?>mod/file_tools/procedures/upload/multi.php",
-			height: 18,
-			width: 100,
-			buttonClass: "elgg-button elgg-button-action",
 			buttonText: elgg.echo("file_tools:forms:browse"),
 			queueID: "uploadify-queue-wrapper",
 			fileTypeExts: "<?php echo file_tools_allowed_extensions(true); ?>",
 			fileSizeLimit: "<?php echo file_tools_get_readable_file_size_limit(); ?>",
 			fileObjName: "upload",
-			auto: false,
+			height: "23",
+			width: "120",
+			auto: false, 
 			onQueueComplete: function(queueData){
 				var folder = $('#file_tools_file_parent_guid').val();
 				

@@ -6,8 +6,24 @@
 	Released under the MIT License <http://www.opensource.org/licenses/mit-license.php> 
 */
 
-#uploadify-button-wrapper {
-	display: inline;
+#uploadify-button-wrapper.uploadify{
+	display: inline-block;
+	position: relative;
+	background: url("http://jeroen.coldtrick.com/_graphics/button_background.gif") repeat-x scroll 0 0 #CCCCCC;
+    border: 1px solid #999999;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: none;
+    color: #333333;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 1px 0 white;
+    font-size: 14px;
+}
+
+#uploadify-button-wrapper .swfupload {
+	left: 0;
 }
 
 .uploadify-queue-item {

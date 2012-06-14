@@ -33,7 +33,6 @@
 			
 			<div>
 				<span id="uploadify-button-wrapper"></span>
-				
 				<?php echo elgg_view("input/button", array("value" => elgg_echo('file_tools:forms:empty_queue'), "class" => "elgg-button-action", "id" => "file-tools-uploadify-cancel")); ?>
 			</div>
 		</div>
