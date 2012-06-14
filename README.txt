@@ -27,3 +27,4 @@
 - bulk download
 - update folder tree
 - redirect na upload
+- flashbutton ie7 outlineing
