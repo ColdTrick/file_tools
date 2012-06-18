@@ -13,7 +13,7 @@
 		// extend CSS
 		elgg_extend_view("css/elgg", "file_tools/css/site");
 		if(file_tools_use_folder_structure()){
-			elgg_extend_view("forms/groups/edit", "file_tools/group_settings");
+			elgg_extend_view("groups/edit", "file_tools/group_settings");
 		}
 		
 		// extend js

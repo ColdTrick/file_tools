@@ -7,6 +7,7 @@ x.x:
 - fixed: page_handler logic
 - fixed: edit a file moving to main folder
 - fixed: dropping files on the tree works again
+- fixed: layout of group settings
 - changed: better handling of file extensions
 - changed: file title is download link in full view
 - removed: unused javascript function
