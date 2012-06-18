@@ -42,6 +42,7 @@
 		// register group option to allow management of file tree structure
 		add_group_tool_option("file_tools_structure_management", elgg_echo("file_tools:group_tool_option:structure_management"));
 		
+		// register widgets
 		// add folder widget
 		// need to keep file_tree for the widget name to be compatible with previous filetree plugin users
 		elgg_register_widget_type ("file_tree", elgg_echo("widgets:file_tree:title"), elgg_echo("widgets:file_tree:description"), "dashboard,profile,groups");
@@ -52,7 +53,34 @@
 		// index files
 		elgg_register_widget_type("index_file", elgg_echo("file"), elgg_echo("widgets:index_file:description"), "index", true);
 		
+		// register events
+		elgg_register_event_handler("create", "object", "file_tools_object_handler");
+		elgg_register_event_handler("update", "object", "file_tools_object_handler");
+		elgg_register_event_handler("delete", "object", "file_tools_object_handler_delete");
+		
+		// register hooks
 		elgg_register_plugin_hook_handler("register", "menu:entity", "file_tools_entity_menu_hook");
+		elgg_register_plugin_hook_handler("permissions_check:metadata", "object", "file_tools_can_edit_metadata_hook");
+// 		elgg_register_plugin_hook_handler("access:collections:write", "all", "file_tools_write_acl_plugin_hook", 550);
+		elgg_register_plugin_hook_handler("route", "file", "file_tools_file_route_hook");
+		elgg_register_plugin_hook_handler("register", "menu:title", "file_tools_title_menu_register_hook");
+		elgg_register_plugin_hook_handler("widget_url", "widget_manager", "file_tools_widget_url_hook");
+		
+		elgg_register_plugin_hook_handler("register", "menu:file_tools_folder_breadcrumb", "file_tools_folder_breadcrumb_hook");
+		elgg_register_plugin_hook_handler("register", "menu:file_tools_folder_sidebar_tree", "file_tools_folder_sidebar_tree_hook");
+		
+		// register actions
+		elgg_register_action("file_tools/groups/save_sort", dirname(__FILE__) . "/actions/groups/save_sort.php");
+		elgg_register_action("file_tools/folder/edit", dirname(__FILE__) . "/actions/folder/edit.php");
+		elgg_register_action("file_tools/folder/delete", dirname(__FILE__) . "/actions/folder/delete.php");
+		elgg_register_action("file_tools/folder/reorder", dirname(__FILE__) . "/actions/folder/reorder.php");
+		elgg_register_action("file_tools/import/zip", dirname(__FILE__) . "/actions/import/zip.php");
+		elgg_register_action("file_tools/folder/delete", dirname(__FILE__) . "/actions/folder/delete.php");
+		elgg_register_action("file_tools/file/hide", dirname(__FILE__) . "/actions/file/hide.php");
+		
+		elgg_register_action("file/move", dirname(__FILE__) . "/actions/file/move.php");
+		elgg_register_action("file/bulk_delete", dirname(__FILE__) . "/actions/file/bulk_delete.php");
+		
 	}
 	
 	function file_tools_pagesetup(){
@@ -80,33 +108,7 @@
 		return $result;
 	}
 
+	// register default Elgg events
 	elgg_register_event_handler("init", "system", "file_tools_init");
 	elgg_register_event_handler("pagesetup", "system", "file_tools_pagesetup");
-	
-	// register events
-	elgg_register_event_handler("create", "object", "file_tools_object_handler");
-	elgg_register_event_handler("update", "object", "file_tools_object_handler");
-	elgg_register_event_handler("delete", "object", "file_tools_object_handler_delete");
-	
-	// register plugin hooks
-	elgg_register_plugin_hook_handler("permissions_check:metadata", "object", "file_tools_can_edit_metadata_hook");
-// 	elgg_register_plugin_hook_handler("access:collections:write", "all", "file_tools_write_acl_plugin_hook", 550);
-	elgg_register_plugin_hook_handler("route", "file", "file_tools_file_route_hook");
-	elgg_register_plugin_hook_handler("register", "menu:title", "file_tools_title_menu_register_hook");
-	elgg_register_plugin_hook_handler("widget_url", "widget_manager", "file_tools_widget_url_hook");
-	
-	elgg_register_plugin_hook_handler("register", "menu:file_tools_folder_breadcrumb", "file_tools_folder_breadcrumb_hook");
-	elgg_register_plugin_hook_handler("register", "menu:file_tools_folder_sidebar_tree", "file_tools_folder_sidebar_tree_hook");
-	
-	// register actions
-	elgg_register_action("file_tools/groups/save_sort", dirname(__FILE__) . "/actions/groups/save_sort.php");
-	elgg_register_action("file_tools/folder/edit", dirname(__FILE__) . "/actions/folder/edit.php");
-	elgg_register_action("file_tools/folder/delete", dirname(__FILE__) . "/actions/folder/delete.php");	
-	elgg_register_action("file_tools/folder/reorder", dirname(__FILE__) . "/actions/folder/reorder.php");	
-	elgg_register_action("file_tools/import/zip", dirname(__FILE__) . "/actions/import/zip.php");
-	elgg_register_action("file_tools/folder/delete", dirname(__FILE__) . "/actions/folder/delete.php");
-	elgg_register_action("file_tools/file/hide", dirname(__FILE__) . "/actions/file/hide.php");
-	
-	elgg_register_action("file/move", dirname(__FILE__) . "/actions/file/move.php");
-	elgg_register_action("file/bulk_delete", dirname(__FILE__) . "/actions/file/bulk_delete.php");
 	
