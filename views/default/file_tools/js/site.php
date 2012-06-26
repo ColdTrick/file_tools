@@ -42,7 +42,12 @@ elgg.file_tools.uploadify.init = function(){
 			onQueueComplete: function(queueData){
 				var folder = $('#file_tools_file_parent_guid').val();
 				
-				document.location.href = file_tools_uploadify_return_url + "#" + folder;
+				var forward_location = file_tools_uploadify_return_url + "#";
+				if(folder > 0){
+					forward_location += folder;
+				}
+				
+				document.location.href = forward_location;
 			},
 			onUploadStart: function(file){
 				$('#uploadify-button-wrapper').uploadify("settings", "formData", $('#file-tools-file-upload-form').serializeJSON());
