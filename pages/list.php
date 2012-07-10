@@ -106,7 +106,11 @@
 			);
 			
 			if(elgg_instanceof($page_owner, "user")){
-				$params["filter_context"] = "mine";
+        if($page_owner->guid == elgg_get_logged_in_user_guid()){
+          $params["filter_context"] = "mine";
+        } else {
+          $params["filter_context"] = $page_owner->username;
+        }
 			} else {
 				$params["filter"] = false;
 			}
