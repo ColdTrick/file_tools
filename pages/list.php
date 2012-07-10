@@ -97,6 +97,7 @@
 			$sidebar = elgg_view("file_tools/list/tree", array("folder" => $folder, "folders" => $folders));
 			$sidebar .= elgg_view("file_tools/sidebar/sort_options");
 			$sidebar .= elgg_view("file_tools/sidebar/info");
+			$sidebar .= elgg_view('page/elements/tagcloud_block', array('subtypes' => 'file', 'owner_guid' => elgg_get_page_owner_guid()));
 			
 			// build page params
 			$params = array(
@@ -106,7 +107,11 @@
 			);
 			
 			if(elgg_instanceof($page_owner, "user")){
-				$params["filter_context"] = "mine";
+        if($page_owner->guid == elgg_get_logged_in_user_guid()){
+          $params["filter_context"] = "mine";
+        } else {
+          $params["filter_context"] = $page_owner->username;
+        }
 			} else {
 				$params["filter"] = false;
 			}
