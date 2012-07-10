@@ -194,10 +194,18 @@ elgg.file_tools.load_folder = function(folder_guid){
 	$("#file_tools_list_files_container").load(url, function(){
 		var add_link = $('ul.elgg-menu-title li.elgg-menu-item-add a').attr("href");
 
-		var path = elgg.parse_url(add_link, "path");
-		var new_add_link = elgg.get_site_url() + path.substring(1) + "?folder_guid=" + folder_guid;
+    if(add_link){
+      var path = elgg.parse_url(add_link, "path");
+      var new_add_link = elgg.get_site_url() + path.substring(1) + "?folder_guid=" + folder_guid;
 		
-		$('ul.elgg-menu-title li.elgg-menu-item-add a').attr("href", new_add_link);
+      $('ul.elgg-menu-title li.elgg-menu-item-add a').attr("href", new_add_link);
+    }
+    
+    //update bookmark link and widget_manager multidashboard link
+    var new_bookmark_link = elgg.get_site_url() + 'bookmarks/add/' + elgg.get_page_owner_guid() + '?address=' + encodeURIComponent(window.location.href);
+    var new_multidashboard_link = elgg.get_site_url() + 'multi_dashboard/edit/?internal_url=' + encodeURIComponent(window.location.href);
+    $(".elgg-menu-item-bookmark a").attr("href", new_bookmark_link);
+    $("#widget-manager-multi_dashboard-extras").attr("href", new_multidashboard_link);
 	});
 }
 
