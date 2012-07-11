@@ -72,6 +72,39 @@
 
 	if($full_view && !elgg_in_context("gallery")) {
 		// normal full view
+    
+    // add folder structure to the breadcrumbs
+  if(file_tools_use_folder_structure()){
+    $endpoint = elgg_pop_breadcrumb();
+    $owner = elgg_pop_breadcrumb();
+    
+    $parent_folder = elgg_get_entities_from_relationship(array(
+       'relationship' => 'folder_of',
+        'relationship_guid' => $file->guid,
+        'inverse_relationship' => TRUE
+    ));
+    
+    $folders = array();
+    if ($parent_folder) {
+    
+      $parent_guid = (int) $parent_folder[0]->guid;
+      
+				while(!empty($parent_guid) && ($parent = get_entity($parent_guid))){
+					$folders[] = $parent;
+					$parent_guid = (int) $parent->parent_guid;
+				}
+    }
+    
+    elgg_push_breadcrumb($owner['title'], $owner['link']);
+    elgg_push_breadcrumb(elgg_echo('file_tools:list:folder:main'), $owner['link']);
+        
+    while($p = array_pop($folders)){
+      elgg_push_breadcrumb($p->title, $p->getURL());
+    }
+    
+    elgg_push_breadcrumb($endpoint['title'], $endpoint['link']);
+  }
+  
 		$extra = "";
 		if (elgg_view_exists("file/specialcontent/$mime")) {
 			$extra = elgg_view("file/specialcontent/$mime", $vars);
