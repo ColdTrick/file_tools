@@ -595,7 +595,12 @@
 	}
 	
 	function file_tools_create_folders($zip_entry, $container_guid, $parent_guid = 0) {
-		$zdir = substr(zip_entry_name($zip_entry), 0, -1);
+		$zip_entry_name = zip_entry_name($zip_entry);
+		$filename = basename($zip_entry_name);
+		
+		$zip_base = str_replace($filename, "", $zip_entry_name);
+		$zdir = substr($zip_base, 0, -1);
+		
 		$container_entity = get_entity($container_guid);
 		
 		$access_id = get_input("access_id", false);
@@ -603,18 +608,16 @@
 			if($parent_guid != 0) {
 				$access_id = get_entity($parent_guid)->access_id;
 			} else {
-				if($container_entity instanceof ElggUser) {
-					$access_id = get_default_access();
-				} elseif($container_entity instanceof ElggGroup) {
+				if(elgg_instanceof($container_entity, "group")) {
 					$access_id = $container_entity->group_acl;
+				} else {
+					$access_id = get_default_access($container_entity);
 				}
 			}
 		}
-		     
-		$sub_folders = explode('/', $zdir);
-		$count = count($sub_folders);
 		
-		if($count == 1) {
+		$sub_folders = explode("/", $zdir);
+		if(count($sub_folders) == 1) {
 			$entity = file_tools_check_foldertitle_exists($zdir, $container_guid, $parent_guid);
 
 			if(!$entity) {
@@ -624,15 +627,17 @@
 				$directory->container_guid = $container_guid;
 				
 				$directory->access_id = $access_id;
-						
+				
 				$directory->title = $zdir;
 				$directory->parent_guid = $parent_guid;
 						
 				$order = elgg_get_entities_from_metadata(array(
 					"type" => "object",
-					"subtype" => 'folder',
-					"metadata_name" => "parent_guid",
-					"metadata_value" => $parent_guid,
+					"subtype" => FILE_TOOLS_SUBTYPE,
+					"metadata_name_value_pairs" => array(
+						"name" => "parent_guid",
+						"value" => $parent_guid
+					),
 					"count" => true
 				));
 						
@@ -647,7 +652,7 @@
 					$parent = $entity->getGUID();
 				} else {
 					$directory = new ElggObject();
-					$directory->subtype = 'folder';
+					$directory->subtype = FILE_TOOLS_SUBTYPE;
 					$directory->owner_guid = elgg_get_logged_in_user_guid();
 					$directory->container_guid = $container_guid;
 					
@@ -658,15 +663,17 @@
 						
 					$order = elgg_get_entities_from_metadata(array(
 						"type" => "object",
-						"subtype" => 'folder',
-						"metadata_name" => "parent_guid",
-						"metadata_value" => $parent,
+						"subtype" => FILE_TOOLS_SUBTYPE,
+						"metadata_name_value_pairs" => array(
+							"name" => "parent_guid",
+							"value" => $parent
+						),
 						"count" => true
 					));
-							
+					
 					$directory->order = $order;
 							
-					$directory->save();
+					$parent = $directory->save();
             	}
 			}
 		}
@@ -696,114 +703,126 @@
 				}
 			}
 			
+			// open the zip file
 		    $zip = zip_open($zipfile);
 		    while ($zip_entry = zip_read($zip)) {
-		        zip_entry_open($zip, $zip_entry);
-		        if (substr(zip_entry_name($zip_entry), -1) == '/') {
-					file_tools_create_folders($zip_entry, $container_guid, $parent_guid);
-		        } else {
-		            $folder_array = explode('/', zip_entry_name($zip_entry));
-		            
-		            $parent = $parent_guid;
-		            foreach($folder_array as $folder) {
-		            	$folder = sanitize_string(utf8_encode($folder));
+		        // open the zip entry
+		    	zip_entry_open($zip, $zip_entry);
+		        
+		    	// set some variables
+		        $zip_entry_name = zip_entry_name($zip_entry);
+		        $filename = basename($zip_entry_name);
+				
+		        // check for folder structure
+		        if (strlen($zip_entry_name) != strlen($filename)) {
+		        	// there is a folder structure, check it and create missing items
+		        	file_tools_create_folders($zip_entry, $container_guid, $parent_guid);
+		        }
 
-			            if($entity = file_tools_check_foldertitle_exists($folder, $container_guid, $parent)) {
-							$parent = $entity->getGUID();
-						} else {
-							if($folder == end($folder_array)) {
-								$prefix = "file/";
-								$extension_array = explode('.', $folder);
+		        // extract the folder structure from the zip entry
+		        $folder_array = explode("/", $zip_entry_name);
+		            
+				$parent = $parent_guid;
+				foreach($folder_array as $folder) {
+					$folder = sanitize_string(utf8_encode($folder));
+					
+					if($entity = file_tools_check_foldertitle_exists($folder, $container_guid, $parent)) {
+						$parent = $entity->getGUID();
+					} else {
+						if($folder == end($folder_array)) {
+							$prefix = "file/";
+							$extension_array = explode('.', $folder);
+							
+							$file_extension				= end($extension_array);
+							$file_size 					= zip_entry_filesize($zip_entry);							
+							
+							if(in_array(strtolower($file_extension), $allowed_extensions)) {
+								$buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
 								
-								$file_extension				= end($extension_array);
-								$file_size 					= zip_entry_filesize($zip_entry);							
+								// create the file
+								$filehandler = new ElggFile();
+								$filehandler->setFilename($prefix . $folder);
 								
-								if(in_array(strtolower($file_extension), $allowed_extensions)) {
-									$buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
+								$filehandler->title 			= $folder;
+								$filehandler->originalfilename 	= $folder;	
+								$filehandler->owner_guid		= elgg_get_logged_in_user_guid();
 								
+								$filehandler->container_guid 	= $container_guid;
+								$filehandler->access_id			= $access_id;
+								
+								$filehandler->open("write");
+								$filehandler->write($buf);
+								$filehandler->close();
+								
+								$mime_type = mime_content_type($filehandler->getFilenameOnFilestore());
+								$simple_type = explode("/", $mime_type);
+								
+								$filehandler->setMimeType($mime_type);
+								$filehandler->simpletype = $simple_type[0];
+								
+								if($simple_type[0] == "image") {
+									$filestorename = elgg_strtolower(time() . $folder);
 									
-									$filehandler = new ElggFile();
-									$filehandler->setFilename($prefix . $folder);
-																	
-									$filehandler->title 			= $folder;
-									$filehandler->originalfilename 	= $folder;	
-									$filehandler->owner_guid		= elgg_get_logged_in_user_guid();
-									
-									$filehandler->container_guid 	= $container_guid;
-									$filehandler->access_id			= $access_id;
-									
-	
-									$filehandler->open("write");
-									$filehandler->write($buf);
-									$filehandler->close();
-									
-									$mime_type = mime_content_type($filehandler->getFilenameOnFilestore());
-									$simple_type = explode('/', $mime_type);
-									
-									$filehandler->setMimeType($mime_type);
-									$filehandler->simpletype = $simple_type[0];
-									
-									if($simple_type[0] == "image") {
-										$filestorename = elgg_strtolower(time().$folder);
+									$thumbnail = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), 60, 60, true);
+									if ($thumbnail) {
+										$thumb = new ElggFile();
+										$thumb->setMimeType($mime_type);
 										
-										$thumbnail = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(),60,60, true);
-										if ($thumbnail) {
-											$thumb = new ElggFile();
-											$thumb->setMimeType($mime_type);
-											
-											$thumb->setFilename($prefix."thumb".$filestorename);
-											$thumb->open("write");
-											$thumb->write($thumbnail);
-											$thumb->close();
-											
-											$filehandler->thumbnail = $prefix."thumb".$filestorename;
-											unset($thumbnail);
-										}
+										$thumb->setFilename($prefix . "thumb" . $filestorename);
+										$thumb->open("write");
+										$thumb->write($thumbnail);
+										$thumb->close();
 										
-										$thumbsmall = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(),153,153, true);
-										if ($thumbsmall) {
-											$thumb->setFilename($prefix."smallthumb".$filestorename);
-											$thumb->open("write");
-											$thumb->write($thumbsmall);
-											$thumb->close();
-											$filehandler->smallthumb = $prefix."smallthumb".$filestorename;
-											unset($thumbsmall);
-										}
-										
-										$thumblarge = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(),600,600, false);
-										if ($thumblarge) {
-											$thumb->setFilename($prefix."largethumb".$filestorename);
-											$thumb->open("write");
-											$thumb->write($thumblarge);
-											$thumb->close();
-											$filehandler->largethumb = $prefix."largethumb".$filestorename;
-											unset($thumblarge);
-										}
+										$filehandler->thumbnail = $prefix . "thumb" . $filestorename;
+										unset($thumbnail);
 									}
 									
-									set_input('folder_guid', $parent);
-									
-									$filehandler->save();
-									
-									$extracted = true;
-									
-									if(!empty($parent)) {
-										system_message("rel: " . $parent . " => " . $filehandler->getGUID());
-										add_entity_relationship($parent, FILE_TOOLS_RELATIONSHIP, $filehandler->getGUID());
+									$thumbsmall = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), 153, 153, true);
+									if ($thumbsmall) {
+										$thumb->setFilename($prefix . "smallthumb" . $filestorename);
+										
+										$thumb->open("write");
+										$thumb->write($thumbsmall);
+										$thumb->close();
+										
+										$filehandler->smallthumb = $prefix . "smallthumb" . $filestorename;
+										unset($thumbsmall);
 									}
+									
+									$thumblarge = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), 600, 600, false);
+									if ($thumblarge) {
+										$thumb->setFilename($prefix . "largethumb" . $filestorename);
+										
+										$thumb->open("write");
+										$thumb->write($thumblarge);
+										$thumb->close();
+										
+										$filehandler->largethumb = $prefix . "largethumb" . $filestorename;
+										unset($thumblarge);
+									}
+								}
+								
+								set_input('folder_guid', $parent);
+								
+								$filehandler->save();
+								
+								$extracted = true;
+								
+								if(!empty($parent)) {
+									add_entity_relationship($parent, FILE_TOOLS_RELATIONSHIP, $filehandler->getGUID());
 								}
 							}
 						}
-		            }
-		        }
-		        
-		        zip_entry_close($zip_entry);
-		    }
-		    
-		    zip_close($zip);
+					}
+				}
+				
+				zip_entry_close($zip_entry);
+			}
+			
+			zip_close($zip);
 		}
-	    
-	    return $extracted;
+		
+		return $extracted;
 	}
 	
 	/**

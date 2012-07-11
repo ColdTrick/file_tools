@@ -9,6 +9,7 @@ x.x:
 - fixed: dropping files on the tree works again
 - fixed: layout of group settings
 - fixed: encoding problem in zip upload
+- fixed: problem with zip upload not creating folders
 - changed: better handling of file extensions
 - changed: file title is download link in full view
 - changed: layout of start.php to be more inline with Elgg
