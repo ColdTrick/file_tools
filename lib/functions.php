@@ -706,7 +706,8 @@
 		            
 		            $parent = $parent_guid;
 		            foreach($folder_array as $folder) {
-		            	$folder = sanitize_string($folder);
+		            	$folder = sanitize_string(utf8_encode($folder));
+
 			            if($entity = file_tools_check_foldertitle_exists($folder, $container_guid, $parent)) {
 							$parent = $entity->getGUID();
 						} else {
