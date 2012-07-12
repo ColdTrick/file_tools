@@ -31,6 +31,7 @@ elgg.file_tools.uploadify.init = function(){
 		$uploadifyButton.uploadify({
 			swf: "<?php echo $vars["url"]; ?>mod/file_tools/vendors/uploadify/uploadify.swf",
 			uploader: "<?php echo $vars["url"]; ?>mod/file_tools/procedures/upload/multi.php",
+			formData: {"X-Requested-With": "XMLHttpRequest"},
 			buttonText: elgg.echo("file_tools:forms:browse"),
 			queueID: "uploadify-queue-wrapper",
 			fileTypeExts: "<?php echo file_tools_allowed_extensions(true); ?>",
@@ -50,6 +51,7 @@ elgg.file_tools.uploadify.init = function(){
 				document.location.href = forward_location;
 			},
 			onUploadStart: function(file){
+				
 				$('#uploadify-button-wrapper').uploadify("settings", "formData", $('#file-tools-file-upload-form').serializeJSON());
 			},
 			onUploadSuccess: function(file, data, response){

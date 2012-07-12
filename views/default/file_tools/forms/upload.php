@@ -32,7 +32,8 @@
 			</div>
 			
 			<div>
-				<span id="uploadify-button-wrapper"></span>
+				<?php echo elgg_view("input/file", array("id" => "uploadify-button-wrapper", "name" => "upload"));?>
+				<span id=""></span>
 				<?php echo elgg_view("input/button", array("value" => elgg_echo('file_tools:forms:empty_queue'), "class" => "elgg-button-action hidden", "id" => "file-tools-uploadify-cancel")); ?>
 			</div>
 		</div>
@@ -67,8 +68,7 @@
 				echo elgg_view('input/securitytoken');
 				echo elgg_view("input/hidden", array("name" => "container_guid", "value" => $container_guid));
 				echo elgg_view("input/hidden", array("name" => "PHPSESSID", "value" => session_id()));
-				echo elgg_view("input/hidden", array("name" => "X-Requested-With", "value" => "XMLHttpRequest"));
-				
+								
 				echo elgg_view("input/submit", array("value" => elgg_echo("save")));
 			?>
 		</div>
