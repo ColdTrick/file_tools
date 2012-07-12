@@ -67,7 +67,13 @@ elgg.file_tools.uploadify.init = function(){
 					elgg.register_error(data.system_messages.error);
 					elgg.system_message(data.system_messages.success);
 				}
-			}
+			},
+			onSelect: function(instance) {
+	           $("#file-tools-uploadify-cancel").removeClass("hidden");
+	        },
+	        onClearQueue: function(queueItemCount){
+	        	$("#file-tools-uploadify-cancel").addClass("hidden");
+	        }
 		});
 	}
 }
