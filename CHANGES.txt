@@ -10,6 +10,8 @@ x.x:
 - fixed: layout of group settings
 - fixed: encoding problem in zip upload
 - fixed: problem with zip upload not creating folders
+- fixed: gracefully fallback for upload form
+- changed: only show empty queue when needed
 - changed: better handling of file extensions
 - changed: file title is download link in full view
 - changed: layout of start.php to be more inline with Elgg
