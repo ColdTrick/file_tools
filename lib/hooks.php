@@ -98,10 +98,11 @@
 						include(dirname(dirname(__FILE__)) . "/pages/list.php");
 					}
 					break;
-				case "add":
+				case "batch":
 					$result = false;
 					
-					include(dirname(dirname(__FILE__)) . "/pages/file/new.php");
+          elgg_set_page_owner_guid($page[1]);
+					include(dirname(dirname(__FILE__)) . "/pages/file/batch.php");
 					break;
 				case "zip":
 					if(isset($page[1])){
@@ -144,12 +145,21 @@
 				$parts = parse_url(current_page_url(), PHP_URL_PATH);
 				
 				if(($add_found && stristr($parts, "file/zip/") === false) || stristr($parts, "file/add/")){
+          
+          $result[] = ElggMenuItem::factory(array(
+						"name" => "batch_upload",
+						"href" => "file/batch/" . $page_owner,
+						"text" => elgg_echo("file_tools:batch:new"),
+						"class" => "elgg-button elgg-button-action",
+					));
+                   
 					$result[] = ElggMenuItem::factory(array(
 						"name" => "zip_upload",
 						"href" => "file/zip/" . $page_owner,
 						"text" => elgg_echo("file_tools:upload:new"),
 						"class" => "elgg-button elgg-button-action"
 					));
+          
 				}
 			}
 		}
