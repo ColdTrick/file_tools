@@ -17,6 +17,7 @@
 		'file_tools:menu:mine' => "Your folders",
 		'file_tools:menu:user' => "%s's folders",
 		'file_tools:menu:group' => "Group file folders",
+    'file_tools:batch:new' => "Batch Upload",
 		
 		// group tool option
 		'file_tools:group_tool_option:structure_management' => "Allow management of folders by members",

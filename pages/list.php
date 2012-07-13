@@ -84,6 +84,9 @@
 			
 			// register title button to add a new file
 			elgg_register_title_button();
+      
+      // register title button to add a single file
+      //elgg_register_title_button('', 'add_single');
 			
 			// get data for tree
 			$folders = file_tools_get_folders($page_owner_guid);
