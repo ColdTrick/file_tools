@@ -200,12 +200,11 @@ elgg.file_tools.load_folder = function(folder_guid){
 
 	$("#file_tools_list_files_container .elgg-ajax-loader").show();
 	$("#file_tools_list_files_container").load(url, function(){
-		var add_link = $('ul.elgg-menu-title li.elgg-menu-item-add a').attr("href");
-
-		var path = elgg.parse_url(add_link, "path");
-		var new_add_link = elgg.get_site_url() + path.substring(1) + "?folder_guid=" + folder_guid;
-		
+		var new_add_link = elgg.get_site_url() + "file/add/" + elgg.get_page_owner_guid() + "?folder_guid=" + folder_guid;
 		$('ul.elgg-menu-title li.elgg-menu-item-add a').attr("href", new_add_link);
+
+		var new_zip_link = elgg.get_site_url() + "file/zip/" + elgg.get_page_owner_guid() + "?folder_guid=" + folder_guid;
+		$('ul.elgg-menu-title li.elgg-menu-item-zip-upload a').attr("href", new_zip_link);
 	});
 }
 

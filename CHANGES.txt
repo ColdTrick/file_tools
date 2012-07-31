@@ -11,6 +11,7 @@ x.x:
 - fixed: encoding problem in zip upload
 - fixed: problem with zip upload not creating folders
 - fixed: gracefully fallback for upload form
+- fixed: JS error when your site is in a subfolder (thanks to SehLax http://community.elgg.org/profile/SehLax)
 - changed: only show empty queue when needed
 - changed: better handling of file extensions
 - changed: file title is download link in full view
