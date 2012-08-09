@@ -1,4 +1,8 @@
 = Version History =
+x.x:
+
+- fixed: call to undefined function
+
 1.0 (2012-07-31):
 
 - added: option to show folder content in the widget

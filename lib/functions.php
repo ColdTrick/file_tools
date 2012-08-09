@@ -850,7 +850,7 @@
 	function file_tools_add_folder_to_zip(ZipArchive &$zip_archive, ElggObject $folder, $folder_path = ""){
 		
 		if(!empty($zip_archive) && !empty($folder) && elgg_instanceof($folder, "object", FILE_TOOLS_SUBTYPE)){
-			$folder_title = sanitize_filename($folder->title);
+			$folder_title = elgg_get_friendly_title($folder->title);
 			
 			$zip_archive->addEmptyDir($folder_path . $folder_title);
 			$folder_path .= $folder_title . DIRECTORY_SEPARATOR;
