@@ -63,6 +63,7 @@
 		elgg_register_plugin_hook_handler("permissions_check:metadata", "object", "file_tools_can_edit_metadata_hook");
 // 		elgg_register_plugin_hook_handler("access:collections:write", "all", "file_tools_write_acl_plugin_hook", 550);
 		elgg_register_plugin_hook_handler("route", "file", "file_tools_file_route_hook");
+		elgg_register_plugin_hook_handler("route", "file_tree", "file_tools_forward_old_link");
 		elgg_register_plugin_hook_handler("register", "menu:title", "file_tools_title_menu_register_hook");
 		elgg_register_plugin_hook_handler("widget_url", "widget_manager", "file_tools_widget_url_hook");
 		

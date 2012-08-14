@@ -306,3 +306,28 @@
 		return $result;
 	}
 	
+  /*
+   * forwards old links to correct content
+   */
+  function file_tools_forward_old_link($hook, $type, $return, $params) {
+    
+    $result = $return;
+    $parts = $return['segments'];
+    
+    switch ($parts[0]) {
+      case 'list':
+        default:
+          $owner = get_entity($parts[1]);
+          if (!$owner) {
+            return $result; // 404
+          }
+          $url = elgg_get_site_url() . 'file/owner/' . $owner->username;
+          if (elgg_instanceof($owner, 'group', '', 'ElggGroup')) {
+            $url = elgg_get_site_url() . 'file/group/' . $owner->guid . '/all';
+          }
+          
+          forward($url);
+          return FALSE;
+          break;
+    }
+  }
