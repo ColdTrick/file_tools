@@ -1,6 +1,6 @@
 = Version History =
 x.x:
-
+- added: breadcrumb folderstructure on file full view
 - fixed: mine tab highlighted when showing files from a friend
 - fixed: call to undefined function
 
