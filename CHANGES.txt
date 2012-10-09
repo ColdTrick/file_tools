@@ -5,6 +5,7 @@ x.x:
 - fixed: call to undefined function
 - fixed: language keys in index_file widget
 - fixed: layout issues and old code in filerepo widget
+- fixed: more link in file_tree widget
 - changed: group_files widget redone
 
 1.0 (2012-07-31):
