@@ -24,8 +24,8 @@
 		}
 	}
 	
-	function file_tools_object_handler_delete($event, $type, $object)
-	{
+	function file_tools_object_handler_delete($event, $type, $object) {
+		
 		if(!empty($object) && elgg_instanceof($object, "object", FILE_TOOLS_SUBTYPE)) {
 			// find subfolders
 			$options = array(

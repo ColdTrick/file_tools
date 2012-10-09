@@ -1,22 +1,17 @@
 <?php
 
-	function file_tools_can_edit_metadata_hook($hook, $type, $returnvalue, $params)
-	{
+	function file_tools_can_edit_metadata_hook($hook, $type, $returnvalue, $params)	{
 		$result = $returnvalue;
 	
-		if(!empty($params) && is_array($params) && $result !== true)
-		{
-			if(array_key_exists("user", $params) && array_key_exists("entity", $params))
-			{
-				$entity = $params["entity"];
-				$user = $params["user"];
+		if(($result !== true) && !empty($params) && is_array($params)) {
+			if(array_key_exists("user", $params) && array_key_exists("entity", $params)) {
+				$entity = elgg_extract("entity", $params);
+				$user = elgg_extract("user", $params);
 	
-				if($entity->getSubtype() == FILE_TOOLS_SUBTYPE)
-				{
+				if(elgg_instanceof($entity, "object", FILE_TOOLS_SUBTYPE)) {
 					$container_entity = $entity->getContainerEntity();
 						
-					if(($container_entity instanceof ElggGroup) && $container_entity->isMember($user) && ($container_entity->file_tools_structure_management_enable != "no"))
-					{
+					if(elgg_instanceof($container_entity, "group") && $container_entity->isMember($user) && ($container_entity->file_tools_structure_management_enable != "no")) {
 						$result = true;
 					}
 				}
@@ -50,15 +45,12 @@
 		return $result;
 	}
 	
-	function file_tools_write_acl_plugin_hook($hook, $type, $returnvalue, $params)
-	{
+	function file_tools_write_acl_plugin_hook($hook, $type, $returnvalue, $params) {
 		$result = $returnvalue;
 		
-		if(!empty($params) && is_array($params))
-		{
+		if(!empty($params) && is_array($params)) {
 			
-			if((elgg_get_context() == "file_tools") && ($page_owner = elgg_get_page_owner_entity()) && ($page_owner instanceof ElggGroup))
-			{
+			if(elgg_in_context("file_tools") && ($page_owner = elgg_get_page_owner_entity()) && elgg_instanceof($page_owner, "group")){
 				$result = array(
 					$page_owner->group_acl => elgg_echo("groups:group") . ": " . $page_owner->name,
 					ACCESS_LOGGED_IN => elgg_echo("LOGGED_IN"),

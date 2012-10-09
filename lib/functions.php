@@ -15,7 +15,6 @@
 	}
 
 	function file_tools_get_zip_structure($folder, $prepend) {
-		global $CONFIG;
 		$entries = array();
 		
 		if($prepend){
