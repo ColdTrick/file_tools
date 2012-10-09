@@ -3,6 +3,8 @@ x.x:
 - added: breadcrumb folderstructure on file full view
 - fixed: mine tab highlighted when showing files from a friend
 - fixed: call to undefined function
+- fixed: language keys in index_file widget
+- changed: group_files widget redone
 
 1.0 (2012-07-31):
 
