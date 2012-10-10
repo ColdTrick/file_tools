@@ -32,9 +32,10 @@
 			</div>
 			
 			<div>
-				<?php echo elgg_view("input/file", array("id" => "uploadify-button-wrapper", "name" => "upload"));?>
-				<span id=""></span>
-				<?php echo elgg_view("input/button", array("value" => elgg_echo('file_tools:forms:empty_queue'), "class" => "elgg-button-action hidden", "id" => "file-tools-uploadify-cancel")); ?>
+				<?php 
+					echo elgg_view("input/file", array("id" => "uploadify-button-wrapper", "name" => "upload"));
+					echo elgg_view("input/button", array("value" => elgg_echo('file_tools:forms:empty_queue'), "class" => "elgg-button-action hidden", "id" => "file-tools-uploadify-cancel")); 
+				?>
 			</div>
 		</div>
 		
