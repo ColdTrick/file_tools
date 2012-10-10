@@ -42,29 +42,40 @@
 					unset($folder);
 				}
 			}
-	
+			
 			if(!empty($folder)) {
-				$folder->title = $title;
-				$folder->description = $description;
-	
-				$folder->access_id = $access_id;
-	
-				if(!empty($change_children_access)) {
-					$folder->save();
-					file_tools_change_children_access($folder, !empty($change_files_access));
-				} elseif(!empty($change_files_access)) {
-					$folder->save();
-					file_tools_change_files_access($folder);
-				}
-	
-				$folder->parent_guid = $parent_guid;
-	
-				if($folder->save()) {
-					$forward_url = $folder->getURL();
+				// check for the correct parent_guid
+				if(($parent_guid === 0) || ($parent_guid != $folder->getGUID())){
+					$folder->title = $title;
+					$folder->description = $description;
+		
+					$folder->access_id = $access_id;
+		
+					if(!empty($change_children_access)) {
+						$folder->save();
+						file_tools_change_children_access($folder, !empty($change_files_access));
+					} elseif(!empty($change_files_access)) {
+						$folder->save();
+						file_tools_change_files_access($folder);
+					}
 					
-					system_message(elgg_echo("file_tools:action:edit:success"));
+					// check if we have a correct parent_guid
+					if($parent_guid == $folder->getGUID()){
+						// set parent to 0 (main level)
+						$parent_guid = 0;
+					}
+					
+					$folder->parent_guid = $parent_guid;
+		
+					if($folder->save()) {
+						$forward_url = $folder->getURL();
+						
+						system_message(elgg_echo("file_tools:action:edit:success"));
+					} else {
+						register_error(elgg_echo("file_tools:action:edit:error:save"));
+					}
 				} else {
-					register_error(elgg_echo("file_tools:action:edit:error:save"));
+					register_error(elgg_echo("file_tools:action:edit:error:parent_guid"));
 				}
 			} else {
 				register_error(elgg_echo("file_tools:action:edit:error:folder"));

@@ -84,6 +84,7 @@
 		'file_tools:action:edit:error:input' => "Incorrect input to create/edit a file folder",
 		'file_tools:action:edit:error:owner' => "Could not find the owner of the file folder",
 		'file_tools:action:edit:error:folder' => "No folder to create/edit",
+		'file_tools:action:edit:error:parent_guid' => "Invalid parent folder, the parent folder can't be the folder itself",
 		'file_tools:action:edit:error:save' => "Unknown error occured while saving the file folder",
 		'file_tools:action:edit:success' => "File folder successfully created/edited",
 	
