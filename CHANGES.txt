@@ -1,6 +1,7 @@
 = Version History =
 x.x:
 - added: breadcrumb folderstructure on file full view
+- added: upgrade script to fix disappeared folders
 - fixed: mine tab highlighted when showing files from a friend
 - fixed: call to undefined function
 - fixed: language keys in index_file widget

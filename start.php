@@ -58,6 +58,8 @@
 		elgg_register_event_handler("update", "object", "file_tools_object_handler");
 		elgg_register_event_handler("delete", "object", "file_tools_object_handler_delete");
 		
+		elgg_register_event_handler("upgrade", "system", "file_tools_upgrade_handler");
+		
 		// register hooks
 		elgg_register_plugin_hook_handler("register", "menu:entity", "file_tools_entity_menu_hook");
 		elgg_register_plugin_hook_handler("permissions_check:metadata", "object", "file_tools_can_edit_metadata_hook");

@@ -78,3 +78,30 @@
 			}
 		}
 	}
+	
+	function file_tools_upgrade_handler(){
+		$upgrades_path = dirname(dirname(__FILE__)) . "/upgrades/";
+		
+		// find all upgrade files
+		$upgrade_files = elgg_get_upgrade_files($upgrades_path);
+		// get processed upgrade file, so we can add our own files when done
+		$processed_upgrades = elgg_get_processed_upgrades();
+		
+		// get unprocessed upgrade files
+		if($unprocessed_upgrades = elgg_get_unprocessed_upgrades($upgrade_files, $processed_upgrades)){
+			
+			foreach($unprocessed_upgrades as $upgrade_file){
+				// make sure we don't try to run someone elses upgrade files
+				if(in_array($upgrade_file, $upgrade_files) && file_exists($upgrades_path . $upgrade_file)){
+					// run upgrade
+					include($upgrades_path . $upgrade_file);
+					// make sure we don't do it again
+					$processed_upgrades[] = $upgrade_file;
+				}
+			}
+			
+			// store processed upgrade files
+			elgg_set_processed_upgrades($processed_upgrades);
+		}
+	}
+	
