@@ -9,6 +9,7 @@ x.x:
 - fixed: deadloop issue when deleting a folder
 - fixed: setting wrong parent on folders
 - changed: group_files widget redone
+- changed: better validation of folder listing
 
 1.0 (2012-07-31):
 
