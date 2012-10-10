@@ -25,16 +25,20 @@
 	}
 	
 	function file_tools_object_handler_delete($event, $type, $object) {
+		static $delete_files;
 		
 		if(!empty($object) && elgg_instanceof($object, "object", FILE_TOOLS_SUBTYPE)) {
 			// find subfolders
 			$options = array(
 				"type" => "object",
 				"subtype" => FILE_TOOLS_SUBTYPE,
-				"owner_guid" => $object->getOwnerGUID(),
+				"container_guid" => $object->getContainerGUID(),
 				"limit" => false,
-				"metadata_name" => "parent_guid",
-				"metadata_value" => $object->getGUID()
+				"metadata_name_value_pairs" => array(
+					"name" => "parent_guid",
+					"value" => $object->getGUID()
+				),
+				"wheres" => array("(e.guid <> " . $object->getGUID() . ")") // prevent deadloops
 			);
 
 			if($subfolders = elgg_get_entities_from_metadata($options)) {
@@ -44,8 +48,17 @@
 				}
 			}
 
+			// fill the static, to delete files in a folder
+			if(!isset($delete_files)){
+				$delete_files = false;
+				
+				if(get_input("files") == "yes"){
+					$delete_files = true;
+				}
+			}
+			
 			// should we remove files?
-			if(get_input("files") == "yes") {
+			if($delete_files) {
 				// find file in this folder
 				$options = array(
 					"type" => "object",

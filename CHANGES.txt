@@ -6,6 +6,7 @@ x.x:
 - fixed: language keys in index_file widget
 - fixed: layout issues and old code in filerepo widget
 - fixed: more link in file_tree widget
+- fixed: deadloop issue when deleting a folder
 - changed: group_files widget redone
 
 1.0 (2012-07-31):
