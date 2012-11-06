@@ -1,5 +1,6 @@
 = Version History =
-x.x:
+1.1 (2012-11-06):
+
 - added: breadcrumb folderstructure on file full view
 - added: upgrade script to fix disappeared folders
 - fixed: mine tab highlighted when showing files from a friend
