@@ -1,5 +1,5 @@
 = Version History =
-x.x:
+1.1.1 (2012-11-14):
 
 - fixed: critical bug in upgrade script when you first enable file_tools (thanks to Sergiy Kamolov http://community.elgg.org/profile/sergiy.kamolov)
 - changed: disabled notifications of new file on zip upload
