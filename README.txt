@@ -28,3 +28,4 @@
 - redirect na upload
 - flashbutton ie7 outlineing
 - single upload form with 3 upload functions (single, multi and zip)
+- find a way to notify users about a zip upload
