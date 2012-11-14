@@ -1,10 +1,13 @@
-= File Tools =
+File Tools
+===============
 
-== Contents ==
+Content
+---------------
 1. Features
 2. ToDo
 
-== 1. Features ==
+1. Features
+---------------
 - Folders for users and for groups
 - Group admin can control who can manage folders in a group
 - Completely (forward and backward) compatible with the Folder plugin
@@ -18,7 +21,8 @@
 - Switching of view type (list/gallery)
 - Take over of default file menu options
 
-== 2. TODO == 
+2. TODO
+---------------
 - Use max available space for file title in listing mode
 - Folder widget should be able to show (all) contents of a specific folder
 - events on upload
