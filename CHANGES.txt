@@ -1,4 +1,8 @@
 = Version History =
+x.x:
+
+- changed: disabled notifications of new file on zip upload
+
 1.1 (2012-11-06):
 
 - added: breadcrumb folderstructure on file full view

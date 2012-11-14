@@ -13,6 +13,9 @@
 		if(strtolower(end($extension_array)) == "zip") {
 			$file = $_FILES["zip_file"];
 			
+			// disable notifications of new objects
+			elgg_unregister_event_handler("create", "object", "object_notifications");
+			
 			if(file_tools_unzip($file, $container_guid, $parent_guid)) {
 				system_message(elgg_echo("file:saved"));
 				
@@ -25,6 +28,9 @@
 			} else {
 				register_error(elgg_echo("file:uploadfailed"));
 			}
+			
+			// reenable notifications of new objects
+			elgg_register_event_handler("create", "object", "object_notifications");
 		} else {
 			register_error(elgg_echo("file:uploadfailed"));
 		}
