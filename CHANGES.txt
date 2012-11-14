@@ -1,6 +1,7 @@
 = Version History =
 x.x:
 
+- fixed: critical bug in upgrade script when you first enable file_tools (thanks to Sergiy Kamolov http://community.elgg.org/profile/sergiy.kamolov)
 - changed: disabled notifications of new file on zip upload
 - changed: README.txt to README.md for better markup
 
