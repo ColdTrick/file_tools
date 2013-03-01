@@ -33,3 +33,7 @@
 #file-tools-folder-tree .file-tools-tree-droppable-hover {
 	border: 1px solid red;
 }
+
+#file-tools-multi-form .uploadify-queue-item {
+	max-width: 100%;
+}
