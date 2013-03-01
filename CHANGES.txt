@@ -2,6 +2,7 @@
 x.x:
 
 - changed: layout of the upload page, now with tabs for the different option (single file, multi file, zip file)
+- removed: old css file
 
 1.1.1 (2012-11-14):
 
