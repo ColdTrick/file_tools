@@ -101,7 +101,8 @@
 						
 						elgg_set_page_owner_guid($page[1]);
 						
-						include(dirname(dirname(__FILE__)) . "/pages/import/zip.php");
+						register_error(elgg_echo("changebookmark"));
+						forward("file/add/" . $page[1] . "?upload_type=zip");
 					}
 					break;
 				case "bulk_download":
@@ -109,50 +110,6 @@
 					
 					include(dirname(dirname(__FILE__)) . "/pages/file/download.php");
 					break;
-			}
-		}
-		
-		return $result;
-	}
-	
-	function file_tools_title_menu_register_hook($hook, $type, $returnvalue, $params){
-		$result = $returnvalue;
-		
-		// only within file context
-		if(elgg_in_context("file")){
-			// check for correct output result
-			if(!empty($result) && !is_array($result)){
-				$result = array($result);
-			} elseif(!is_array($result)){
-				$result = array();
-			}
-			
-			// we need a page_owner
-			if(!($page_owner = elgg_get_page_owner_guid())){
-				$page_owner = elgg_get_logged_in_user_guid();
-			}
-			
-			// do we have an add button
-			$add_found = false;
-			
-			if(!empty($result)){
-				foreach($result as $menu_item){
-					if(($menu_item->getName() == "add") && $menu_item->getText() == elgg_echo("file:add")){
-						$add_found = true;
-						break;
-					}
-				}
-			}
-			
-			$parts = parse_url(current_page_url(), PHP_URL_PATH);
-			
-			if(($add_found && stristr($parts, "file/zip/") === false) || stristr($parts, "file/add/")){
-				$result[] = ElggMenuItem::factory(array(
-					"name" => "zip_upload",
-					"href" => "file/zip/" . $page_owner,
-					"text" => elgg_echo("file_tools:upload:new"),
-					"class" => "elgg-button elgg-button-action"
-				));
 			}
 		}
 		

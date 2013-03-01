@@ -79,6 +79,14 @@
 	
 		'file_tools:folder:delete:confirm_files' => "Do you also wish to delete all files in the removed (sub)folders",
 	
+		// upload
+		'file_tools:upload:tabs:single' => "Single file",
+		'file_tools:upload:tabs:multi' => "Multi file",
+		'file_tools:upload:tabs:zip' => "Zip file",
+		'file_tools:upload:form:choose' => 'Choose file',
+		'file_tools:upload:form:info' => 'Click browse to upload (multiple) files',
+		'file_tools:upload:form:zip:info' => "You can upload a zip file. It will be extracted and each file will be separately imported. Also if you have folders in your zip they will be imported into each specific folder. File types that are not allowed will be skipped.",
+		
 		// actions
 		// edit
 		'file_tools:action:edit:error:input' => "Incorrect input to create/edit a file folder",
@@ -96,11 +104,6 @@
 		'file_tools:actions:delete:error:subtype' => "The given GUID is not a file folder",
 		'file_tools:actions:delete:error:delete' => "An unknown error occured while deleting the file folder",
 		'file_tools:actions:delete:success' => "The file folder was deleted successfully",
-	
-		'file_tools:upload:new' => 'Upload zip file',
-		'file_tools:upload:form:choose' => 'Choose file',
-		'file_tools:upload:form:info' => 'Click browse to upload (multiple) files',
-		'file_tools:upload:form:zip:info' => "You can upload a zip file. It will be extracted and each file will be separately imported. Also if you have folders in your zip they will be imported into each specific folder. File types that are not allowed will be skipped.",
 	
 		//errors
 		'file_tools:error:pageowner' => 'Error retrieving page owner.',

@@ -28,6 +28,9 @@ elgg.file_tools.uploadify.init = function(){
 	$uploadifyButton = $('#uploadify-button-wrapper');
 
 	if($uploadifyButton.length){
+		$('#file-tools-uploadify-cancel').live("click", elgg.file_tools.uploadify.cancel);
+		$('#file-tools-multi-form').submit(elgg.file_tools.uploadify.upload);
+		
 		$uploadifyButton.uploadify({
 			swf: "<?php echo $vars["url"]; ?>mod/file_tools/vendors/uploadify/uploadify.swf",
 			uploader: "<?php echo $vars["url"]; ?>mod/file_tools/procedures/upload/multi.php",
@@ -52,7 +55,7 @@ elgg.file_tools.uploadify.init = function(){
 			},
 			onUploadStart: function(file){
 				
-				$('#uploadify-button-wrapper').uploadify("settings", "formData", $('#file-tools-file-upload-form').serializeJSON());
+				$('#uploadify-button-wrapper').uploadify("settings", "formData", $('#file-tools-multi-form').serializeJSON());
 			},
 			onUploadSuccess: function(file, data, response){
 				data = $.parseJSON(data);
@@ -294,12 +297,24 @@ elgg.file_tools.new_folder = function(event){
 	});
 }
 
+elgg.file_tools.upload_tab_click = function(event) {
+	event.preventDefault();
+
+	$('#file-tools-upload-tabs .elgg-state-selected').removeClass("elgg-state-selected");
+	$(this).parent().addClass("elgg-state-selected");
+
+	var id = $(this).attr("id").replace("-link", "");
+	$('#file-tools-upload-wrapper form').hide();
+	$('#' + id).show();
+}
+
 elgg.file_tools.init = function(){
 	// uploadify functions
 	elgg.file_tools.uploadify.init();
-	$('#file-tools-uploadify-cancel').live("click", elgg.file_tools.uploadify.cancel);
-	$('#file-tools-file-upload-form').submit(elgg.file_tools.uploadify.upload);
 
+	// upload functions
+	$('#file-tools-upload-tabs a').live("click", elgg.file_tools.upload_tab_click);
+	
 	// tree functions
 	elgg.file_tools.tree.init();
 	
