@@ -65,7 +65,6 @@
 		elgg_register_plugin_hook_handler("permissions_check:metadata", "object", "file_tools_can_edit_metadata_hook");
 // 		elgg_register_plugin_hook_handler("access:collections:write", "all", "file_tools_write_acl_plugin_hook", 550);
 		elgg_register_plugin_hook_handler("route", "file", "file_tools_file_route_hook");
-		elgg_register_plugin_hook_handler("register", "menu:title", "file_tools_title_menu_register_hook");
 		elgg_register_plugin_hook_handler("widget_url", "widget_manager", "file_tools_widget_url_hook");
 		
 		elgg_register_plugin_hook_handler("register", "menu:file_tools_folder_breadcrumb", "file_tools_folder_breadcrumb_hook");
@@ -76,7 +75,7 @@
 		elgg_register_action("file_tools/folder/edit", dirname(__FILE__) . "/actions/folder/edit.php");
 		elgg_register_action("file_tools/folder/delete", dirname(__FILE__) . "/actions/folder/delete.php");
 		elgg_register_action("file_tools/folder/reorder", dirname(__FILE__) . "/actions/folder/reorder.php");
-		elgg_register_action("file_tools/import/zip", dirname(__FILE__) . "/actions/import/zip.php");
+		elgg_register_action("file_tools/upload/zip", dirname(__FILE__) . "/actions/upload/zip.php");
 		elgg_register_action("file_tools/folder/delete", dirname(__FILE__) . "/actions/folder/delete.php");
 		elgg_register_action("file_tools/file/hide", dirname(__FILE__) . "/actions/file/hide.php");
 		

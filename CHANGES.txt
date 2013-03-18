@@ -1,4 +1,10 @@
 = Version History =
+x.x:
+
+- changed: layout of the upload page, now with tabs for the different option (single file, multi file, zip file)
+- removed: old css file
+- removed: tags from multi upload form
+
 1.1.1 (2012-11-14):
 
 - fixed: critical bug in upgrade script when you first enable file_tools (thanks to Sergiy Kamolov http://community.elgg.org/profile/sergiy.kamolov)
