@@ -311,8 +311,12 @@
 				);
 				
 				if($files = elgg_get_entities_from_relationship($options)) {
+					// need to unregister an event listener
+					elgg_unregister_event_handler("update", "object", "file_tools_object_handler");
+					
 					foreach($files as $file) {
 						$file->access_id = $folder->access_id;
+						
 						$file->save();
 					}
 				}
