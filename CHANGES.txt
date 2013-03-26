@@ -2,6 +2,7 @@
 x.x:
 
 - fixed: files lost their folder if the access of the folder was updated (thanks to Tauvic Ritter for reporting)
+- fixed: uploading a zip could create an empty folder
 - changed: layout of the upload page, now with tabs for the different option (single file, multi file, zip file)
 - removed: old css file
 - removed: tags from multi upload form

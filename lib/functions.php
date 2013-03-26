@@ -604,56 +604,27 @@
 		$zip_base = str_replace($filename, "", $zip_entry_name);
 		$zdir = substr($zip_base, 0, -1);
 		
-		$container_entity = get_entity($container_guid);
-		
-		$access_id = get_input("access_id", false);
-		if($access_id === false){
-			if($parent_guid != 0) {
-				$access_id = get_entity($parent_guid)->access_id;
-			} else {
-				if(elgg_instanceof($container_entity, "group")) {
-					$access_id = $container_entity->group_acl;
+		if (!empty($zdir)) {
+			$container_entity = get_entity($container_guid);
+			
+			$access_id = get_input("access_id", false);
+			if($access_id === false){
+				if($parent_guid != 0) {
+					$access_id = get_entity($parent_guid)->access_id;
 				} else {
-					$access_id = get_default_access($container_entity);
+					if(elgg_instanceof($container_entity, "group")) {
+						$access_id = $container_entity->group_acl;
+					} else {
+						$access_id = get_default_access($container_entity);
+					}
 				}
 			}
-		}
-		
-		$sub_folders = explode("/", $zdir);
-		if(count($sub_folders) == 1) {
-			$entity = file_tools_check_foldertitle_exists($zdir, $container_guid, $parent_guid);
-
-			if(!$entity) {
-				$directory = new ElggObject();
-				$directory->subtype = FILE_TOOLS_SUBTYPE;
-				$directory->owner_guid = elgg_get_logged_in_user_guid();
-				$directory->container_guid = $container_guid;
-				
-				$directory->access_id = $access_id;
-				
-				$directory->title = $zdir;
-				$directory->parent_guid = $parent_guid;
-						
-				$order = elgg_get_entities_from_metadata(array(
-					"type" => "object",
-					"subtype" => FILE_TOOLS_SUBTYPE,
-					"metadata_name_value_pairs" => array(
-						"name" => "parent_guid",
-						"value" => $parent_guid
-					),
-					"count" => true
-				));
-						
-				$directory->order = $order;
-						
-				$directory->save();
-            }
-		} else {
-			$parent = $parent_guid;
-			foreach($sub_folders as $folder) {
-				if($entity = file_tools_check_foldertitle_exists($folder, $container_guid, $parent)) {
-					$parent = $entity->getGUID();
-				} else {
+			
+			$sub_folders = explode("/", $zdir);
+			if(count($sub_folders) == 1) {
+				$entity = file_tools_check_foldertitle_exists($zdir, $container_guid, $parent_guid);
+	
+				if(!$entity) {
 					$directory = new ElggObject();
 					$directory->subtype = FILE_TOOLS_SUBTYPE;
 					$directory->owner_guid = elgg_get_logged_in_user_guid();
@@ -661,23 +632,55 @@
 					
 					$directory->access_id = $access_id;
 					
-					$directory->title = $folder;
-					$directory->parent_guid = $parent;
-						
+					$directory->title = $zdir;
+					$directory->parent_guid = $parent_guid;
+							
 					$order = elgg_get_entities_from_metadata(array(
 						"type" => "object",
 						"subtype" => FILE_TOOLS_SUBTYPE,
 						"metadata_name_value_pairs" => array(
 							"name" => "parent_guid",
-							"value" => $parent
+							"value" => $parent_guid
 						),
 						"count" => true
 					));
-					
+							
 					$directory->order = $order;
 							
-					$parent = $directory->save();
-            	}
+					$directory->save();
+	            }
+			} else {
+				$parent = $parent_guid;
+				
+				foreach($sub_folders as $folder) {
+					if($entity = file_tools_check_foldertitle_exists($folder, $container_guid, $parent)) {
+						$parent = $entity->getGUID();
+					} else {
+						$directory = new ElggObject();
+						$directory->subtype = FILE_TOOLS_SUBTYPE;
+						$directory->owner_guid = elgg_get_logged_in_user_guid();
+						$directory->container_guid = $container_guid;
+						
+						$directory->access_id = $access_id;
+						
+						$directory->title = $folder;
+						$directory->parent_guid = $parent;
+							
+						$order = elgg_get_entities_from_metadata(array(
+							"type" => "object",
+							"subtype" => FILE_TOOLS_SUBTYPE,
+							"metadata_name_value_pairs" => array(
+								"name" => "parent_guid",
+								"value" => $parent
+							),
+							"count" => true
+						));
+						
+						$directory->order = $order;
+								
+						$parent = $directory->save();
+	            	}
+				}
 			}
 		}
 	}
