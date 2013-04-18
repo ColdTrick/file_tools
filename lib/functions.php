@@ -38,7 +38,7 @@
 			"metadata_value" => $parent_guid,
 		);
 		
-		// voor de hoogste map de sub bestanden nog ophalen		
+		// voor de hoogste map de sub bestanden nog ophalen
 		if($entities = elgg_get_entities_from_metadata($options)) {
 			foreach($entities as $subfolder) {
 				$title = $prepend . $subfolder->title;
@@ -59,7 +59,7 @@
 			//"container_guid" => get_loggedin_userid(),
 			"relationship" => FILE_TOOLS_RELATIONSHIP,
 			"relationship_guid" => $folder,
-			"inverse_relationship" => false			
+			"inverse_relationship" => false
 		);
 		
 		$file_guids = array();
@@ -94,7 +94,7 @@
 				$parents = array();
 
 				foreach($folders as $folder) {
-					$parent_guid = (int) $folder->parent_guid; 
+					$parent_guid = (int) $folder->parent_guid;
 					
 					if(!empty($parent_guid)) {
 						if($temp = get_entity($parent_guid)) {
@@ -115,7 +115,7 @@
 					$parents[$parent_guid][] = $folder;
 				}
 				
-				$result = file_tools_sort_folders($parents, 0);				
+				$result = file_tools_sort_folders($parents, 0);
 			}
 		}
 		return $result;
@@ -130,7 +130,7 @@
 				 * $level contains
 				 * folder: the folder on this level
 				 * children: potential children
-				 * 
+				 *
 				 */
 				if($folder = elgg_extract("folder", $level)){
 					$result[$folder->getGUID()] = str_repeat("-", $depth) . $folder->title;
@@ -173,7 +173,7 @@
 		return $result;
 	}
 	
-	function file_tools_sort_folders($folders, $parent_guid = 0) {		
+	function file_tools_sort_folders($folders, $parent_guid = 0) {
 		$result = false;
 		
 		if(array_key_exists($parent_guid, $folders)) {
@@ -233,7 +233,7 @@
 		}
 		
 		if($folders) {
-			$result = $folders;		
+			$result = $folders;
 		}
 		
 		return $result;
@@ -321,7 +321,7 @@
 					}
 				}
 			}
-		}	
+		}
 	}
 	
 	function file_tools_allowed_extensions($zip = false) {
@@ -331,7 +331,7 @@
 		$allowed_extensions_settings = string_to_tag_array($allowed_extensions_settings);
 		
 		if(!empty($allowed_extensions_settings)) {
-			$result = $allowed_extensions_settings;	
+			$result = $allowed_extensions_settings;
 		} else {
 			$result = array('txt','jpg','jpeg','png','bmp','gif','pdf','doc','docx','xls','xlsx','ppt','pptx','odt','ods','odp');
 		}
@@ -433,7 +433,7 @@
 	               if ($typestr == "string") {
 	                  $magic = stripcslashes($magic);
 	                  $len = strlen($magic);
-	                  if ($mask) { 
+	                  if ($mask) {
 	                     continue;
 	                  }
 	               }
@@ -456,7 +456,7 @@
 	                     if (!$magic) { continue; }   // zero is not a good magic value anyhow
 	                  }
 	
-	                  #-- different types               
+	                  #-- different types
 	                  switch ($typestr) {
 	
 	                     case "byte":
@@ -740,7 +740,7 @@
 							$extension_array = explode('.', $folder);
 							
 							$file_extension				= end($extension_array);
-							$file_size 					= zip_entry_filesize($zip_entry);							
+							$file_size 					= zip_entry_filesize($zip_entry);
 							
 							if(in_array(strtolower($file_extension), $allowed_extensions)) {
 								$buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
@@ -750,7 +750,7 @@
 								$filehandler->setFilename($prefix . $folder);
 								
 								$filehandler->title 			= $folder;
-								$filehandler->originalfilename 	= $folder;	
+								$filehandler->originalfilename 	= $folder;
 								$filehandler->owner_guid		= elgg_get_logged_in_user_guid();
 								
 								$filehandler->container_guid 	= $container_guid;
@@ -760,13 +760,36 @@
 								$filehandler->write($buf);
 								$filehandler->close();
 								
-								$mime_type = mime_content_type($filehandler->getFilenameOnFilestore());
-								$simple_type = explode("/", $mime_type);
+								$mime_type = $filehandler->detectMimeType($filehandler->getFilenameOnFilestore());
+								
+								// hack for Microsoft zipped formats
+								$info = pathinfo($folder);
+								$office_formats = array("docx", "xlsx", "pptx");
+								if ($mime_type == "application/zip" && in_array($info["extension"], $office_formats)) {
+									switch ($info["extension"]) {
+										case "docx":
+											$mime_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+											break;
+										case "xlsx":
+											$mime_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+											break;
+										case "pptx":
+											$mime_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+											break;
+									}
+								}
+								
+								// check for bad ppt detection
+								if ($mime_type == "application/vnd.ms-office" && $info["extension"] == "ppt") {
+									$mime_type = "application/vnd.ms-powerpoint";
+								}
+								
+								$simple_type = file_get_simple_type($mime_type);
 								
 								$filehandler->setMimeType($mime_type);
-								$filehandler->simpletype = $simple_type[0];
+								$filehandler->simpletype = $simple_type;
 								
-								if($simple_type[0] == "image") {
+								if($simple_type == "image") {
 									$filestorename = elgg_strtolower(time() . $folder);
 									
 									$thumbnail = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), 60, 60, true);
@@ -834,7 +857,7 @@
 	/**
 	 * Helper function to check if we use a folder structure
 	 * Result is cached to increase performance
-	 * 
+	 *
 	 * @return boolean
 	 */
 	function file_tools_use_folder_structure(){
