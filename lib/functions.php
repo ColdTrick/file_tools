@@ -601,7 +601,13 @@
 		$zip_entry_name = zip_entry_name($zip_entry);
 		$filename = basename($zip_entry_name);
 		
-		$zip_base = str_replace($filename, "", $zip_entry_name);
+		if (substr($zip_entry_name, -1) != '/') {
+            $zip_base = str_replace($filename, "", $zip_entry_name);
+        }
+        else {
+            $zip_base = $zip_entry_name;
+        }
+		
 		$zdir = substr($zip_base, 0, -1);
 		
 		if (!empty($zdir)) {
