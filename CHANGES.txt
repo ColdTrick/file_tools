@@ -1,6 +1,8 @@
 = Version History =
 x.x:
+
 - fixed: mimetype detection in ZIP upload doesn't detect all MS Office types correctly
+- changed: small css fixes
 
 1.1.2 (2013-04-05):
 

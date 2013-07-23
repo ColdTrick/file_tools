@@ -34,7 +34,7 @@
 
 		$wheres = array();
 		$wheres[] = "NOT EXISTS (
-					SELECT 1 FROM " . elgg_get_config("dbprefix") . "entity_relationships r 
+					SELECT 1 FROM " . elgg_get_config("dbprefix") . "entity_relationships r
 					WHERE r.guid_two = e.guid AND
 					r.relationship = '" . FILE_TOOLS_RELATIONSHIP . "')";
 
@@ -85,7 +85,7 @@
 			// build page elements
 			$title_text = elgg_echo("file:user", array($page_owner->name));
 			
-			$body = "<div id='file_tools_list_files_container'>" . elgg_view("graphics/ajax_loader", array("hidden" => false)) . "</div>";
+			$body = "<div id='file_tools_list_files_container' class='elgg-content'>" . elgg_view("graphics/ajax_loader", array("hidden" => false)) . "</div>";
 			
 			// make sidebar
 			$sidebar = elgg_view("file_tools/list/tree", array("folder" => $folder, "folders" => $folders));
@@ -96,7 +96,7 @@
 			// build page params
 			$params = array(
 				"title" => $title_text,
-				"content" => $body, 
+				"content" => $body,
 				"sidebar" => $sidebar
 			);
 			
