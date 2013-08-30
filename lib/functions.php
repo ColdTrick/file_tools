@@ -221,7 +221,7 @@
 			"limit" => false,
 			"metadata_name" => "parent_guid",
 			"metadata_value" => $parent_guid,
-			"order_by_metadata" => array('name' => 'order', 'direction' => 'ASC'),
+			"order_by_metadata" => array('name' => 'order', 'direction' => 'ASC', 'as' => 'integer'),
 			"full_view" => false,
 			"pagination" => false
 		);
