@@ -948,3 +948,20 @@
 		return $result;
 	}
 	
+	function file_tools_get_list_length() {
+		static $result;
+		
+		if (!isset($result)) {
+			$result = 50;
+			
+			$setting = (int) elgg_get_plugin_setting("list_length", "file_tools");
+			if ($setting < 0) {
+				$result = false;
+			} elseif ($setting > 0) {
+				$result = $setting;
+			}
+		}
+		
+		return $result;
+	}
+	

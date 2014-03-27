@@ -322,6 +322,76 @@ elgg.file_tools.upload_tab_click = function(event) {
 	$('#' + id).show();
 }
 
+elgg.file_tools.show_more_files = function() {
+	$(this).hide();
+	$('#file_tools_list_files div.elgg-ajax-loader').show();
+
+	var offset = $(this).siblings('input[name="offset"]').val();
+	var folder = $(this).siblings('input[name="folder_guid"]').val();
+	var query_parts = elgg.parse_url(window.location.href, "query", true);
+	var search_type = 'list';
+	
+	if (query_parts && query_parts.search_viewtype) {
+		search_type = query_parts.search_viewtype;
+	}
+
+	
+	elgg.post("file_tools/list/" + elgg.get_page_owner_guid(), {
+		data: {
+			folder_guid: folder,
+			search_viewtype: search_type,
+			offset: offset
+		},
+		success: function(data) {
+			// append the files to the list
+			var li = $(data).find("ul.elgg-list-entity > li");
+			$('#file_tools_list_files ul.elgg-list').append(li);
+			elgg.file_tools.initialize_file_draggable();
+
+			// replace the show more button with new data
+			var show_more = $(data).find("#file-tools-show-more-wrapper");
+			$("#file-tools-show-more-wrapper").replaceWith(show_more);
+
+			// hide ajax loader
+			$('#file_tools_list_files div.elgg-ajax-loader').hide();
+		}
+	});
+	 
+}
+
+elgg.file_tools.initialize_file_draggable = function() {
+	$("#file_tools_list_files .file-tools-file").draggable("destroy");
+	
+	$("#file_tools_list_files .file-tools-file").draggable({
+		revert: "invalid",
+		opacity: 0.8,
+		appendTo: "body",
+		helper: "clone",
+		start: function(event, ui) {
+			$(this).css("visibility", "hidden");
+			$(ui.helper).width($(this).width());
+		},
+		stop: function(event, ui) {
+			$(this).css("visibility", "visible");
+		}
+	});
+}
+
+elgg.file_tools.initialize_folder_droppable = function() {
+	$("#file_tools_list_files .file-tools-folder").droppable({
+		accept: "#file_tools_list_files .file-tools-file",
+		drop: function(event, ui){
+			droppable = $(this);
+			draggable = ui.draggable;
+
+			drop_id = droppable.parent().attr("id").split("-").pop();
+			drag_id = draggable.parent().attr("id").split("-").pop();
+
+			elgg.file_tools.move_file(drag_id, drop_id, draggable);
+		}
+	});
+}
+
 elgg.file_tools.init = function() {
 	// uploadify functions
 	elgg.file_tools.uploadify.init();
@@ -336,6 +406,7 @@ elgg.file_tools.init = function() {
 	$('#file_tools_select_all').live("click", elgg.file_tools.select_all);
 	$('#file_tools_action_bulk_delete').live("click", elgg.file_tools.bulk_delete);
 	$('#file_tools_action_bulk_download').live("click", elgg.file_tools.bulk_download);
+	$('#file-tools-show-more-files').live("click", elgg.file_tools.show_more_files);
 
 	$('#file_tools_list_new_folder_toggle').live('click', elgg.file_tools.new_folder);
 }

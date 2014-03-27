@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	$english = array(
 		'file_tools' => "File Tools",
@@ -9,6 +9,7 @@
 		'file_tools:list:sort:time_created' => 'Time created',
 		'file_tools:list:sort:asc' => 'Ascending',
 		'file_tools:list:sort:desc' => 'Descending',
+		'file_tools:show_more' => 'Show more files',
 	
 		// object name
 		'item:object:folder' => "File Folder",
@@ -132,6 +133,8 @@
 		'file_tools:settings:allowed_extensions' => 'Allowed extensions (comma seperated)',
 		'file_tools:settings:user_folder_structure' => 'Use folder structure',
 		'file_tools:settings:sort:default' => 'Default folder sorting options',
+		'file_tools:settings:list_length' => 'How many files to show in the listing',
+		'file_tools:settings:list_length:unlimited' => 'Unlimited',
 	
 		'file:type:application' => 'Application',
 		'file:type:text' => 'Text',
