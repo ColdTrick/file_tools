@@ -221,7 +221,7 @@
 			"limit" => false,
 			"metadata_name" => "parent_guid",
 			"metadata_value" => $parent_guid,
-			"order_by_metadata" => array('name' => 'order', 'direction' => 'ASC'),
+			"order_by_metadata" => array('name' => 'order', 'direction' => 'ASC', 'as' => 'integer'),
 			"full_view" => false,
 			"pagination" => false
 		);
@@ -944,6 +944,23 @@
 		}
 		
 		$result = $file_size_limit . $size_units[$i];
+		
+		return $result;
+	}
+	
+	function file_tools_get_list_length() {
+		static $result;
+		
+		if (!isset($result)) {
+			$result = 50;
+			
+			$setting = (int) elgg_get_plugin_setting("list_length", "file_tools");
+			if ($setting < 0) {
+				$result = false;
+			} elseif ($setting > 0) {
+				$result = $setting;
+			}
+		}
 		
 		return $result;
 	}

@@ -1,6 +1,10 @@
 = Version History =
 x.x:
+
+- added: max number of files in the listing (plugin setting) with 'show more' button
 - fixed: mimetype detection in ZIP upload doesn't detect all MS Office types correctly
+- fixed: moving a folder doesn't always correclty refreshed the content
+- changed: small css fixes
 
 1.1.2 (2013-04-05):
 
