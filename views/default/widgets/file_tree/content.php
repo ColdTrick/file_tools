@@ -48,9 +48,9 @@
 		if(!empty($folders)){
 			$owner = $widget->getOwnerEntity();
 			if(elgg_instanceof($owner, "user")){
-				$more_url = $vars["url"] . "file/owner/" . $owner->username;
+				$more_url = elgg_get_site_url() . "file/owner/" . $owner->username;
 			} else {
-				$more_url = $vars["url"] . "file/group/" . $owner->getGUID() . "/all";
+				$more_url = elgg_get_site_url() . "file/group/" . $owner->getGUID() . "/all";
 			}
 			
 			echo $folders;
