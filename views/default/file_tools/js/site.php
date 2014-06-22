@@ -32,8 +32,8 @@ elgg.file_tools.uploadify.init = function() {
 		$('#file-tools-multi-form').submit(elgg.file_tools.uploadify.upload);
 		
 		$uploadifyButton.uploadify({
-			swf: "<?php echo $vars["url"]; ?>mod/file_tools/vendors/uploadify/uploadify.swf",
-			uploader: "<?php echo $vars["url"]; ?>mod/file_tools/procedures/upload/multi.php",
+			swf: "<?php echo elgg_get_site_url(); ?>mod/file_tools/vendors/uploadify/uploadify.swf",
+			uploader: "<?php echo elgg_get_site_url(); ?>mod/file_tools/procedures/upload/multi.php",
 			formData: {"X-Requested-With": "XMLHttpRequest"},
 			buttonText: elgg.echo("file_tools:forms:browse"),
 			queueID: "uploadify-queue-wrapper",
