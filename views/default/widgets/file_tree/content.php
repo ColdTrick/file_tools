@@ -1,6 +1,7 @@
 <?php 
 
 	$widget = elgg_extract("entity", $vars);
+	$site_url = elgg_get_site_url();
 	
 	if($folder_guids = $widget->folder_guids){
 		$show_content = $widget->show_content;
@@ -48,9 +49,9 @@
 		if(!empty($folders)){
 			$owner = $widget->getOwnerEntity();
 			if(elgg_instanceof($owner, "user")){
-				$more_url = $vars["url"] . "file/owner/" . $owner->username;
+				$more_url = $site_url . "file/owner/" . $owner->username;
 			} else {
-				$more_url = $vars["url"] . "file/group/" . $owner->getGUID() . "/all";
+				$more_url = $site_url . "file/group/" . $owner->getGUID() . "/all";
 			}
 			
 			echo $folders;

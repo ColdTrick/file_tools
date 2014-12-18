@@ -80,6 +80,8 @@
 	}
 	
 	function file_tools_upgrade_handler(){
+		// @todo THIS IS BROKEN AND NEEDS TO BE DONE A DIFFERENT WAY.
+		return;
 		$upgrades_path = dirname(dirname(__FILE__)) . "/upgrades/";
 		
 		// find all upgrade files
