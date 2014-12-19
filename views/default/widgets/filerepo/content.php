@@ -1,6 +1,7 @@
 <?php
 	
 	$widget = elgg_extract("entity", $vars);
+	$site_url = elgg_get_site_url();
 	
 	// how many files to display 
 	$num_display = sanitise_int($widget->num_display, false);
@@ -40,9 +41,9 @@
 			
 			$owner = $widget->getOwnerEntity();
 			if(elgg_instanceof($owner, "user")){
-				$more_link = $vars["url"] . "file/owner/" . $owner->username;
+				$more_link = $site_url . "file/owner/" . $owner->username;
 			} else {
-				$more_link = $vars["url"] . "file/group/" . $owner->getGUID() . "/all";
+				$more_link = $site_url . "file/group/" . $owner->getGUID() . "/all";
 			}
 			$list .= "<span class='elgg-widget-more'>";
 			$list .= elgg_view("output/url", array("text" => elgg_echo("file:more"), "href" => $more_link, "is_trusted" => true));
@@ -54,9 +55,9 @@
 	} elseif($list = elgg_list_entities_from_metadata($options)){
 		$owner = $widget->getOwnerEntity();
 		if(elgg_instanceof($owner, "user")){
-			$more_link = $vars["url"] . "file/owner/" . $owner->username;
+			$more_link = $site_url . "file/owner/" . $owner->username;
 		} else {
-			$more_link = $vars["url"] . "file/group/" . $owner->getGUID() . "/all";
+			$more_link = $site_url . "file/group/" . $owner->getGUID() . "/all";
 		}
 		$list .= "<span class='elgg-widget-more'>";
 		$list .= elgg_view("output/url", array("text" => elgg_echo("file:more"), "href" => $more_link, "is_trusted" => true));
