@@ -27,8 +27,8 @@ function file_tools_get_file_extension($file) {
 /**
  * Read a folder structure for a zip file
  *
- * @param ElggObject $folder
- * @param string     $prepend
+ * @param ElggObject $folder  the folder to read
+ * @param string     $prepend current prefix
  *
  * @return array
  */
@@ -40,17 +40,14 @@ function file_tools_get_zip_structure($folder, $prepend) {
 	}
 	
 	if (!$folder) {
-		$container_guid = elgg_get_page_owner_guid();
 		$parent_guid = 0;
 	} else {
-		$container_guid = $folder->getContainerGUID();
 		$parent_guid = $folder->getGUID();
 	}
 	
 	$options = array(
 		"type" => "object",
 		"subtype" => FILE_TOOLS_SUBTYPE,
-		//"container_guid" => $container_guid,
 		"limit" => false,
 		"metadata_name" => "parent_guid",
 		"metadata_value" => $parent_guid,
@@ -308,7 +305,7 @@ function file_tools_get_sub_folders($folder = false, $list = false) {
 /**
  * Create a folder menu
  *
- * @param array $folders
+ * @param array $folders the folders to create the menu for
  *
  * @return bool|ElggMenuItem[]
  */
@@ -416,12 +413,11 @@ function file_tools_change_files_access($folder) {
 /**
  * Get the allowed extensions for uploading
  *
- * @param bool $zip
+ * @param bool $zip return zip upload dialog format
  *
  * @return bool|string
  */
 function file_tools_allowed_extensions($zip = false) {
-	$result = false;
 	
 	$allowed_extensions_settings = elgg_get_plugin_setting('allowed_extensions', 'file_tools');
 	$allowed_extensions_settings = string_to_tag_array($allowed_extensions_settings);
@@ -689,11 +685,11 @@ function file_tools_check_foldertitle_exists($title, $container_guid, $parent_gu
 		)
 	);
 	
-	if(!empty($parent_guid)){
+	if (!empty($parent_guid)) {
 		$entities_options["metadata_name_value_pairs"] = array("parent_guid" => $parent_guid);
 	}
 				
-	if($entities = elgg_get_entities_from_metadata($entities_options)) {
+	if ($entities = elgg_get_entities_from_metadata($entities_options)) {
 		$result = $entities[0];
 	}
 	
@@ -706,6 +702,8 @@ function file_tools_check_foldertitle_exists($title, $container_guid, $parent_gu
  * @param zip_entry $zip_entry      the zip file entry
  * @param int       $container_guid the container where the folders need to be created
  * @param int       $parent_guid    the parent folder
+ *
+ * @return void
  */
 function file_tools_create_folders($zip_entry, $container_guid, $parent_guid = 0) {
 	$zip_entry_name = zip_entry_name($zip_entry);
@@ -723,11 +721,11 @@ function file_tools_create_folders($zip_entry, $container_guid, $parent_guid = 0
 		$container_entity = get_entity($container_guid);
 		
 		$access_id = get_input("access_id", false);
-		if($access_id === false){
-			if($parent_guid != 0) {
+		if ($access_id === false) {
+			if ($parent_guid != 0) {
 				$access_id = get_entity($parent_guid)->access_id;
 			} else {
-				if(elgg_instanceof($container_entity, "group")) {
+				if (elgg_instanceof($container_entity, "group")) {
 					$access_id = $container_entity->group_acl;
 				} else {
 					$access_id = get_default_access($container_entity);
@@ -736,10 +734,10 @@ function file_tools_create_folders($zip_entry, $container_guid, $parent_guid = 0
 		}
 		
 		$sub_folders = explode("/", $zdir);
-		if(count($sub_folders) == 1) {
+		if (count($sub_folders) == 1) {
 			$entity = file_tools_check_foldertitle_exists($zdir, $container_guid, $parent_guid);
 
-			if(!$entity) {
+			if (!$entity) {
 				$directory = new ElggObject();
 				$directory->subtype = FILE_TOOLS_SUBTYPE;
 				$directory->owner_guid = elgg_get_logged_in_user_guid();
@@ -763,12 +761,12 @@ function file_tools_create_folders($zip_entry, $container_guid, $parent_guid = 0
 				$directory->order = $order;
 						
 				$directory->save();
-            }
+			}
 		} else {
 			$parent = $parent_guid;
 			
-			foreach($sub_folders as $folder) {
-				if($entity = file_tools_check_foldertitle_exists($folder, $container_guid, $parent)) {
+			foreach ($sub_folders as $folder) {
+				if ($entity = file_tools_check_foldertitle_exists($folder, $container_guid, $parent)) {
 					$parent = $entity->getGUID();
 				} else {
 					$directory = new ElggObject();
@@ -794,7 +792,7 @@ function file_tools_create_folders($zip_entry, $container_guid, $parent_guid = 0
 					$directory->order = $order;
 							
 					$parent = $directory->save();
-            	}
+				}
 			}
 		}
 	}
@@ -812,7 +810,7 @@ function file_tools_create_folders($zip_entry, $container_guid, $parent_guid = 0
 function file_tools_unzip($file, $container_guid, $parent_guid = 0) {
 	$extracted = false;
 	
-	if(!empty($file) && !empty($container_guid)){
+	if (!empty($file) && !empty($container_guid)) {
 		$allowed_extensions = file_tools_allowed_extensions();
 		
 		$zipfile = elgg_extract("tmp_name", $file);
@@ -821,11 +819,11 @@ function file_tools_unzip($file, $container_guid, $parent_guid = 0) {
 		
 		$access_id = get_input("access_id", false);
 		
-		if($access_id === false){
-			if(!empty($parent_guid) && ($parent_folder = get_entity($parent_guid)) && elgg_instanceof($parent_folder, "object", FILE_TOOLS_SUBTYPE)) {
+		if ($access_id === false) {
+			if (!empty($parent_guid) && ($parent_folder = get_entity($parent_guid)) && elgg_instanceof($parent_folder, "object", FILE_TOOLS_SUBTYPE)) {
 				$access_id = $parent_folder->access_id;
 			} else {
-				if(elgg_instanceof($container_entity, "group")) {
+				if (elgg_instanceof($container_entity, "group")) {
 					$access_id = $container_entity->group_acl;
 				} else {
 					$access_id = get_default_access($container_entity);
@@ -834,39 +832,38 @@ function file_tools_unzip($file, $container_guid, $parent_guid = 0) {
 		}
 		
 		// open the zip file
-	    $zip = zip_open($zipfile);
-	    while ($zip_entry = zip_read($zip)) {
-	        // open the zip entry
-	    	zip_entry_open($zip, $zip_entry);
-	        
-	    	// set some variables
-	        $zip_entry_name = zip_entry_name($zip_entry);
-	        $filename = basename($zip_entry_name);
+		$zip = zip_open($zipfile);
+		while ($zip_entry = zip_read($zip)) {
+			// open the zip entry
+			zip_entry_open($zip, $zip_entry);
 			
-	        // check for folder structure
-	        if (strlen($zip_entry_name) != strlen($filename)) {
-	        	// there is a folder structure, check it and create missing items
-	        	file_tools_create_folders($zip_entry, $container_guid, $parent_guid);
-	        }
-
-	        // extract the folder structure from the zip entry
-	        $folder_array = explode("/", $zip_entry_name);
-	            
+			// set some variables
+			$zip_entry_name = zip_entry_name($zip_entry);
+			$filename = basename($zip_entry_name);
+			
+			// check for folder structure
+			if (strlen($zip_entry_name) != strlen($filename)) {
+				// there is a folder structure, check it and create missing items
+				file_tools_create_folders($zip_entry, $container_guid, $parent_guid);
+			}
+			
+			// extract the folder structure from the zip entry
+			$folder_array = explode("/", $zip_entry_name);
+			
 			$parent = $parent_guid;
-			foreach($folder_array as $folder) {
+			foreach ($folder_array as $folder) {
 				$folder = utf8_encode($folder);
 				
-				if($entity = file_tools_check_foldertitle_exists($folder, $container_guid, $parent)) {
+				if ($entity = file_tools_check_foldertitle_exists($folder, $container_guid, $parent)) {
 					$parent = $entity->getGUID();
 				} else {
-					if($folder == end($folder_array)) {
+					if ($folder == end($folder_array)) {
 						$prefix = "file/";
 						$extension_array = explode('.', $folder);
 						
-						$file_extension				= end($extension_array);
-						$file_size 					= zip_entry_filesize($zip_entry);
+						$file_extension	= end($extension_array);
 						
-						if(in_array(strtolower($file_extension), $allowed_extensions)) {
+						if (in_array(strtolower($file_extension), $allowed_extensions)) {
 							$buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
 							
 							// create the file
@@ -913,13 +910,14 @@ function file_tools_unzip($file, $container_guid, $parent_guid = 0) {
 							$filehandler->setMimeType($mime_type);
 							$filehandler->simpletype = $simple_type;
 							
-							if($simple_type == "image") {
+							if ($simple_type == "image") {
 								$filestorename = elgg_strtolower(time() . $folder);
+								
+								$thumb = new ElggFile();
+								$thumb->owner_guid = elgg_get_logged_in_user_guid();
 								
 								$thumbnail = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), 60, 60, true);
 								if ($thumbnail) {
-									$thumb = new ElggFile();
-									$thumb->setMimeType($mime_type);
 									
 									$thumb->setFilename($prefix . "thumb" . $filestorename);
 									$thumb->open("write");
@@ -953,6 +951,8 @@ function file_tools_unzip($file, $container_guid, $parent_guid = 0) {
 									$filehandler->largethumb = $prefix . "largethumb" . $filestorename;
 									unset($thumblarge);
 								}
+								
+								unset($thumb);
 							}
 							
 							set_input('folder_guid', $parent);
@@ -961,7 +961,7 @@ function file_tools_unzip($file, $container_guid, $parent_guid = 0) {
 							
 							$extracted = true;
 							
-							if(!empty($parent)) {
+							if (!empty($parent)) {
 								add_entity_relationship($parent, FILE_TOOLS_RELATIONSHIP, $filehandler->getGUID());
 							}
 						}
@@ -1003,15 +1003,15 @@ function file_tools_use_folder_structure() {
 /**
  * Add a folder to a zip file
  *
- * @param ZipArchive $zip_archive the zip file to add files/folder to
- * @param ElggObject $folder      the folder to add
- * @param string     $folder_path the path of the current folder
+ * @param ZipArchive &$zip_archive the zip file to add files/folder to
+ * @param ElggObject $folder       the folder to add
+ * @param string     $folder_path  the path of the current folder
  *
  * @return void
  */
 function file_tools_add_folder_to_zip(ZipArchive &$zip_archive, ElggObject $folder, $folder_path = "") {
 	
-	if(!empty($zip_archive) && !empty($folder) && elgg_instanceof($folder, "object", FILE_TOOLS_SUBTYPE)){
+	if (!empty($zip_archive) && !empty($folder) && elgg_instanceof($folder, "object", FILE_TOOLS_SUBTYPE)) {
 		$folder_title = elgg_get_friendly_title($folder->title);
 		
 		$zip_archive->addEmptyDir($folder_path . $folder_title);
@@ -1026,10 +1026,10 @@ function file_tools_add_folder_to_zip(ZipArchive &$zip_archive, ElggObject $fold
 		);
 		
 		// add files from this folder to the zip
-		if($files = elgg_get_entities_from_relationship($file_options)){
-			foreach($files as $file){
+		if ($files = elgg_get_entities_from_relationship($file_options)) {
+			foreach ($files as $file) {
 				// check if the file exists
-				if($zip_archive->statName($folder_path . $file->originalfilename) === false){
+				if ($zip_archive->statName($folder_path . $file->originalfilename) === false) {
 					// doesn't exist, so add
 					$zip_archive->addFile($file->getFilenameOnFilestore(), $folder_path . $file->originalfilename);
 				} else {
@@ -1050,8 +1050,8 @@ function file_tools_add_folder_to_zip(ZipArchive &$zip_archive, ElggObject $fold
 			"metadata_name_value_pairs" => array("parent_guid" => $folder->getGUID())
 		);
 		
-		if($sub_folders = elgg_get_entities_from_metadata($folder_options)){
-			foreach($sub_folders as $sub_folder){
+		if ($sub_folders = elgg_get_entities_from_metadata($folder_options)) {
+			foreach ($sub_folders as $sub_folder) {
 				file_tools_add_folder_to_zip($zip_archive, $sub_folder, $folder_path);
 			}
 		}
@@ -1064,7 +1064,6 @@ function file_tools_add_folder_to_zip(ZipArchive &$zip_archive, ElggObject $fold
  * @return string
  */
 function file_tools_get_readable_file_size_limit() {
-	$result = false;
 	
 	$size_units = array("B", "KB", "MB", "GB", "TB", "PB");
 	$i = 0;
