@@ -51,13 +51,13 @@ function file_tools_init() {
 	// register widgets
 	// add folder widget
 	// need to keep file_tree for the widget name to be compatible with previous filetree plugin users
-	elgg_register_widget_type("file_tree", elgg_echo("widgets:file_tree:title"), elgg_echo("widgets:file_tree:description"), "dashboard,profile,groups", true);
+	elgg_register_widget_type("file_tree", elgg_echo("widgets:file_tree:title"), elgg_echo("widgets:file_tree:description"), array("dashboard", "profile", "groups"), true);
 	
 	// group files
-	elgg_register_widget_type("group_files", elgg_echo("file:group"), elgg_echo("widgets:group_files:description"), "groups");
+	elgg_register_widget_type("group_files", elgg_echo("file:group"), elgg_echo("widgets:group_files:description"), array("groups"));
 	
 	// index files
-	elgg_register_widget_type("index_file", elgg_echo("file"), elgg_echo("widgets:index_file:description"), "index", true);
+	elgg_register_widget_type("index_file", elgg_echo("file"), elgg_echo("widgets:index_file:description"), array("index"), true);
 	
 	// register events
 	elgg_register_event_handler("create", "object", "file_tools_object_handler");
