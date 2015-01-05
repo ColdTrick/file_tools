@@ -367,10 +367,11 @@ function file_tools_entity_menu_hook($hook, $type, $returnvalue, $params) {
 	}
 	
 	if (elgg_instanceof($entity, "object", FILE_TOOLS_SUBTYPE)) {
+		$remove_items = array("like", "unlike");
+		
 		foreach ($returnvalue as $index => $menu_item) {
-			if ($menu_item->getName() == "likes") {
-				unset($result[$index]);
-				break;
+			if (in_array($menu_item->getName(), $remove_items)) {
+				unset($returnvalue[$index]);
 			}
 		}
 	} elseif (elgg_instanceof($entity, "object", "file")) {
