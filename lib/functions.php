@@ -317,9 +317,14 @@ function file_tools_make_menu_items($folders) {
 		
 		foreach ($folders as $index => $level) {
 			if ($folder = elgg_extract("folder", $level)) {
+				$folder_title = $folder->title;
+				if (empty($folder_title)) {
+					$folder_title = elgg_echo("untitled");
+				}
+				
 				$folder_menu = ElggMenuItem::factory(array(
 					"name" => "folder_" . $folder->getGUID(),
-					"text" => $folder->title,
+					"text" => $folder_title,
 					"href" => "#" . $folder->getGUID(),
 					"priority" => $folder->order
 				));

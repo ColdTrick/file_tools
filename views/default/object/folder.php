@@ -18,6 +18,15 @@ if ($time_preference == 'date') {
 }
 
 $title = $folder->title;
+if (empty($title)) {
+	$title = elgg_echo("untitled");
+}
+$params = array(
+	'text' => elgg_get_excerpt($title, 100),
+	'href' => $folder->getURL(),
+	'is_trusted' => true,
+);
+$title = elgg_view('output/url', $params);
 
 $entity_menu = "";
 if (!elgg_in_context("widgets")) {
@@ -40,6 +49,7 @@ if ($full_view) {
 	
 	$params = array(
 		"entity" => $folder,
+		"title" => $title,
 		"metadata" => $entity_menu,
 		"tags" => elgg_view("output/tags", array("value" => $folder->tags)),
 		"subtitle" => $subtitle
@@ -65,6 +75,7 @@ if ($full_view) {
 	
 	$params = array(
 		"entity" => $folder,
+		"title" => $title,
 		"metadata" => $entity_menu
 	);
 	
