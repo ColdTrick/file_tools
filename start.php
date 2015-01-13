@@ -70,7 +70,7 @@ function file_tools_init() {
 // 	elgg_register_plugin_hook_handler("access:collections:write", "all", "file_tools_write_acl_plugin_hook", 550);
 	elgg_register_plugin_hook_handler("route", "file", "file_tools_file_route_hook");
 	elgg_register_plugin_hook_handler("widget_url", "widget_manager", "file_tools_widget_url_hook");
-	elgg_register_plugin_hook_handler("entity:url", "object", "file_tools_entity_url_hook");
+	elgg_register_plugin_hook_handler("entity:url", "object", "file_tools_folder_url_handler");
 	
 	elgg_register_plugin_hook_handler("register", "menu:file_tools_folder_breadcrumb", "file_tools_folder_breadcrumb_hook");
 	elgg_register_plugin_hook_handler("register", "menu:file_tools_folder_sidebar_tree", "file_tools_folder_sidebar_tree_hook");
