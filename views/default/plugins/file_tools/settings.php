@@ -1,7 +1,7 @@
 <?php
 	
 // get plugin
-$plugin = elgg_extact("entity", $vars);
+$plugin = elgg_extract("entity", $vars);
 
 // make default options
 $noyes_options = array(
