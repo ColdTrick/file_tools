@@ -46,7 +46,7 @@ if ($guid) {
 if (file_tools_use_folder_structure()) {
 	$parent_guid = 0;
 	if ($file = elgg_extract("entity", $vars)) {
-		if ($folders = $file->getEntitiesFromRelationship(FILE_TOOLS_RELATIONSHIP, true, 1)) {
+		if($folders = $file->getEntitiesFromRelationship(array('relationship'=>FILE_TOOLS_RELATIONSHIP, 'inverse_relationship'=>true, 'limit'=>1))){
 			$parent_guid = $folders[0]->getGUID();
 		}
 	}
