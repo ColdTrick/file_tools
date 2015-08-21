@@ -30,10 +30,13 @@ function file_tools_init() {
 	elgg_register_js("jquery.uploadify", $vendors . "uploadify/jquery.uploadify-3.1.min.js");
 	elgg_register_simplecache_view("css/uploadify/uploadify");
 	elgg_register_css("jquery.uploadify", elgg_get_simplecache_url("css", "uploadify/uploadify"));
-	
-	elgg_register_js("jquery.tree", $vendors . "jstree/jquery.tree.min.js");
-	elgg_register_css("jquery.tree", $vendors . "jstree/themes/default/style.css");
-	
+
+	elgg_register_css("jquery.tree", $vendors . "jstree/dist/themes/default/style.css");
+	elgg_define_js('jquery.tree', array(
+		'src' => $vendors . 'jstree/dist/jstree.min.js',
+		'deps' => array('jquery'),
+	));
+
 	elgg_register_js("jquery.hashchange", $vendors . "hashchange/jquery.hashchange.js");
 	
 	// extend views

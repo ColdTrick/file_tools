@@ -12,7 +12,7 @@ $page_owner = elgg_get_page_owner_entity();
 $site_url = elgg_get_site_url();
 
 // load JS
-elgg_load_js("jquery.tree");
+elgg_require_js("jquery.tree");
 elgg_load_css("jquery.tree");
 
 elgg_load_js("jquery.hashchange");
