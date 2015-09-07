@@ -15,6 +15,10 @@ if (empty($page_owner) || (!elgg_instanceof($page_owner, "user") && !elgg_instan
 
 elgg_group_gatekeeper();
 
+if ($page_owner->canEdit() || ($page_owner instanceof ElggGroup && $page_owner->isMember())) {
+	elgg_require_js('file_tools/reorder');
+}
+
 if (empty($sort_by)) {
 	$sort_value = "e.time_created";
 	if (elgg_instanceof($page_owner, "group") && !empty($page_owner->file_tools_sort)) {
