@@ -14,7 +14,7 @@ if (!empty($container_guid) && get_uploaded_file("zip_file")) {
 		$file = $_FILES["zip_file"];
 		
 		// disable notifications of new objects
-		elgg_unregister_event_handler("create", "object", "object_notifications");
+		elgg_unregister_notification_event('object', 'file');
 		
 		if (file_tools_unzip($file, $container_guid, $parent_guid)) {
 			system_message(elgg_echo("file:saved"));
@@ -30,7 +30,7 @@ if (!empty($container_guid) && get_uploaded_file("zip_file")) {
 		}
 		
 		// reenable notifications of new objects
-		elgg_register_event_handler("create", "object", "object_notifications");
+		elgg_register_notification_event('object', 'file', array('create'));
 	} else {
 		register_error(elgg_echo("file:uploadfailed"));
 	}
