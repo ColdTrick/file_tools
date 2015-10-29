@@ -22,7 +22,9 @@ $body .= elgg_view_menu("file_tools_folder_sidebar_tree", array(
 ));
 $body .= "</div>";
 
-if ($page_owner->canEdit() || ($page_owner instanceof ElggGroup && $page_owner->isMember() && $page_owner->file_tools_structure_management_enable != "no")) {
+$user_guid = elgg_get_logged_in_user_guid();
+
+if ($page_owner->canWriteToContainer($user_guid, 'object', FILE_TOOLS_SUBTYPE) && $page_owner->file_tools_structure_management_enable != "no") {
 	elgg_load_js("lightbox");
 	elgg_load_css("lightbox");
 
