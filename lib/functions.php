@@ -268,27 +268,45 @@ function file_tools_sort_folders($folders, $parent_guid = 0) {
  */
 function file_tools_get_sub_folders($folder = false, $list = false) {
 	$result = false;
-	
-	if (!empty($folder) && elgg_instanceof($folder, "object", FILE_TOOLS_SUBTYPE)) {
-		$container_guid = $folder->getContainerGUID();
-		$parent_guid = $folder->getGUID();
-	} else {
-		$container_guid = elgg_get_page_owner_guid();
-		$parent_guid = 0;
-	}
-	
+
 	$options = array(
 		"type" => "object",
 		"subtype" => FILE_TOOLS_SUBTYPE,
-		"container_guid" => $container_guid,
 		"limit" => false,
-		"metadata_name" => "parent_guid",
-		"metadata_value" => $parent_guid,
-		"order_by_metadata" => array('name' => 'order', 'direction' => 'ASC', 'as' => 'integer'),
 		"full_view" => false,
 		"pagination" => false
 	);
-	
+
+	$page_owner = elgg_get_page_owner_entity();
+
+	if ($page_owner instanceof ElggGroup && !empty($page_owner->file_tools_sort)) {
+		// Each group has its own sorting settings
+		$order_by = $page_owner->file_tools_sort;
+		$order_direction = $page_owner->file_tools_sort_direction;
+
+		$dbprefix = get_config('dbprefix');
+		$options['joins'] = array("JOIN {$dbprefix}objects_entity oe ON e.guid = oe.guid");
+		$options['order_by'] =  "{$order_by} {$order_direction}";
+	} else {
+		// Default to sorting by 'order' metadata
+		$options["order_by_metadata"] = array(
+			'name' => 'order',
+			'direction' => 'ASC',
+			'as' => 'integer',
+		);
+	}
+
+	if (!empty($folder) && elgg_instanceof($folder, "object", FILE_TOOLS_SUBTYPE)) {
+		$options['container_guid'] = $folder->getContainerGUID();
+		$parent_guid = $folder->getGUID();
+	} else {
+		$options['container_guid'] = $page_owner->guid;
+		$parent_guid = 0;
+	}
+
+	$options["metadata_name"] = "parent_guid";
+	$options["metadata_value"] = $parent_guid;
+
 	if ($list) {
 		$folders = elgg_list_entities_from_metadata($options);
 	} else {
