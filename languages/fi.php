@@ -5,10 +5,10 @@ return array(
 
 	'file_tools:file:actions' => 'Actions',
 
-	'file_tools:list:sort:type' => 'Type',
-	'file_tools:list:sort:time_created' => 'Time created',
-	'file_tools:list:sort:asc' => 'Ascending',
-	'file_tools:list:sort:desc' => 'Descending',
+	'file_tools:list:sort:type' => 'Tyyppi',
+	'file_tools:list:sort:time_created' => 'Luontiaika',
+	'file_tools:list:sort:asc' => 'Nouseva',
+	'file_tools:list:sort:desc' => 'Laskeva',
 	'file_tools:show_more' => 'Show more files',
 
 	// object name
@@ -20,7 +20,7 @@ return array(
 	'file_tools:menu:group' => "Group file folders",
 
 	// group tool option
-	'file_tools:group_tool_option:structure_management' => "Allow management of folders by members",
+	'file_tools:group_tool_option:structure_management' => "Salli jäsenten hallinnoida kansioita",
 
 	// views
 
@@ -61,11 +61,11 @@ return array(
 	'file_tools:list:files:options:sort_title' => 'Sorting',
 	'file_tools:list:files:options:view_title' => 'View',
 
-	'file_tools:usersettings:time' => 'Time display',
-	'file_tools:usersettings:time:description' => 'Change the way the file/folder time is displayed ',
+	'file_tools:usersettings:time' => 'Valitse:',
+	'file_tools:usersettings:time:description' => 'Valitse tapa, jolla ilmaistaan tiedostojen ja hakemistojen luontiaika',
 	'file_tools:usersettings:time:default' => 'Default time display',
-	'file_tools:usersettings:time:date' => 'Date',
-	'file_tools:usersettings:time:days' => 'Days ago',
+	'file_tools:usersettings:time:date' => 'Päivämäärä',
+	'file_tools:usersettings:time:days' => 'Montako päivää sitten',
 
 	// new/edit
 	'file_tools:new:title' => "Uusi hakemisto",
@@ -132,7 +132,7 @@ return array(
 	//settings
 	'file_tools:settings:allowed_extensions' => 'Allowed extensions (comma seperated)',
 	'file_tools:settings:user_folder_structure' => 'Use folder structure',
-	'file_tools:settings:sort:default' => 'Default folder sorting options',
+	'file_tools:settings:sort:default' => 'Hakemistojen järjestys',
 	'file_tools:settings:list_length' => 'How many files to show in the listing',
 	'file_tools:settings:list_length:unlimited' => 'Unlimited',
 
