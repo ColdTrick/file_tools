@@ -1,4 +1,4 @@
-Version History
+Version history
 ===============
 
 2.0 (2015-07-08):
