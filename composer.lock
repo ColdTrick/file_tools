@@ -4,9 +4,129 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8199bd326876bf6ba7a7d22f36847551",
-    "content-hash": "0194fa119ec747cccc330810b39acf51",
+    "hash": "36be0a147300af4536cce66cf67741bf",
+    "content-hash": "87a8d66a51be153abc9d7599bf2b0de7",
     "packages": [
+        {
+            "name": "bower-asset/jquery",
+            "version": "3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jquery/jquery-dist.git",
+                "reference": "1b30f3ad466ebf2714d47eda34dbd7fdf6849fe3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/1b30f3ad466ebf2714d47eda34dbd7fdf6849fe3",
+                "reference": "1b30f3ad466ebf2714d47eda34dbd7fdf6849fe3",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "dist/jquery.js",
+                "bower-asset-ignore": [
+                    "package.json"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "keywords": [
+                "browser",
+                "javascript",
+                "jquery",
+                "library"
+            ]
+        },
+        {
+            "name": "bower-asset/jquery.serializeJSON",
+            "version": "2.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/marioizquierdo/jquery.serializeJSON.git",
+                "reference": "2f462314f40b1cb88b7b5293e4816ae87fad1ede"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/marioizquierdo/jquery.serializeJSON/zipball/2f462314f40b1cb88b7b5293e4816ae87fad1ede",
+                "reference": "2f462314f40b1cb88b7b5293e4816ae87fad1ede",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery": "*"
+            },
+            "require-dev": {
+                "bower-asset/jasmine": "2.0.0"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "jquery.serializejson.js",
+                "bower-asset-ignore": [
+                    "**/.*",
+                    "node_modules",
+                    "bower_components",
+                    "test",
+                    "tests"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "jQuery or Zepto plugin to serialize a form into a JavaScript Object, using the same format as the default Ruby on Rails request params",
+            "keywords": [
+                "form",
+                "helper",
+                "jquery",
+                "json",
+                "serialize"
+            ]
+        },
+        {
+            "name": "bower-asset/jstree",
+            "version": "3.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vakata/jstree.git",
+                "reference": "9770c6711f0a155ec494f635aaf0add9b3cfb45c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vakata/jstree/zipball/9770c6711f0a155ec494f635aaf0add9b3cfb45c",
+                "reference": "9770c6711f0a155ec494f635aaf0add9b3cfb45c",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery": ">=1.9.1"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "./dist/jstree.js",
+                    "./dist/themes/default/style.css"
+                ],
+                "bower-asset-ignore": [
+                    "**/.*",
+                    "docs",
+                    "demo",
+                    "libs",
+                    "node_modules",
+                    "test",
+                    "libs",
+                    "jstree.jquery.json",
+                    "gruntfile.js",
+                    "package.json",
+                    "bower.json",
+                    "component.json",
+                    "LICENCE-MIT",
+                    "README.md"
+                ]
+            },
+            "keywords": [
+                "jstree",
+                "tree",
+                "ui"
+            ]
+        },
         {
             "name": "composer/installers",
             "version": "v1.2.0",

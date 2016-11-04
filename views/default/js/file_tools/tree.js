@@ -5,7 +5,7 @@ define(function(require) {
 	var elgg = require('elgg');
 	var $ = require('jquery');
 	var file_tools = require('file_tools/site');
-	var jquery_tree = require('jquery.tree');
+	var jquery_tree = require('jstree/jstree.min');
 	var jquery_hashchange = require('jquery.hashchange');
 
 	/**
@@ -20,11 +20,11 @@ define(function(require) {
 
 		var file_tools_old_parent_guid;
 
-		console.log($.jstree.defaults);
+		//console.log($.jstree.defaults);
 
 		folders.jstree({
 			'core': {
-				'multiple': false,
+				'multiple': false
 			}
 		})
 		.on('ready.jstree', function() {
@@ -71,10 +71,10 @@ define(function(require) {
 					refresh = file_tools_old_parent_guid;
 				}
 
-				$("#file_tools_list_files_container .elgg-ajax-loader").show();
+				$('#file_tools_list_files_container .elgg-ajax-loader').show();
 			}
 
-			elgg.action("file_tools/folder/reorder", {
+			elgg.action('file_tools/folder/reorder', {
 				data: {
 					folder_guid: folder_guid,
 					parent_guid: parent_guid,
@@ -98,16 +98,16 @@ define(function(require) {
 	 * Makes all directories in the jsTree droppable
 	 */
 	var make_tree_folder_droppable = function() {
-		$("#file-tools-folder-tree .elgg-menu-content").droppable({
-			accept: "#file_tools_list_files .file-tools-file",
-			hoverClass: "file-tools-tree-droppable-hover",
-			tolerance: "pointer",
+		$('#file-tools-folder-tree .elgg-menu-content').droppable({
+			accept: '#file_tools_list_files .file-tools-file',
+			hoverClass: 'file-tools-tree-droppable-hover',
+			tolerance: 'pointer',
 			drop: function(event, ui) {
 				droppable = $(this);
 				draggable = ui.draggable;
 
-				drop_id = droppable.attr("href").substring(1);
-				drag_id = draggable.parent().attr("id").split("-").pop();
+				drop_id = droppable.attr('href').substring(1);
+				drag_id = draggable.parent().attr('id').split('-').pop();
 
 				file_tools.move_file(drag_id, drop_id, draggable);
 			}
@@ -120,7 +120,7 @@ define(function(require) {
 	function get_selected_tree_folder_id(){
 		var result = 0;
 
-		tree = $.tree.reference($("#file_tools_list_tree"));
+		tree = $.tree.reference($('#file_tools_list_tree'));
 		result = file_tools_tree_folder_id(tree.selected);
 		return result;
 	}
@@ -130,9 +130,9 @@ define(function(require) {
 	 * @param {Object} link
 	 */
 	function file_tools_remove_folder_files(link) {
-		if (confirm(elgg.echo("file_tools:folder:delete:confirm_files"))) {
-			var cur_href = $(link).attr("href");
-			$(link).attr("href", cur_href + "&files=yes");
+		if (confirm(elgg.echo('file_tools:folder:delete:confirm_files'))) {
+			var cur_href = $(link).attr('href');
+			$(link).attr('href', cur_href + '&files=yes');
 		}
 		return true;
 	}
@@ -144,12 +144,12 @@ define(function(require) {
 	 */
 	function file_tools_tree_folder_id(node, parent) {
 		if (parent == true) {
-			var find = "a:first";
+			var find = 'a:first';
 		} else {
-			var find = "a";
+			var find = 'a';
 		}
 
-		var element_id = node.find(find).attr("id");
+		var element_id = node.find(find).attr('id');
 		return element_id.substring(24, element_id.length);
 	}
 
@@ -160,10 +160,10 @@ define(function(require) {
 	 * @param {Object} tree
 	 */
 	function file_tools_select_node(folder_guid, tree) {
-		tree = $.tree.reference($("#file_tools_list_tree"));
+		tree = $.tree.reference($('#file_tools_list_tree'));
 
-		tree.select_branch($("#file_tools_tree_element_" + folder_guid));
-		tree.open_branch($("#file_tools_tree_element_" + folder_guid));
+		tree.select_branch($('#file_tools_tree_element_' + folder_guid));
+		tree.open_branch($('#file_tools_tree_element_' + folder_guid));
 	}
 
 	/**
@@ -178,40 +178,17 @@ define(function(require) {
 			file_tools.load_folder(window.location.hash.substring(1));
 		});
 
-		$(document).on("click", "a[href*='file_tools/file/new'], a[href*='file_tools/import/zip']", function(e) {
-			var link = $(this).attr('href');
-
-			window.location = link + '?folder_guid=' + get_selected_tree_folder_id();
-			e.preventDefault();
-
-		});
-
 		$(document).on('click', '.file_tools_load_folder', function() {
 			folder_guid = $(this).attr('rel');
 			file_tools_select_node(folder_guid);
 		});
 
 		$('select[name="file_sort"], select[name="file_sort_direction"]').change(function() {
-			show_loader($("#file_tools_list_folder"));
+			show_loader($('#file_tools_list_folder'));
 
-			// TODO(juho) Add this to the URL below: <?php echo get_input("search_viewtype", "list"); ?>
-			var folder_url = elgg.get_site_url() + "file_tools/list/" + elgg.page_owner.guid + folder_guid + ' = ' + get_selected_tree_folder_id() + "&search_viewtype&sort_by=" + $('select[name="file_sort"]').val() + "&direction=" + $('select[name="file_sort_direction"]').val();
-			$("#file_tools_list_files_container").load(folder_url);
-		});
-
-		$('a#file_tools_action_bulk_download').click(function() {
-			checkboxes = $('input[name="file_tools_file_action_check"]:checked');
-
-			if (checkboxes.length) {
-				data = [];
-				$.each($('input[name="file_tools_file_action_check"]:checked'), function(i, value) {
-					data.push($(value).val());
-				});
-
-				window.location = elgg.get_site_url() + 'file_tools/file/download?guids=' + data.join('-');
-			} else {
-				alert(elgg.echo("file_tools:list:alert:none_selected"));
-			}
+			// TODO(juho) Add this to the URL below: <?php echo get_input('search_viewtype', 'list'); ?>
+			var folder_url = elgg.get_site_url() + 'file_tools/list/' + elgg.page_owner.guid + '?folder_guid=' + get_selected_tree_folder_id() + '&search_viewtype&sort_by=' + $('select[name="file_sort"]').val() + '&direction=' + $('select[name="file_sort_direction"]').val();
+			$('#file_tools_list_files_container').load(folder_url);
 		});
 	});
 
@@ -221,9 +198,9 @@ define(function(require) {
 	 */
 	function show_loader(elem) {
 		var overlay_width = elem.outerWidth();
-		var margin_left = elem.css("margin-left");
+		var margin_left = elem.css('margin-left');
 
-		$("#file_tools_list_files_overlay").css("width", overlay_width).css("left", margin_left).show();
+		$('#file_tools_list_files_overlay').css('width', overlay_width).css('left', margin_left).show();
 	}
 
 	init();

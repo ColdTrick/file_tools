@@ -9,7 +9,9 @@
 		"issues": "https://github.com/ColdTrick/file_tools/issues"
 	},
 	"require": {
-		"composer/installers": "^1.0.8"
+		"composer/installers": "^1.0.8",
+		"bower-asset/jquery.serializeJSON": "~2.7.2",
+		"bower-asset/jstree": "~3.3.3"
 	},
 	"require-dev": {
 		"coldtrick/sniffs": "dev-master",

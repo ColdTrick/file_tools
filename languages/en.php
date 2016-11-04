@@ -23,11 +23,11 @@ return array(
 	'file_tools:group_tool_option:structure_management' => "Allow management of folders by members",
 	
 	// views
-
+	
 	// object
 	'file_tools:object:files' => "%s file(s) in this folder",
 	'file_tools:object:no_files' => "No files in this folder",
-
+	
 	// input - folder select
 	'file_tools:input:folder_select:main' => "Main folder",
 
@@ -82,7 +82,6 @@ return array(
 
 	// upload
 	'file_tools:upload:tabs:single' => "Single file",
-	'file_tools:upload:tabs:multi' => "Multi file",
 	'file_tools:upload:tabs:zip' => "Zip file",
 	'file_tools:upload:form:choose' => 'Choose file',
 	'file_tools:upload:form:info' => 'Click browse to upload (multiple) files',
@@ -130,7 +129,8 @@ return array(
 	'file_tools:action:folder:reorder:success' => "Successfully reordered the folder(s)",
 	
 	//settings
-	'file_tools:settings:allowed_extensions' => 'Allowed extensions (comma seperated)',
+	'file_tools:settings:allowed_extensions' => 'Allowed extensions',
+	'file_tools:settings:allowed_extensions:help' => 'Which file extensions are allowed to be uploaded using the ZIP upload. This is a comma separated list.',
 	'file_tools:settings:user_folder_structure' => 'Use folder structure',
 	'file_tools:settings:sort:default' => 'Default folder sorting options',
 	'file_tools:settings:list_length' => 'How many files to show in the listing',
