@@ -9,7 +9,7 @@ $direction = get_input('direction');
 $limit = file_tools_get_list_length();
 $offset = (int) get_input('offset', 0);
 
-if (!($page_owner instanceof ElggUser)) {
+if (!($page_owner instanceof ElggUser) && !($page_owner instanceof ElggGroup)) {
 	forward(REFERER);
 }
 
@@ -136,7 +136,7 @@ $params = [
 	'sidebar' => $sidebar,
 ];
 
-if (elgg_instanceof($page_owner, 'user')) {
+if ($page_owner instanceof ElggUser) {
 	if ($page_owner->getGUID() == elgg_get_logged_in_user_guid()) {
 		$params['filter_context'] = 'mine';
 	} else {

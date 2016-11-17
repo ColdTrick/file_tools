@@ -36,7 +36,5 @@ class Router {
 				return false;
 				break;
 		}
-		
-		return $return_value;
 	}
 }
