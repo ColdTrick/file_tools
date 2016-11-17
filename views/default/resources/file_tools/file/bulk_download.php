@@ -1,12 +1,6 @@
 <?php
 
-$zip_dir = elgg_get_data_path() . 'file_tools/zip_temp/';
-
-if (!file_exists($zip_dir)) {
-	mkdir($zip_dir, 0755, true);
-}
-
-$zip_filename = tempnam($zip_dir, 'download_');
+$zip_filename = tempnam(sys_get_temp_dir(), 'download_');
 
 $file_guids = get_input('file_guids');
 $folder_guids = get_input('folder_guids');
