@@ -29,9 +29,6 @@ function file_tools_init() {
 	// make our own URLs for folder icons
 	elgg_register_plugin_hook_handler('entity:icon:url', 'object', '\ColdTrick\FileTools\Folder::getIconURL');
 	
-	// register group option to allow management of file tree structure
-	add_group_tool_option('file_tools_structure_management', elgg_echo('file_tools:group_tool_option:structure_management'));
-	
 	// register events
 	elgg_register_event_handler('create', 'object', '\ColdTrick\FileTools\ElggFile::create');
 	elgg_register_event_handler('update', 'object', '\ColdTrick\FileTools\ElggFile::update');
@@ -48,6 +45,8 @@ function file_tools_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:entity', '\ColdTrick\FileTools\Menus\Entity::registerFile');
 	elgg_register_plugin_hook_handler('register', 'menu:file_tools_folder_breadcrumb', '\ColdTrick\FileTools\Menus\FolderBreadcrumb::register');
 	elgg_register_plugin_hook_handler('register', 'menu:file_tools_folder_sidebar_tree', '\ColdTrick\FileTools\Menus\FolderSidebarTree::register');
+	
+	elgg_register_plugin_hook_handler('tool_options', 'group', '\ColdTrick\FileTools\Groups::tools');
 	
 	// register actions
 	elgg_register_action('file_tools/groups/save_sort', dirname(__FILE__) . '/actions/groups/save_sort.php');
