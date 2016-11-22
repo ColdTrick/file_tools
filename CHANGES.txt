@@ -1,6 +1,23 @@
 Version history
 ===============
 
+3.0.0-rc.1 (2016-11-22):
+
+- added: French translation file
+- added: Finnish translations file
+- added: folder write access can now be altered with a plugin hook
+- changed: all javascript is now written as AMD modules
+- changed: increased Elgg version requirement
+- changed: rewrite of the plugin for Elgg 2.2
+- changed: temp location for bulk downloads now uses system temp location
+- changed: notification handling
+- changed: updates jsTree from 0.9.9 to 3.2.0 and loads it asynchronously
+- fixed: input for getEntitiesFromRelationship to array as per deprecation message
+- fixed: AJAX response for folder list now respects group sorting settings
+- fixed: group files not working
+- fixed: only allow group folder management if folders is enabled
+- removed: support for IE6/7/8
+
 2.0 (2015-07-08):
 
 - fixed: input for getEntitiesFromRelationship to array as per deprecation message #53
