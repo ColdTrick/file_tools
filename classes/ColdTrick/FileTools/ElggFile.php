@@ -49,7 +49,14 @@ class ElggFile {
 	 */
 	protected static function setFolderGUID(\ElggFile $entity) {
 		
-		$folder_guid = (int) get_input('folder_guid', 0);
+		$folder_guid = get_input('folder_guid', false);
+		if ($folder_guid === false) {
+			// folder_input was not present in form/action
+			// maybe someone else did something with a file
+			return;
+		}
+		
+		$folder_guid = (int) $folder_guid;
 		if (!empty($folder_guid)) {
 			$folder = get_entity($folder_guid);
 			if (!elgg_instanceof($folder, 'object', FILE_TOOLS_SUBTYPE)) {
