@@ -7,7 +7,7 @@ if (empty($folder_guid)) {
 }
 
 $folder = get_entity($folder_guid);
-if (!elgg_instanceof($folder, 'object', FILE_TOOLS_SUBTYPE) || $folder->canDelete()) {
+if (!elgg_instanceof($folder, 'object', FILE_TOOLS_SUBTYPE) || !$folder->canDelete()) {
 	register_error(elgg_echo('actionunauthorized'));
 	forward(REFERER);
 }
