@@ -1,6 +1,11 @@
 Version history
 ===============
 
+3.0.0-rc.2 (2016-11-28):
+
+- fixed: folder update event to greedy
+- fixed: unable to delete folder
+
 3.0.0-rc.1 (2016-11-22):
 
 - added: French translation file
