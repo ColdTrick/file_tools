@@ -24,8 +24,12 @@ define(function(require) {
 
 		folders.jstree({
 			'core': {
-				'multiple': false
-			}
+				'multiple': false,
+				'check_callback': true
+			},
+			'plugins' : [
+				'dnd'
+			]
 		})
 		.on('ready.jstree', function() {
 			var hash = window.location.hash;
@@ -53,13 +57,16 @@ define(function(require) {
 		})
 		.on('move_node.jstree', function (e, data) {
 			var refresh = false;
-			var parent_node = tree_obj.parent(node);
-
-			var folder_guid = $(node).find('a:first').attr('href').substr(1);
-			var parent_guid = $(parent_node).find('a:first').attr('href').substr(1);
+			var tree_obj = data.instance;
+			
+			var parent_id = tree_obj.get_parent(data.node);
+			var $parent_node = $('#' + parent_id);
+			
+			var folder_guid = data.node.a_attr.href.substr(1);
+			var parent_guid = $parent_node.find('a:first').attr('href').substr(1);
 
 			var order = [];
-			$(parent_node).find('>ul > li > a').each(function(k, v) {
+			$parent_node.find('>ul > li > a').each(function(k, v) {
 				var guid = $(v).attr('href').substr(1);
 				order.push(guid);
 			});
