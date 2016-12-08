@@ -1,6 +1,11 @@
 Version history
 ===============
 
+3.0.0-rc.3 (2016-12-08):
+
+- fixed: folders can't be reordered
+- fixed: group owners can't create folders
+
 3.0.0-rc.2 (2016-11-28):
 
 - fixed: folder update event to greedy
