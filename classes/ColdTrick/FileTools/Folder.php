@@ -170,4 +170,43 @@ class Folder {
 			return "file/owner/{$container->username}#{$entity->getGUID()}";
 		}
 	}
+	
+	/**
+	 * Can create a folder in a group
+	 *
+	 * @param string $hook         the name of the hook
+	 * @param string $type         the type of the hook
+	 * @param string $retrun_value current return value
+	 * @param array  $params       supplied params
+	 *
+	 * @retrun void|bool
+	 */
+	public static function canWriteToContainer($hook, $type, $return_value, $params) {
+		
+		$subtype = elgg_extract('subtype', $params);
+		if ($subtype !== FILE_TOOLS_SUBTYPE) {
+			return;
+		}
+		
+		$container = elgg_extract('container', $params);
+		$user = elgg_extract('user', $params);
+		if (!($container instanceof \ElggGroup) || !($user instanceof \ElggUser)) {
+			return;
+		}
+		
+		if ($container->canEdit($user->getGUID())) {
+			// admins, group owners and group admins can create folder all the time
+			return true;
+		}
+		
+		if (!$container->isMember($user)) {
+			// user is not a group member
+			return false;
+		}
+		
+		if ($container->file_tools_structure_management_enable === 'no') {
+			// file management is disabled
+			return false;
+		}
+	}
 }

@@ -25,7 +25,7 @@ $body = elgg_format_element('div', [
 
 $user_guid = elgg_get_logged_in_user_guid();
 
-if ($page_owner->canWriteToContainer($user_guid, 'object', FILE_TOOLS_SUBTYPE) && $page_owner->file_tools_structure_management_enable != 'no') {
+if ($page_owner->canWriteToContainer($user_guid, 'object', FILE_TOOLS_SUBTYPE)) {
 	$body .= elgg_format_element('div', ['class' => 'mtm'], elgg_view('input/button', [
 		'value' => elgg_echo('file_tools:new:title'),
 		'id' => 'file_tools_list_new_folder_toggle',

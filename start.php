@@ -36,6 +36,7 @@ function file_tools_init() {
 	
 	// register hooks
 	elgg_register_plugin_hook_handler('permissions_check:metadata', 'object', '\ColdTrick\FileTools\Folder::canEditMetadata');
+	elgg_register_plugin_hook_handler('container_permissions_check', 'object', '\ColdTrick\FileTools\Folder::canWriteToContainer');
 	elgg_register_plugin_hook_handler('route', 'file', '\ColdTrick\FileTools\Router::file');
 	elgg_register_plugin_hook_handler('entity:url', 'object', '\ColdTrick\FileTools\Folder::getURL');
 	
