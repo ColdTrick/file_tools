@@ -31,3 +31,7 @@
 #file-tools-folder-tree .file-tools-tree-droppable-hover {
 	border: 1px solid red;
 }
+
+.elgg-widget-instance-file_tree .elgg-widget-content .elgg-list .elgg-list li:last-child {
+	border-bottom: none;
+}
