@@ -2,6 +2,10 @@
 
 $folder = elgg_extract('entity', $vars);
 $full_view = (bool) elgg_extract('full_view', $vars, false);
+$show_toggle_content = (bool) elgg_extract('show_toggle_content', $vars, false);
+if ($show_toggle_content && elgg_is_xhr()) {
+	$full_view = elgg_extract('fullView', $vars, $full_view);
+}
 
 $time_preference = 'date';
 
@@ -38,6 +42,17 @@ if (!elgg_in_context('widgets')) {
 }
 
 if ($full_view) {
+	
+	if (elgg_in_context('widgets') && $show_toggle_content) {
+		$entity_menu = elgg_view('output/url', [
+			'text' => elgg_view_icon('caret-right') . elgg_view_icon('caret-down', ['class' => 'hidden']),
+			'href' => 'javascript:void(0);',
+			'data-guid' => $folder->getGUID(),
+			'data-full-view' => 1,
+			'class' => 'file-tools-file-tree-toggle-content float-alt',
+		]);
+	}
+	
 	// full view
 	$icon = elgg_view_entity_icon($folder, 'small');
 	
@@ -75,6 +90,19 @@ if ($full_view) {
 			'name' => 'folder_guids[]',
 			'value' => $folder->getGUID(),
 			'default' => false,
+		]);
+	} elseif ($show_toggle_content) {
+		$right_class = '';
+		$down_class = 'hidden';
+		if (!isset($vars['items'])) {
+			$right_class = 'hidden';
+			$down_class = '';
+		}
+		$icon_alt = elgg_view('output/url', [
+			'text' => elgg_view_icon('caret-right', ['class' => $right_class]) . elgg_view_icon('caret-down', ['class' => $down_class]),
+			'href' => 'javascript:void(0);',
+			'data-guid' => $folder->getGUID(),
+			'class' => 'file-tools-file-tree-toggle-content',
 		]);
 	}
 	

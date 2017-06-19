@@ -23,6 +23,9 @@ function file_tools_init() {
 	// extend views
 	elgg_extend_view('groups/edit', 'file_tools/group_settings');
 	
+	//ajax views
+	elgg_register_ajax_view('object/folder/file_tree_content');
+	
 	// register page handler for nice URL's
 	elgg_register_page_handler('file_tools', '\ColdTrick\FileTools\PageHandler::fileTools');
 	

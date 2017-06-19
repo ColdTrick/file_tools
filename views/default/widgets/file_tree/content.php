@@ -10,6 +10,7 @@ if (empty($folder_guids)) {
 }
 
 $show_content = (bool) $widget->show_content;
+$toggle_contents = (bool) $widget->toggle_contents;
 
 if (!is_array($folder_guids)) {
 	$folder_guids = [$folder_guids];
@@ -24,16 +25,22 @@ $folder_options = [
 	'container_guid' => $widget->getOwnerGUID(),
 	'limit' => false,
 	'full_view' => true,
+	
+	'show_toggle_content' => $toggle_contents,
 ];
 
 if ($show_content) {
-	$folder_options['item_view'] = 'object/folder/file_tree_content';
+	$folder_options['item_view'] = 'object/folder/file_tree';
 }
 
 $folders = elgg_get_entities($folder_options);
 if (empty($folders)) {
 	echo elgg_echo('notfound');
 	return;
+}
+
+if ($toggle_contents) {
+	elgg_require_js('file_tools/file_tree');
 }
 
 $sorted_result = [];
@@ -53,46 +60,7 @@ ksort($sorted_result);
 // show the results
 echo elgg_view_entity_list($sorted_result, $folder_options);
 
-// $folders = '';
-// foreach ($folder_guids as $guid) {
-// 	$folder = get_entity($guid);
-	
-// 	if (empty($folder) || ($folder->getSubtype() !== FILE_TOOLS_SUBTYPE)) {
-// 		continue;
-// 	}
-	
-// 	if (!empty($show_content)) {
-// 		// list the files
-// 		$folders .= elgg_view_entity($folder, ['full_view' => false]);
-		
-// 		// list the content
-// 		$sub_folders = file_tools_get_sub_folders($folder);
-// 		if (empty($sub_folders)) {
-// 			$sub_folders = [];
-// 		}
-		
-// 		$files_options = [
-// 			'type' => 'object',
-// 			'subtype' => 'file',
-// 			'limit' => false,
-// 			'container_guid' => $widget->getOwnerGUID(),
-// 			'relationship' => FILE_TOOLS_RELATIONSHIP,
-// 			'relationship_guid' => $folder->getGUID(),
-// 			'inverse_relationship' => false,
-// 		];
-// 		$files = elgg_get_entities_from_relationship($files_options);
-		
-// 		$entities = array_merge($sub_folders, $files);
-		
-// 		$folders .= elgg_format_element('div', ['class' => 'mlm'], elgg_view_entity_list($entities, [
-// 			'full_view' => false,
-// 			'pagination' => false,
-// 		]));
-// 	} else {
-// 		$folders .= elgg_view_entity($folder);
-// 	}
-// }
-
+// more link
 $more_url = '';
 $owner = $widget->getOwnerEntity();
 if ($owner instanceof ElggUser) {

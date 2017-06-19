@@ -32,3 +32,12 @@ echo elgg_view_input('checkbox', [
 	'value' => '1',
 	'checked' => !empty($widget->show_content),
 ]);
+
+// allow content to be ajax loaded
+echo elgg_view_input('checkbox', [
+	'label' => elgg_echo('widgets:file_tree:edit:toggle_contents'),
+	'help' => elgg_echo('widgets:file_tree:edit:toggle_contents:help'),
+	'name' => 'params[toggle_contents]',
+	'value' => '1',
+	'checked' => !empty($widget->toggle_contents),
+]);

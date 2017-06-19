@@ -1,6 +1,6 @@
 <?php
 /**
- * Show a folder in the file_tree widget with contents show
+ * Show the folder contents in the file_tree widget
  *
  * @uses $vars['entity'] the folder to show
  */
@@ -9,9 +9,6 @@ $entity = elgg_extract('entity', $vars);
 if (!($entity instanceof ElggObject) || $entity->getSubtype() !== FILE_TOOLS_SUBTYPE) {
 	return;
 }
-
-// show folder
-echo elgg_view_entity($entity, ['full_view' => false]);
 
 // get the containing folders
 $sub_folders = file_tools_get_sub_folders($entity);
@@ -34,8 +31,24 @@ $files = elgg_get_entities_from_relationship([
 $entities = array_merge($sub_folders, $files);
 
 // list results
-echo elgg_view_entity_list($entities, [
-	'list_class' => 'mlm',
-	'full_view' => false,
-	'pagination' => false,
-]);
+$params = $vars;
+$params['list_class'] = 'mlm';
+$params['full_view'] = false;
+$params['pagination'] = false;
+
+if (elgg_is_xhr()) {
+	// ajax view, set some additional params
+	$params['show_toggle_content'] = true;
+	
+	$context = false;
+	if (!elgg_in_context('widgets')) {
+		$context = true;
+		elgg_push_context('widgets');
+	}
+}
+
+echo elgg_view_entity_list($entities, $params);
+
+if ($context) {
+	elgg_pop_context();
+}

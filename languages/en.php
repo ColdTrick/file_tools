@@ -147,6 +147,8 @@ return array(
 	'widgets:file_tree:edit:select' => "Select which folder(s) to display",
 	'widgets:file_tree:edit:show_content' => "Show the content of the folder(s)",
 	'widgets:file_tree:edit:show_content:help' => "Show the files and folders contained in the selected folders.",
+	'widgets:file_tree:edit:toggle_contents' => "Load folder contents in widget",
+	'widgets:file_tree:edit:toggle_contents:help' => "Add a link to the folder listing to show the contents of the folder.",
 	'widgets:file_tree:no_folders' => "No folders configured",
 	'widgets:file_tree:more' => "More file folders",
 
