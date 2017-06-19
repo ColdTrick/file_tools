@@ -23,6 +23,11 @@ define(function(require){
 		ajax.view('object/folder/file_tree_content', {
 			data: $link.data(),
 			success: function(data) {
+				
+				if (!data.length) {
+					data = '<ul class="elgg-list"><li>' + elgg.echo('file_tools:object:no_files') + '</li></ul>';
+				}
+				
 				$li.append(data);
 				
 				$li.find('> .elgg-listing-full > .elgg-output').hide();
