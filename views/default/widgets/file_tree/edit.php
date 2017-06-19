@@ -25,8 +25,9 @@ echo file_tools_build_widget_options($folders, 'params[folder_guids][]', $select
 echo '</div>';
 
 // display folder or folder content
-echo elgg_view_input('checkebox', [
+echo elgg_view_input('checkbox', [
 	'label' => elgg_echo('widgets:file_tree:edit:show_content'),
+	'help' => elgg_echo('widgets:file_tree:edit:show_content:help'),
 	'name' => 'params[show_content]',
 	'value' => '1',
 	'checked' => !empty($widget->show_content),
