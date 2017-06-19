@@ -5,7 +5,7 @@ $title = get_input('title');
 $owner_guid = (int) get_input('page_owner');
 $description = get_input('description');
 $parent_guid = (int) get_input('file_tools_parent_guid', 0); // 0 is top_level
-$access_id = (int) get_input('access_id', ACCESS_DEFAULT);
+$access_id = (int) get_input('access_id');
 $change_children_access = get_input('change_children_access', false);
 $change_files_access = get_input('change_files_access', false);
 
