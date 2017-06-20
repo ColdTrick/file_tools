@@ -13,7 +13,7 @@ define(function(require){
 		if ($li.find('> .elgg-list').length) {
 			// content already loaded
 			$li.find('> .elgg-list').toggle();
-			$li.find('> .elgg-listing-full > .elgg-output').toggle();
+			$li.find('> .elgg-content > .elgg-output').toggle();
 			$link.find('> span').toggleClass('hidden');
 			
 			return;
@@ -25,12 +25,12 @@ define(function(require){
 			success: function(data) {
 				
 				if (!data.length) {
-					data = '<ul class="elgg-list"><li>' + elgg.echo('file_tools:object:no_files') + '</li></ul>';
+					data = '<ul class="elgg-list"><li class="elgg-item">' + elgg.echo('file_tools:object:no_files') + '</li></ul>';
 				}
 				
 				$li.append(data);
 				
-				$li.find('> .elgg-listing-full > .elgg-output').hide();
+				$li.find('> .elgg-content > .elgg-output').hide();
 				$link.find('> span').toggleClass('hidden');
 			}
 		});
