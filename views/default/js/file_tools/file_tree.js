@@ -22,6 +22,7 @@ define(function(require){
 		var ajax = new Ajax();
 		ajax.view('object/folder/file_tree_content', {
 			data: $link.data(),
+			method: 'GET',
 			success: function(data) {
 				
 				if (!data.length) {
