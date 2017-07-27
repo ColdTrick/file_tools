@@ -177,10 +177,6 @@ define(function(require) {
 	 *
 	 */
 	$(function() {
-		if (window.location.hash.substring(1) == '') {
-			file_tools.load_folder(0);
-		}
-
 		$(window).hashchange(function(){
 			file_tools.load_folder(window.location.hash.substring(1));
 		});
