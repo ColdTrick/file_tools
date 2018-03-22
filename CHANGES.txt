@@ -1,6 +1,16 @@
 Version history
 ===============
 
+3.0 (2018-03-22):
+
+- added: option to open folders in file_tree widget
+- changed: file_tree ajax load method to GET for Elgg 2.2
+- changed: file_tree widget now uses generic listing functions
+- fixed: don't use ACCESS_DEFAULT as a fallback value
+- fixed: double request on load main folder
+- fixed: incorrect metadata access check
+- fixed: show folder content option in file_tree widget not available
+
 3.0.0-rc.3 (2016-12-08):
 
 - fixed: folders can't be reordered
