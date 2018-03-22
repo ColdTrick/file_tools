@@ -20,7 +20,7 @@ if (!empty($parent_guid)) {
 // get folder from folder_guid and check if it is a folder
 if (!is_null($parent_guid) && ($folder_guid !== $parent_guid)) {
 	$folder = get_entity($folder_guid);
-	if (elgg_instanceof($folder, 'object', FILE_TOOLS_SUBTYPE) && $folder->canEditMetadata('parent_guid')) {
+	if (elgg_instanceof($folder, 'object', FILE_TOOLS_SUBTYPE) && $folder->canEditMetadata()) {
 		// set new parent_guid
 		$folder->parent_guid = $parent_guid;
 		$folder->save();
@@ -36,7 +36,7 @@ if (!empty($order) && !is_null($parent_guid)) {
 	foreach ($order as $index => $order_guid) {
 		$folder = get_entity($order_guid);
 		
-		if (!elgg_instanceof($folder, 'object', FILE_TOOLS_SUBTYPE) || !$folder->canEditMetadata('order')) {
+		if (!elgg_instanceof($folder, 'object', FILE_TOOLS_SUBTYPE) || !$folder->canEditMetadata()) {
 			continue;
 		}
 		
