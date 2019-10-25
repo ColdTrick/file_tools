@@ -10,7 +10,7 @@ if (empty($page_owner)) {
 // build breadcrumb
 elgg_push_breadcrumb(elgg_echo('file'), 'file/all');
 if ($page_owner instanceof ElggGroup) {
-	elgg_push_breadcrumb($page_owner->name, 'file/group/' . $page_owner->getGUID() . '/all');
+	elgg_push_breadcrumb($page_owner->name, 'file/group/' . $page_owner->guid . '/all');
 } else {
 	elgg_push_breadcrumb($page_owner->name, 'file/owner/' . $page_owner->username);
 }

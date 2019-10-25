@@ -17,7 +17,7 @@ if (!empty($folder)) {
 
 	echo elgg_view('input/hidden', [
 		'name' => 'guid',
-		'value' => $folder->getGUID(),
+		'value' => $folder->guid,
 	]);
 
 	$submit_text = elgg_echo('update');
@@ -42,7 +42,7 @@ if (!empty($folder)) {
 
 echo elgg_view('input/hidden', [
 	'name' => 'page_owner',
-	'value' => $page_owner->getGUID(),
+	'value' => $page_owner->guid,
 ]);
 
 echo elgg_view_input('text', [
@@ -62,7 +62,7 @@ echo elgg_view_input('folder_select', [
 	'name' => 'file_tools_parent_guid',
 	'folder' => $folder,
 	'value' => $parent,
-	'container_guid' => $page_owner->getGUID(),
+	'container_guid' => $page_owner->guid,
 	'type' => 'folder',
 ]);
 

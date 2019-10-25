@@ -8,14 +8,12 @@ set_time_limit(0);
 $forward_url = REFERER;
 
 if (empty($container_guid) || !get_uploaded_file('zip_file')) {
-	register_error(elgg_echo('file:cannotload'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('file:cannotload'));
 }
 
 $extension_array = explode('.', $_FILES['zip_file']['name']);
 if (strtolower(end($extension_array)) !== 'zip') {
-	register_error(elgg_echo('file:uploadfailed'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('file:uploadfailed'));
 }
 
 $file = $_FILES['zip_file'];
@@ -28,7 +26,7 @@ if (file_tools_unzip($file, $container_guid, $parent_guid)) {
 	
 	$container = get_entity($container_guid);
 	if ($container instanceof ElggGroup) {
-		$forward_url = "file/group/{$container->getGUID()}/all#{$parent_guid}";
+		$forward_url = "file/group/{$container->guid}/all#{$parent_guid}";
 	} else {
 		$forward_url = "file/owner/{$container->username}#{$parent_guid}";
 	}

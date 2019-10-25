@@ -25,12 +25,12 @@ if ($guid) {
 	// get current parent_guid
 	$file = get_entity($guid);
 	$folders = $file->getEntitiesFromRelationship([
-		'relationship' => FILE_TOOLS_RELATIONSHIP,
+		'relationship' => FileToolsFolder::RELATIONSHIP,
 		'inverse_relationship' => true,
 		'limit' => 1,
 	]);
 	if (!empty($folders)) {
-		$parent_guid = $folders[0]->getGUID();
+		$parent_guid = $folders[0]->guid;
 	}
 } else {
 	$file_label = elgg_echo("file:file");

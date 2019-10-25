@@ -38,7 +38,7 @@ if (!empty($file_guids)) {
 		} else {
 			// file name exists, so create a new one
 			$ext_pos = strrpos($file->originalfilename, '.');
-			$file_name = substr($file->originalfilename, 0, $ext_pos) . '_' . $file->getGUID() . substr($file->originalfilename, $ext_pos);
+			$file_name = substr($file->originalfilename, 0, $ext_pos) . '_' . $file->guid . substr($file->originalfilename, $ext_pos);
 			
 			$zip->addFile($file->getFilenameOnFilestore(), $file_name);
 		}
@@ -49,7 +49,7 @@ if (!empty($file_guids)) {
 if (!empty($folder_guids)) {
 	$folders = new ElggBatch('elgg_get_entities', [
 		'type' => 'object',
-		'subtype' => FILE_TOOLS_SUBTYPE,
+		'subtype' => \FileToolsFolder::SUBTYPE,
 		'guids' => $folder_guids,
 		'limit' => false,
 	]);

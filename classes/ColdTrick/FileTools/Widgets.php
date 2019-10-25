@@ -34,12 +34,12 @@ class Widgets {
 				if ($owner instanceof \ElggUser) {
 					return "file/owner/{$owner->username}";
 				} elseif ($owner instanceof \ElggGroup) {
-					return "file/group/{$owner->getGUID()}/all";
+					return "file/group/{$owner->guid}/all";
 				}
 				
 				break;
 			case 'group_files':
-				return "file/group/{$owner->getGUID()}/all";
+				return "file/group/{$owner->guid}/all";
 				break;
 			case 'index_file':
 				return 'file/all';

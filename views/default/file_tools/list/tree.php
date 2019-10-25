@@ -5,7 +5,7 @@ $folder = elgg_extract('folder', $vars);
 
 $selected_id = 'file_tools_list_tree_main';
 if ($folder instanceof ElggObject) {
-	$selected_id = $folder->getGUID();
+	$selected_id = $folder->guid;
 }
 
 $page_owner = elgg_get_page_owner_entity();
@@ -25,7 +25,7 @@ $body = elgg_format_element('div', [
 
 $user_guid = elgg_get_logged_in_user_guid();
 
-if ($page_owner->canWriteToContainer($user_guid, 'object', FILE_TOOLS_SUBTYPE)) {
+if ($page_owner->canWriteToContainer($user_guid, 'object', \FileToolsFolder::SUBTYPE)) {
 	$body .= elgg_format_element('div', ['class' => 'mtm'], elgg_view('input/button', [
 		'value' => elgg_echo('file_tools:new:title'),
 		'id' => 'file_tools_list_new_folder_toggle',

@@ -4,10 +4,11 @@ $file_guids = (array) get_input('file_guids', []);
 $folder_guids = (array) get_input('folder_guids', []);
 
 if (empty($file_guids) && empty($folder_guids)) {
-	register_error(elgg_echo('error:missing_data'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('error:missing_data'));
 }
 
+$success_msgs = [];
+		
 // remove all files
 if (!empty($file_guids)) {
 	$file_count = 0;
@@ -29,10 +30,10 @@ if (!empty($file_guids)) {
 		}
 	}
 	
-	if (!empty($file_count)) {
-		system_message(elgg_echo('file_tools:action:bulk_delete:success:files', [$file_count]));
+	if (empty($file_count)) {
+		return elgg_error_response(elgg_echo('file_tools:action:bulk_delete:error:files'));
 	} else {
-		register_error(elgg_echo('file_tools:action:bulk_delete:error:files'));
+		$success_msgs[] = elgg_echo('file_tools:action:bulk_delete:success:files', [$file_count]);
 	}
 }
 
@@ -42,7 +43,7 @@ if (!empty($folder_guids)) {
 	
 	$folders = elgg_get_entities([
 		'type' => 'object',
-		'subtype' => FILE_TOOLS_SUBTYPE,
+		'subtype' => FileToolsFolder::SUBTYPE,
 		'guids' => $folder_guids,
 		'limit' => false,
 	]);
@@ -57,11 +58,13 @@ if (!empty($folder_guids)) {
 		}
 	}
 	
-	if (!empty($folder_count)) {
-		system_message(elgg_echo('file_tools:action:bulk_delete:success:folders', [$folder_count]));
+	if (empty($folder_count)) {
+		return elgg_error_response(elgg_echo('file_tools:action:bulk_delete:error:folders'));
 	} else {
-		register_error(elgg_echo('file_tools:action:bulk_delete:error:folders'));
+		$success_msgs[] = elgg_echo('file_tools:action:bulk_delete:success:folders', [$folder_count]);
 	}
 }
 
-forward(REFERER);
+$msg = !empty($success_msgs) ? implode(' ', $success_msgs) : '';
+
+return elgg_ok_response('', $msg);

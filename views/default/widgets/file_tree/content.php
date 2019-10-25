@@ -20,7 +20,7 @@ $folder_guids = array_map('sanitise_int', $folder_guids);
 
 $folder_options = [
 	'type' => 'object',
-	'subtype' => FILE_TOOLS_SUBTYPE,
+	'subtype' => \FileToolsFolder::SUBTYPE,
 	'guids' => $folder_guids,
 	'container_guid' => $widget->getOwnerGUID(),
 	'limit' => false,
@@ -46,7 +46,7 @@ if ($toggle_contents) {
 $sorted_result = [];
 /* @var $folder ElggObject */
 foreach ($folders as $folder) {
-	$index = array_search($folder->getGUID(), $folder_guids);
+	$index = array_search($folder->guid, $folder_guids);
 	if ($index === false) {
 		// shouldn't happen
 		continue;
@@ -66,7 +66,7 @@ $owner = $widget->getOwnerEntity();
 if ($owner instanceof ElggUser) {
 	$more_url = "file/owner/{$owner->username}";
 } elseif ($owner instanceof ElggGroup) {
-	$more_url = "file/group/{$owner->getGUID()}/all";
+	$more_url = "file/group/{$owner->guid}/all";
 }
 
 if (empty($more_url)) {

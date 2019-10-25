@@ -28,7 +28,7 @@ if ($widget->featured_only == 'yes') {
 
 // how to display the files
 if ($widget->gallery_list == 2) {
-	$files = elgg_get_entities_from_metadata($options);
+	$files = elgg_get_entities($options);
 	if (empty($files)) {
 		echo elgg_echo('file:none');
 		return;
@@ -54,7 +54,7 @@ if ($widget->gallery_list == 2) {
 	if ($owner instanceof ElggUser) {
 		$more_link = "file/owner/{$owner->username}";
 	} elseif ($owner instanceof ElggGroup) {
-		$more_link = "file/group/{$owner->getGUID()}/all";
+		$more_link = "file/group/{$owner->guid}/all";
 	}
 	
 	if (empty($more_link)) {
@@ -70,7 +70,7 @@ if ($widget->gallery_list == 2) {
 	return;
 }
 
-$list = elgg_list_entities_from_metadata($options);
+$list = elgg_list_entities($options);
 if (empty($list)) {
 	echo elgg_echo('file:none');
 	return;
@@ -83,7 +83,7 @@ $owner = $widget->getOwnerEntity();
 if ($owner instanceof ElggUser) {
 	$more_link = "file/owner/{$owner->username}";
 } elseif ($owner instanceof ElggGroup) {
-	$more_link = "file/group/{$owner->getGUID()}/all";
+	$more_link = "file/group/{$owner->guid}/all";
 }
 
 if (empty($more_link)) {

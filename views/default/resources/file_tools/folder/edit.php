@@ -3,7 +3,7 @@
 elgg_gatekeeper();
 
 $folder_guid = (int) elgg_extract('folder_guid', $vars);
-elgg_entity_gatekeeper($folder_guid, 'object', FILE_TOOLS_SUBTYPE);
+elgg_entity_gatekeeper($folder_guid, 'object', \FileToolsFolder::SUBTYPE);
 
 $folder = get_entity($folder_guid);
 if (!$folder->canEdit()) {

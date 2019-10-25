@@ -24,13 +24,13 @@ class FolderBreadcrumb {
 		
 		/* @var $folder \ElggObject */
 		$folder = elgg_extract('entity', $params);
-		if (elgg_instanceof($folder, 'object', FILE_TOOLS_SUBTYPE)) {
+		if ($folder instanceof \FileToolsFolder) {
 			$container = $folder->getContainerEntity();
 			
 			$priority = 9999999;
 			
 			$return_value[] = \ElggMenuItem::factory([
-				'name' => "folder_{$folder->getGUID()}",
+				'name' => "folder_{$folder->guid}",
 				'text' => $folder->getDisplayName(),
 				'href' => false,
 				'priority' => $priority,
@@ -39,14 +39,14 @@ class FolderBreadcrumb {
 			$parent_guid = (int) $folder->parent_guid;
 			while (!empty($parent_guid)) {
 				$parent = get_entity($parent_guid);
-				if (!elgg_instanceof($parent, 'object', FILE_TOOLS_SUBTYPE)) {
+				if (!$parent instanceof \FileToolsFolder) {
 					break;
 				}
 				
 				$priority--;
 				
 				$return_value[] = \ElggMenuItem::factory([
-					'name' => "folder_{$parent->getGUID()}",
+					'name' => "folder_{$parent->guid}",
 					'text' => $parent->getDisplayName(),
 					'href' => $parent->getURL(),
 					'priority' => $priority,
@@ -63,7 +63,7 @@ class FolderBreadcrumb {
 		];
 		
 		if ($container instanceof \ElggGroup) {
-			$main_folder_options['href'] = "file/group/{$container->getGUID()}/all#";
+			$main_folder_options['href'] = "file/group/{$container->guid}/all#";
 		} else {
 			$main_folder_options['href'] = "file/owner/{$container->username}/all#";
 		}

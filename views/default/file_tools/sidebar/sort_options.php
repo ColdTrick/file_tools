@@ -13,7 +13,7 @@ $sort_value = 'e.time_created';
 if (isset($_SESSION['file_tools']) && is_array($_SESSION['file_tools']) && !empty($_SESSION['file_tools']['sort'])) {
 	$sort_value = $_SESSION['file_tools']['sort'];
 } else {
-	if (elgg_instanceof($page_owner, 'group') && !empty($page_owner->file_tools_sort)) {
+	if ($page_owner instanceof \ElggGroup && !empty($page_owner->file_tools_sort)) {
 		$sort_value = $page_owner->file_tools_sort;
 	} elseif ($site_sort_default = elgg_get_plugin_setting('sort', 'file_tools')) {
 		$sort_value = $site_sort_default;
@@ -36,7 +36,7 @@ $sort_direction_value = 'asc';
 if (isset($_SESSION['file_tools']) && is_array($_SESSION['file_tools']) && !empty($_SESSION['file_tools']['sort_direction'])) {
 	$sort_direction_value = $_SESSION['file_tools']['sort_direction'];
 } else {
-	if (elgg_instanceof($page_owner, 'group') && !empty($page_owner->file_tools_sort_direction)) {
+	if ($page_owner instanceof \ElggGroup && !empty($page_owner->file_tools_sort_direction)) {
 		$sort_direction_value = $page_owner->file_tools_sort_direction;
 	} elseif ($site_sort_direction_default = elgg_get_plugin_setting('sort_direction', 'file_tools')) {
 		$sort_direction_value = $site_sort_direction_default;

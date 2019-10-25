@@ -41,14 +41,14 @@ $wheres = [];
 $wheres[] = 'NOT EXISTS (
 	SELECT 1 FROM ' . elgg_get_config('dbprefix') . 'entity_relationships r
 	WHERE r.guid_two = e.guid AND
-	r.relationship = "' . FILE_TOOLS_RELATIONSHIP . '")';
+	r.relationship = "' . FileToolsFolder::RELATIONSHIP . '")';
 
 $files_options = [
 	'type' => 'object',
 	'subtype' => 'file',
 	'limit' => $limit,
 	'offset' => $offset,
-	'container_guid' => $page_owner->getGUID(),
+	'container_guid' => $page_owner->guid,
 ];
 
 $files_options['joins'][] = 'JOIN ' . elgg_get_config('dbprefix') . 'objects_entity oe ON oe.guid = e.guid';
@@ -65,8 +65,8 @@ if ($sort_by == 'simpletype') {
 $folder = false;
 if (!empty($folder_guid)) {
 	$folder = get_entity($folder_guid);
-	if (elgg_instanceof($folder, 'object', FILE_TOOLS_SUBTYPE) && ($folder->getContainerGUID() === $page_owner->getGUID())) {
-		$files_options['relationship'] = FILE_TOOLS_RELATIONSHIP;
+	if ($folder instanceof \FileToolsFolder && ($folder->getContainerGUID() === $page_owner->guid)) {
+		$files_options['relationship'] = FileToolsFolder::RELATIONSHIP;
 		$files_options['relationship_guid'] = $folder_guid;
 		$files_options['inverse_relationship'] = false;
 	} else {
@@ -78,11 +78,10 @@ if (empty($folder)) {
 }
 
 // get the files
-$files = elgg_get_entities_from_relationship($files_options);
+$files = elgg_get_entities($files_options);
 
 // get count
-$files_options['count'] = true;
-$files_count = elgg_get_entities_from_relationship($files_options);
+$files_count = elgg_count_entities($files_options);
 
 // do we need a more button
 $show_more = false;
@@ -111,7 +110,7 @@ elgg_push_breadcrumb($page_owner->name);
 elgg_register_title_button();
 
 // get data for tree
-$folders = file_tools_get_folders($page_owner->getGUID());
+$folders = file_tools_get_folders($page_owner->guid);
 
 // build page elements
 $title_text = elgg_echo('file:user', [$page_owner->name]);
@@ -127,7 +126,7 @@ $body = elgg_format_element('div', [
 $sidebar = elgg_view('file_tools/list/tree', ['folder' => $folder, 'folders' => $folders]);
 $sidebar .= elgg_view('file_tools/sidebar/sort_options');
 $sidebar .= elgg_view('file_tools/sidebar/info');
-$sidebar .= elgg_view('page/elements/tagcloud_block', ['subtypes' => 'file', 'owner_guid' => $page_owner->getGUID()]);
+$sidebar .= elgg_view('page/elements/tagcloud_block', ['subtypes' => 'file', 'owner_guid' => $page_owner->guid]);
 
 // build page params
 $params = [
@@ -137,7 +136,7 @@ $params = [
 ];
 
 if ($page_owner instanceof ElggUser) {
-	if ($page_owner->getGUID() == elgg_get_logged_in_user_guid()) {
+	if ($page_owner->guid == elgg_get_logged_in_user_guid()) {
 		$params['filter_context'] = 'mine';
 	} else {
 		$params['filter_context'] = $page_owner->username;

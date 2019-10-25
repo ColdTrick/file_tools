@@ -10,7 +10,7 @@ if (($entity instanceof ElggGroup) && $entity->canEdit()) {
 	$entity->file_tools_sort = $sort;
 	$entity->file_tools_sort_direction = $sort_direction;
 	
-	forward($entity->getURL());
+	return elgg_ok_response('', '', $entity->getURL());
 }
 
-forward(REFERER);
+return elgg_ok_response();

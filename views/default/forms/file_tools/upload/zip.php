@@ -26,7 +26,7 @@ if (file_tools_use_folder_structure()) {
 	echo elgg_view_input('folder_select', [
 		'label' => elgg_echo('file_tools:forms:edit:parent'),
 		'name' => 'parent_guid',
-		'container_guid' => $page_owner->getGUID(),
+		'container_guid' => $page_owner->guid,
 	]);
 }
 
@@ -36,6 +36,6 @@ echo elgg_view_input('access', [
 ]);
 
 echo '<div class="elgg-foot">';
-echo elgg_view('input/hidden', ['name' => 'container_guid', 'value' => $page_owner->getGUID()]);
+echo elgg_view('input/hidden', ['name' => 'container_guid', 'value' => $page_owner->guid]);
 echo elgg_view('input/submit', ['value' => elgg_echo('upload')]);
 echo '</div>';

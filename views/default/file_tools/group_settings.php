@@ -48,7 +48,7 @@ $form_body .= '&nbsp;' . elgg_view('input/select', [
 $form_body .= '</div>';
 
 $form_body .= '<div class="elgg-foot">';
-$form_body .= elgg_view('input/hidden', ['name' => 'guid', 'value' => $group->getGUID()]);
+$form_body .= elgg_view('input/hidden', ['name' => 'guid', 'value' => $group->guid]);
 $form_body .= elgg_view('input/submit', ['value' => elgg_echo('save')]);
 $form_body .= '</div>';
 

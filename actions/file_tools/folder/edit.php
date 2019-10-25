@@ -10,38 +10,34 @@ $change_children_access = get_input('change_children_access', false);
 $change_files_access = get_input('change_files_access', false);
 
 if (empty($title) || empty($owner_guid)) {
-	register_error(elgg_echo('error:missing_data'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('error:missing_data'));
 }
 
 $owner = get_entity($owner_guid);
 if (!($owner instanceof ElggUser) && !($owner instanceof ElggGroup)) {
-	register_error(elgg_echo('error:missing_data'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('error:missing_data'));
 }
 
 if (!empty($guid)) {
 	// check if editing existing
 	$folder = get_entity($guid);
-	if (!elgg_instanceof($folder, 'object', FILE_TOOLS_SUBTYPE)) {
+	if (!$folder instanceof FileToolsFolder) {
 		unset($folder);
 	}
 } else {
 	// create a new folder
-	$folder = new ElggObject();
-	$folder->subtype = FILE_TOOLS_SUBTYPE;
+	$folder = new FileToolsFolder();
 	$folder->owner_guid = elgg_get_logged_in_user_guid();
 	$folder->container_guid = $owner_guid;
 	$folder->access_id = $access_id;
 
-	$order = elgg_get_entities_from_metadata([
+	$order = elgg_count_entities([
 		'type' => 'object',
-		'subtype' => FILE_TOOLS_SUBTYPE,
+		'subtype' => FileToolsFolder::SUBTYPE,
 		'metadata_name_value_pairs' => [
 			'name' => 'parent_guid',
 			'value' => $parent_guid
 		],
-		'count' => true
 	]);
 
 	$folder->order = $order;
@@ -52,14 +48,12 @@ if (!empty($guid)) {
 }
 
 if (empty($folder)) {
-	register_error(elgg_echo('file_tools:action:edit:error:folder'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('file_tools:action:edit:error:folder'));
 }
 
 // check for the correct parent_guid
-if (!empty($parent_guid) && ($parent_guid === $folder->getGUID())) {
-	register_error(elgg_echo('file_tools:action:edit:error:parent_guid'));
-	forward(REFERER);
+if (!empty($parent_guid) && ($parent_guid === $folder->guid)) {
+	return elgg_error_response(elgg_echo('file_tools:action:edit:error:parent_guid'));
 }
 
 $folder->title = $title;
@@ -77,10 +71,8 @@ if (!empty($change_children_access)) {
 
 $folder->parent_guid = $parent_guid;
 
-if ($folder->save()) {
-	system_message(elgg_echo('file_tools:action:edit:success'));
-	forward( $folder->getURL());
+if (!$folder->save()) {
+	return elgg_error_response(elgg_echo('file_tools:action:edit:error:save'));
 }
 
-register_error(elgg_echo('file_tools:action:edit:error:save'));
-forward(REFERER);
+return elgg_ok_response('', elgg_echo('file_tools:action:edit:success'));

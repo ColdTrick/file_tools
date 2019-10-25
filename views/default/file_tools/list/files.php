@@ -53,7 +53,7 @@ if (empty($files_content)) {
 		if (!empty($folder)) {
 			$more .= elgg_view('input/hidden', [
 				'name' => 'folder_guid',
-				'value' => $folder->getGUID(),
+				'value' => $folder->guid,
 			]);
 		} else {
 			$more .= elgg_view('input/hidden', [
@@ -109,6 +109,6 @@ echo '</div>';
 
 $page_owner = elgg_get_page_owner_entity();
 
-if ($page_owner->canEdit() || (elgg_instanceof($page_owner, 'group') && $page_owner->isMember())) {
+if ($page_owner->canEdit() || ($page_owner instanceof \ElggGroup && $page_owner->isMember())) {
 	elgg_require_js('file_tools/site');
 }

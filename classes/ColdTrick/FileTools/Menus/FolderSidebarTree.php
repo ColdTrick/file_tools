@@ -32,8 +32,8 @@ class FolderSidebarTree {
 		
 		$folders = new \ElggBatch('elgg_get_entities', [
 			'type' => 'object',
-			'subtype' => FILE_TOOLS_SUBTYPE,
-			'container_guid' => $container->getGUID(),
+			'subtype' => \FileToolsFolder::SUBTYPE,
+			'container_guid' => $container->guid,
 			'limit' => false,
 		]);
 		/* @var $folder \ElggObject */
@@ -42,15 +42,15 @@ class FolderSidebarTree {
 			$parent_name = 'root';
 			if ($folder->parent_guid) {
 				$temp = get_entity($folder->parent_guid);
-				if (elgg_instanceof($temp, 'object', FILE_TOOLS_SUBTYPE)) {
-					$parent_name = "folder_{$temp->getGUID()}";
+				if ($temp instanceof \FileToolsFolder) {
+					$parent_name = "folder_{$temp->guid}";
 				}
 			}
 			
 			$return_value[] = \ElggMenuItem::factory([
-				'name' => "folder_{$folder->getGUID()}",
+				'name' => "folder_{$folder->guid}",
 				'text' => $folder->getDisplayName(),
-				'href' => "#{$folder->getGUID()}",
+				'href' => "#{$folder->guid}",
 				'priority' => (int) $folder->order,
 				'parent_name' => $parent_name,
 			]);

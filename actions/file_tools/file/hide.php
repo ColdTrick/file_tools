@@ -4,20 +4,17 @@ $action = get_input('hide');
 $file_guid = (int) get_input('guid');
 
 if (empty($file_guid)) {
-	register_error(elgg_echo('error:missing_data'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('error:missing_data'));
 }
 
 $file = get_entity($file_guid);
 
 if (!($file instanceof \ElggFile)) {
-	register_error(elgg_echo('error:missing_data'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('error:missing_data'));
 }
 
 if (!$file->canEdit()) {
-	register_error(elgg_echo('actionunauthorized'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('actionunauthorized'));
 }
 
 if ($action === 'show') {
@@ -28,21 +25,21 @@ if ($action === 'show') {
 
 if (stristr($_SERVER['HTTP_REFERER'], 'file')) {
 	
-	$folders = elgg_get_entities_from_relationship([
+	$folders = elgg_get_entities([
 		'type' => 'object',
-		'subtype' => FILE_TOOLS_SUBTYPE,
+		'subtype' => FileToolsFolder::SUBTYPE,
 		'container_guid' => $file->getOwnerGUID(),
 		'limit' => 1,
-		'relationship' => FILE_TOOLS_RELATIONSHIP,
-		'relationship_guid' => $file->getGUID(),
+		'relationship' => FileToolsFolder::RELATIONSHIP,
+		'relationship_guid' => $file->guid,
 		'inverse_relationship' => true,
 	]);
 	
 	if (!empty($folders)) {
 		$folder = $folders[0];
 		
-		forward($folder->getURL());
+		return elgg_ok_response('', '', $folder->getURL());
 	}
 }
 
-forward(REFERER);
+return elgg_ok_response();

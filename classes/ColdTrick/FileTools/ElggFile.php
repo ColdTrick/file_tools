@@ -59,16 +59,16 @@ class ElggFile {
 		$folder_guid = (int) $folder_guid;
 		if (!empty($folder_guid)) {
 			$folder = get_entity($folder_guid);
-			if (!elgg_instanceof($folder, 'object', FILE_TOOLS_SUBTYPE)) {
+			if (!$folder instanceof \FileToolsFolder) {
 				unset($folder_guid);
 			}
 		}
 		
 		// remove old relationships
-		remove_entity_relationships($entity->getGUID(), FILE_TOOLS_RELATIONSHIP, true);
+		remove_entity_relationships($entity->guid, \FileToolsFolder::RELATIONSHIP, true);
 		
 		if (!empty($folder_guid)) {
-			add_entity_relationship($folder_guid, FILE_TOOLS_RELATIONSHIP, $entity->getGUID());
+			add_entity_relationship($folder_guid, \FileToolsFolder::RELATIONSHIP, $entity->guid);
 		}
 	}
 }

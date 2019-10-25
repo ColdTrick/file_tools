@@ -47,7 +47,7 @@ if ($full_view) {
 		$entity_menu = elgg_view('output/url', [
 			'text' => elgg_view_icon('caret-right') . elgg_view_icon('caret-down', ['class' => 'hidden']),
 			'href' => 'javascript:void(0);',
-			'data-guid' => $folder->getGUID(),
+			'data-guid' => $folder->guid,
 			'data-full-view' => 1,
 			'class' => 'file-tools-file-tree-toggle-content float-alt',
 		]);
@@ -88,7 +88,7 @@ if ($full_view) {
 	if (!elgg_in_context('widgets')) {
 		$icon_alt = elgg_view('input/checkbox', [
 			'name' => 'folder_guids[]',
-			'value' => $folder->getGUID(),
+			'value' => $folder->guid,
 			'default' => false,
 		]);
 	} elseif ($show_toggle_content) {
@@ -101,7 +101,7 @@ if ($full_view) {
 		$icon_alt = elgg_view('output/url', [
 			'text' => elgg_view_icon('caret-right', ['class' => $right_class]) . elgg_view_icon('caret-down', ['class' => $down_class]),
 			'href' => 'javascript:void(0);',
-			'data-guid' => $folder->getGUID(),
+			'data-guid' => $folder->guid,
 			'class' => 'file-tools-file-tree-toggle-content',
 		]);
 	}

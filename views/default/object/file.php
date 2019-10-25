@@ -13,7 +13,7 @@ if (empty($file)) {
 	return true;
 }
 
-$file_guid = $file->getGUID();
+$file_guid = $file->guid;
 $owner = $file->getOwnerEntity();
 
 $title = $file->title;
@@ -79,9 +79,9 @@ if ($full_view && !elgg_in_context('gallery')) {
 		// @todo this should probably be moved to the file view page, but that is currently not under control of file_tools
 		$endpoint = elgg_pop_breadcrumb();
 		
-		$parent_folder = elgg_get_entities_from_relationship([
+		$parent_folder = elgg_get_entities([
 			'relationship' => 'folder_of',
-			'relationship_guid' => $file->getGUID(),
+			'relationship_guid' => $file->guid,
 			'inverse_relationship' => true,
 		]);
 		
@@ -114,7 +114,7 @@ if ($full_view && !elgg_in_context('gallery')) {
 		'entity' => $file,
 		'title' => elgg_view('output/url', [
 			'text' => $title,
-			'href' => 'file/download/' . $file->getGUID(),
+			'href' => 'file/download/' . $file->guid,
 		]),
 		'metadata' => $entity_menu,
 		'subtitle' => $subtitle,
@@ -149,7 +149,7 @@ if ($full_view && !elgg_in_context('gallery')) {
 		if (elgg_in_context('file_tools_selector')) {
 			$file_icon_alt = elgg_view('input/checkbox', [
 				'name' => 'file_guids[]',
-				'value' => $file->getGUID(),
+				'value' => $file->guid,
 				'default' => false,
 			]);
 		}

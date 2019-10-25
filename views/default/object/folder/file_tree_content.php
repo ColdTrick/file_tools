@@ -6,7 +6,7 @@
  */
 
 $entity = elgg_extract('entity', $vars);
-if (!($entity instanceof ElggObject) || $entity->getSubtype() !== FILE_TOOLS_SUBTYPE) {
+if (!$entity instanceof \FileToolsFolder) {
 	return;
 }
 
@@ -17,13 +17,13 @@ if (empty($sub_folders)) {
 }
 
 // get the containing files
-$files = elgg_get_entities_from_relationship([
+$files = elgg_get_entities([
 	'type' => 'object',
 	'subtype' => 'file',
 	'limit' => false,
 	'container_guid' => $entity->getContainerGUID(),
-	'relationship' => FILE_TOOLS_RELATIONSHIP,
-	'relationship_guid' => $entity->getGUID(),
+	'relationship' => FileToolsFolder::RELATIONSHIP,
+	'relationship_guid' => $entity->guid,
 	'inverse_relationship' => false,
 ]);
 
