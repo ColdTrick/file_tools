@@ -7,24 +7,23 @@ class Entity {
 	/**
 	 * Add items to the file entity menu
 	 *
-	 * @param string         $hook        the name of the hook
-	 * @param string         $type        the type of the hook
-	 * @param ElggMenuItem[] $return_value current return value
-	 * @param array          $params      supplied params
+	 * @param \Elgg\Hook $hook 'register', 'menu:entity'
 	 *
 	 * @return void|ElggMenuItem[]
 	 */
-	public static function registerFile($hook, $type, $return_value, $params) {
+	public static function registerFile(\Elgg\Hook $hook) {
 		
-		$entity = elgg_extract('entity', $params);
-		if (!($entity instanceof \ElggFile)) {
+		$entity = $hook->getEntityParam();
+		if (!$entity instanceof \ElggFile) {
 			return;
 		}
 		
+		$return_value = $hook->getValue();
+		
 		$return_value[] = \ElggMenuItem::factory([
 			'name' => 'download',
-			'text' => elgg_view_icon('download'),
-			'title' => elgg_echo('download'),
+			'icon' => 'download',
+			'text' => elgg_echo('download'),
 			'href' => elgg_get_download_url($entity),
 			'priority' => 200,
 		]);

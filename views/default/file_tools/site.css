@@ -1,0 +1,14 @@
+.file-tools-icon-tiny {
+	> .elgg-image {
+		img {
+			width: 1.5rem;
+		}
+	}	
+}
+
+.file-tools-file-list {
+	> .elgg-item {
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
+	}
+}

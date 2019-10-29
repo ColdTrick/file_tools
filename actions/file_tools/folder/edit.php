@@ -63,10 +63,10 @@ $folder->access_id = $access_id;
 
 if (!empty($change_children_access)) {
 	$folder->save();
-	file_tools_change_children_access($folder, !empty($change_files_access));
+	$folder->updateChildAccess(!empty($change_files_access));
 } elseif (!empty($change_files_access)) {
 	$folder->save();
-	file_tools_change_files_access($folder);
+	$folder->updateFileAccess();
 }
 
 $folder->parent_guid = $parent_guid;
@@ -75,4 +75,4 @@ if (!$folder->save()) {
 	return elgg_error_response(elgg_echo('file_tools:action:edit:error:save'));
 }
 
-return elgg_ok_response('', elgg_echo('file_tools:action:edit:success'));
+return elgg_ok_response('', elgg_echo('file_tools:action:edit:success'), $folder->getURL());

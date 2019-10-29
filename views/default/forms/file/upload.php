@@ -37,80 +37,70 @@ if ($guid) {
 	$submit_label = elgg_echo('upload');
 }
 
-// Get post_max_size and upload_max_filesize
-$post_max_size = elgg_get_ini_setting_in_bytes('post_max_size');
-$upload_max_filesize = elgg_get_ini_setting_in_bytes('upload_max_filesize');
-
-// Determine the correct value
-$max_upload = $upload_max_filesize > $post_max_size ? $post_max_size : $upload_max_filesize;
-
-$upload_limit = elgg_echo('file:upload_limit', array(elgg_format_bytes($max_upload)));
-
 $fields = [
 	[
-		'type' => 'file',
+		'#type' => 'file',
+		'#label' => $file_label,
 		'name' => 'upload',
-		'label' => $file_label,
-		'help' => $upload_limit,
 		'value' => ($guid),
 		'required' => (!$guid),
 	],
 	[
-		'type' => 'text',
+		'#type' => 'text',
+		'#label' => elgg_echo('title'),
 		'name' => 'title',
 		'value' => $title,
-		'label' => elgg_echo('title'),
 	],
 	[
-		'type' => 'longtext',
+		'#type' => 'longtext',
+		'#label' => elgg_echo('description'),
 		'name' => 'description',
 		'value' => $desc,
-		'label' => elgg_echo('description'),
+		'editor_type' => 'simple',
 	],
 	[
-		'type' => 'tags',
+		'#type' => 'tags',
+		'#label' => elgg_echo('tags'),
 		'name' => 'tags',
 		'value' => $tags,
-		'label' => elgg_echo('tags'),
 	],
 	[
-		'type' => 'folder_select',
+		'#type' => 'folder_select',
+		'#label' => elgg_echo('file_tools:forms:edit:parent'),
 		'name' => 'folder_guid',
 		'value' => $parent_guid,
-		'label' => elgg_echo('file_tools:forms:edit:parent'),
 	],
 	[
-		'type' => 'access',
+		'#type' => 'access',
+		'#label' => elgg_echo('access'),
 		'name' => 'access_id',
 		'value' => $access_id,
 		'entity' => get_entity($guid),
 		'entity_type' => 'object',
 		'entity_subtype' => 'file',
-		'label' => elgg_echo('access'),
 	],
 	[
-		'type' => 'hidden',
+		'#type' => 'hidden',
 		'name' => 'container_guid',
 		'value' => $container_guid,
 	],
 	[
-		'type' => 'hidden',
+		'#type' => 'hidden',
 		'name' => 'file_guid',
 		'value' => $guid,
 	],
-	[
-		'type' => 'submit',
-		'value' => $submit_label,
-		'field_class' => 'elgg-foot',
-	]
 ];
 
 foreach ($fields as $field) {
-	$type = elgg_extract('type', $field, 'text');
-	unset($field['type']);
-	
-	if ($type == 'folder_select' && !file_tools_use_folder_structure()) {
+	if (elgg_extract('#type', $field) == 'folder_select' && (elgg_get_plugin_setting('use_folder_structure', 'file_tools') !== 'yes')) {
 		continue;
 	}
-	echo elgg_view_input($type, $field);
+	
+	echo elgg_view_field($field);
 }
+
+$footer = elgg_view_field([
+	'#type' => 'submit',
+	'value' => $submit_label,
+]);
+elgg_set_form_footer($footer);

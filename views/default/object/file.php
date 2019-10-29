@@ -1,31 +1,17 @@
 <?php
 /**
- * Elgg file browser.
- * File renderer.
+ * File renderer
  *
- * @package ElggFile
+ * @uses $vars['entity'] ElggFile to show
  */
 
-$file = elgg_extract('entity', $vars, false);
-$full_view = elgg_extract('full_view', $vars, false);
+$full = elgg_extract('full_view', $vars, false);
+$entity = elgg_extract('entity', $vars, false);
 
-if (empty($file)) {
-	return true;
+if (!$entity instanceof \ElggFile) {
+	return;
 }
 
-$file_guid = $file->guid;
-$owner = $file->getOwnerEntity();
-
-$title = $file->title;
-$mime = $file->mimetype;
-$base_type = substr($mime, 0, strpos($mime,'/'));
-
-$owner_link = elgg_view('output/url', [
-	'text' => $owner->name,
-	'href' => $owner->getURL(),
-	'is_trusted' => true,
-]);
-$author_text = elgg_echo('byline', [$owner_link]);
 
 // which time format to show
 $time_preference = 'date';
@@ -37,142 +23,131 @@ if ($user_time_preference = elgg_get_plugin_user_setting('file_tools_time_displa
 }
 
 if ($time_preference == 'date') {
-	$date = date(elgg_echo('friendlytime:date_format'), $file->time_created);
+	$date = date(elgg_echo('friendlytime:date_format'), $entity->time_created);
 } else {
-	$date = elgg_view_friendly_time($file->time_created);
+	$date = elgg_view_friendly_time($entity->time_created);
 }
 
-// count comments
-$comments_link = '';
-$comment_count = (int) $file->countComments();
-if ($comment_count > 0) {
-	$comments_link = elgg_view('output/url', [
-		'href' => $file->getURL() . '#file-comments',
-		'text' => elgg_echo('comments') . " ({$comment_count})",
-		'is_trusted' => true,
-	]);
-}
+if ($full && !elgg_in_context('gallery')) {
+	$mime = $entity->getMimeType();
+	$base_type = substr($mime, 0, strpos($mime, '/'));
 
-$subtitle = "$author_text $date $comments_link $categories";
-
-// title
-if (empty($title)) {
-	$title = elgg_echo('untitled');
-}
-
-// entity actions
-$entity_menu = '';
-if (!elgg_in_context('widgets')) {
-	$entity_menu = elgg_view_menu('entity', [
-		'entity' => $file,
-		'handler' => 'file',
-		'sort_by' => 'priority',
-		'class' => 'elgg-menu-hz',
-	]);
-}
-
-if ($full_view && !elgg_in_context('gallery')) {
-	// normal full view
-	
-	// add folder structure to the breadcrumbs
-	if (file_tools_use_folder_structure()) {
-		// @todo this should probably be moved to the file view page, but that is currently not under control of file_tools
-		$endpoint = elgg_pop_breadcrumb();
-		
-		$parent_folder = elgg_get_entities([
-			'relationship' => 'folder_of',
-			'relationship_guid' => $file->guid,
-			'inverse_relationship' => true,
-		]);
-		
-		$folders = [];
-		if ($parent_folder) {
-			
-			$parent_guid = (int) $parent_folder[0]->guid;
-			
-			while (!empty($parent_guid) && ($parent = get_entity($parent_guid))) {
-				$folders[] = $parent;
-				$parent_guid = (int) $parent->parent_guid;
-			}
-		}
-		
-		while ($p = array_pop($folders)) {
-			elgg_push_breadcrumb($p->title, $p->getURL());
-		}
-		
-		elgg_push_breadcrumb($file->title);
-	}
-	
 	$extra = '';
 	if (elgg_view_exists("file/specialcontent/$mime")) {
 		$extra = elgg_view("file/specialcontent/$mime", $vars);
-	} elseif (elgg_view_exists("file/specialcontent/{$base_type}/default")) {
-		$extra = elgg_view("file/specialcontent/{$base_type}/default", $vars);
+	} elseif (elgg_view_exists("file/specialcontent/$base_type/default")) {
+		$extra = elgg_view("file/specialcontent/$base_type/default", $vars);
 	}
-	
+
+	$body = elgg_view('output/longtext', ['value' => $entity->description]);
+
 	$params = [
-		'entity' => $file,
-		'title' => elgg_view('output/url', [
-			'text' => $title,
-			'href' => 'file/download/' . $file->guid,
-		]),
-		'metadata' => $entity_menu,
-		'subtitle' => $subtitle,
+		'show_summary' => true,
+		'icon_entity' => $entity->getOwnerEntity(),
+		'body' => $body,
+		'attachments' => $extra,
+		'show_responses' => elgg_extract('show_responses', $vars, false),
+		'show_navigation' => true,
 	];
 	$params = $params + $vars;
-	$summary = elgg_view('object/elements/summary', $params);
 	
-	$text = elgg_view('output/longtext', ['value' => $file->description]);
-	$body = "$text $extra";
-	
-	echo elgg_view('object/elements/full', [
-		'entity' => $file,
-		'title' => false,
-		'icon' => elgg_view_entity_icon($file, 'small'),
-		'summary' => $summary,
-		'body' => $body,
-	]);
+	echo elgg_view('object/elements/full', $params);
 } elseif (elgg_in_context('gallery')) {
-	// gallery view of the file
 	echo '<div class="file-gallery-item">';
-	echo "<h3>" . $file->title . "</h3>";
-	echo elgg_view_entity_icon($file, 'medium');
-	echo "<p class='subtitle'>$owner_link $date</p>";
+	echo "<h3>" . $entity->getDisplayName() . "</h3>";
+	echo elgg_view_entity_icon($entity, 'medium');
 	echo '</div>';
 } else {
-	// listing view of the file
-	$file_icon_alt = '';
-	if (file_tools_use_folder_structure()) {
-		$file_icon = elgg_view_entity_icon($file, 'tiny', [
-			'img_class' => 'file-tools-icon-tiny',
-		]);
-		if (elgg_in_context('file_tools_selector')) {
-			$file_icon_alt = elgg_view('input/checkbox', [
-				'name' => 'file_guids[]',
-				'value' => $file->guid,
-				'default' => false,
-			]);
-		}
-		
-		$excerpt = '';
-		$subtitle = '';
-		$tags = '';
-	} else {
-		$file_icon = elgg_view_entity_icon($file, 'small');
-		$excerpt = elgg_get_excerpt($file->description);
-	}
-	
+	// brief view
 	$params = [
-		'entity' => $file,
-		'metadata' => $entity_menu,
-		'subtitle' => $subtitle,
-		'content' => $excerpt
+		'content' => elgg_get_excerpt($entity->description),
+		'icon_entity' => $entity,
+		'icon_size' => 'tiny',
+		'class' => 'file-tools-icon-tiny',
+		'subtitle' => false,
 	];
 	$params = $params + $vars;
-	$list_body = elgg_view('object/elements/summary', $params);
 	
-	echo elgg_view_image_block($file_icon, $list_body, [
-		'class' => 'file-tools-file',
-		'image_alt' => $file_icon_alt,
-	]);
+	if (elgg_extract('file_tools_selector', $vars)) {
+		$params['image_block_vars'] = [
+			'image_alt' => elgg_view('input/checkbox', [
+				'name' => 'file_guids[]',
+				'value' => $entity->guid,
+				'default' => false,
+			]),
+		];
+	}
+	
+	echo elgg_view('object/elements/summary', $params);
 }
+
+
+// add folder structure to the breadcrumbs
+// 	if (elgg_get_plugin_setting('use_folder_structure', 'file_tools') == 'yes') {
+// 		// @todo this should probably be moved to the file view page, but that is currently not under control of file_tools
+// 		$endpoint = elgg_pop_breadcrumb();
+		
+// 		$parent_folder = elgg_get_entities([
+// 			'relationship' => 'folder_of',
+// 			'relationship_guid' => $entity->guid,
+// 			'inverse_relationship' => true,
+// 		]);
+		
+// 		$folders = [];
+// 		if ($parent_folder) {
+			
+// 			$parent_guid = (int) $parent_folder[0]->guid;
+			
+// 			while (!empty($parent_guid) && ($parent = get_entity($parent_guid))) {
+// 				$folders[] = $parent;
+// 				$parent_guid = (int) $parent->parent_guid;
+// 			}
+// 		}
+		
+// 		while ($p = array_pop($folders)) {
+// 			elgg_push_breadcrumb($p->title, $p->getURL());
+// 		}
+		
+// 		elgg_push_breadcrumb($entity->title);
+// 	}
+
+
+
+
+
+	// listing view of the file
+// 	$file_icon_alt = '';
+// 	if (elgg_get_plugin_setting('use_folder_structure', 'file_tools') == 'yes') {
+// 		$file_icon = elgg_view_entity_icon($entity, 'tiny', [
+// 			'img_class' => 'file-tools-icon-tiny',
+// 		]);
+// 		if (elgg_in_context('file_tools_selector')) {
+// 			$file_icon_alt = elgg_view('input/checkbox', [
+// 				'name' => 'file_guids[]',
+// 				'value' => $entity->guid,
+// 				'default' => false,
+// 			]);
+// 		}
+		
+// 		$excerpt = '';
+// 		$subtitle = '';
+// 		$tags = '';
+// 	} else {
+// 		$file_icon = elgg_view_entity_icon($entity, 'small');
+// 		$excerpt = elgg_get_excerpt($entity->description);
+// 	}
+	
+// 	$params = [
+// 		'entity' => $entity,
+// 		'metadata' => $entity_menu,
+// 		'subtitle' => $subtitle,
+// 		'content' => $excerpt
+// 	];
+// 	$params = $params + $vars;
+// 	$list_body = elgg_view('object/elements/summary', $params);
+	
+// 	echo elgg_view_image_block($file_icon, $list_body, [
+// 		'class' => 'file-tools-file',
+// 		'image_alt' => $file_icon_alt,
+// 	]);
+

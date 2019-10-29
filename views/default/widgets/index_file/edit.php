@@ -7,10 +7,11 @@ if ($count < 1) {
 	$count = 8;
 }
 
-echo elgg_view_input('text', [
-	'label' => elgg_echo('file:num_files'),
+echo elgg_view_field([
+	'#type' => 'number',
+	'#label' => elgg_echo('file:num_files'),
 	'name' => 'params[file_count]',
 	'value' => $count,
-	'size' => 4,
-	'maxlength' => 4,
+	'min' => 1,
+	'max' => 50,
 ]);

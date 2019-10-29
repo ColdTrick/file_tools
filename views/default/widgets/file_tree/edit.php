@@ -16,7 +16,7 @@ if (!empty($selected_folders) && !is_array($selected_folders)) {
 
 // select folder(s) to display
 echo elgg_echo('widgets:file_tree:edit:select');
-echo '<div>';
+echo '<div class="mbl">';
 echo elgg_view('input/hidden', [
 	'name' => 'params[folder_guids][]',
 	'value' => '',
@@ -25,19 +25,12 @@ echo file_tools_build_widget_options($folders, 'params[folder_guids][]', $select
 echo '</div>';
 
 // display folder or folder content
-echo elgg_view_input('checkbox', [
-	'label' => elgg_echo('widgets:file_tree:edit:show_content'),
-	'help' => elgg_echo('widgets:file_tree:edit:show_content:help'),
+echo elgg_view_field([
+	'#type' => 'checkbox',
+	'#label' => elgg_echo('widgets:file_tree:edit:show_content'),
+	'#help' => elgg_echo('widgets:file_tree:edit:show_content:help'),
 	'name' => 'params[show_content]',
 	'value' => '1',
 	'checked' => !empty($widget->show_content),
-]);
-
-// allow content to be ajax loaded
-echo elgg_view_input('checkbox', [
-	'label' => elgg_echo('widgets:file_tree:edit:toggle_contents'),
-	'help' => elgg_echo('widgets:file_tree:edit:toggle_contents:help'),
-	'name' => 'params[toggle_contents]',
-	'value' => '1',
-	'checked' => !empty($widget->toggle_contents),
+	'switch' => true,
 ]);

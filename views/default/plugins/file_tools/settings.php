@@ -3,7 +3,7 @@
 $plugin = elgg_extract('entity', $vars);
 
 $list_length_options = [
-	-1 => elgg_echo('file_tools:settings:list_length:unlimited'),
+	0 => elgg_echo('file_tools:settings:list_length:unlimited'),
 ];
 $list_length_options += array_combine(range(10, 200, 10), range(10, 200, 10));
 
@@ -19,9 +19,9 @@ echo elgg_view_field([
 // Use folder structure
 echo elgg_view_field([
 	'#type' => 'checkbox',
-	'#label' => elgg_echo('file_tools:settings:user_folder_structure'),
-	'name' => 'params[user_folder_structure]',
-	'checked' => $plugin->user_folder_structure === 'yes',
+	'#label' => elgg_echo('file_tools:settings:use_folder_structure'),
+	'name' => 'params[use_folder_structure]',
+	'checked' => $plugin->use_folder_structure === 'yes',
 	'switch' => true,
 	'default' => 'no',
 	'value' => 'yes',
@@ -52,7 +52,6 @@ echo elgg_view_field([
 			'options_values' => [
 				'e.time_created' => elgg_echo('file_tools:list:sort:time_created'),
 				'oe.title' => elgg_echo('title'),
-				'oe.description' => elgg_echo('description'),
 				'simpletype' => elgg_echo('file_tools:list:sort:type'),
 			],
 		],

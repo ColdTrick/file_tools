@@ -130,7 +130,7 @@ return array(
 	
 	//settings
 	'file_tools:settings:allowed_extensions' => 'Extensiones permitidas (separadas por comas)',
-	'file_tools:settings:user_folder_structure' => 'Usar estructura de carpetas',
+	'file_tools:settings:use_folder_structure' => 'Usar estructura de carpetas',
 	'file_tools:settings:sort:default' => 'Opciones de ordenación de carpetas',
 
 	'file:type:application' => 'Aplicación',

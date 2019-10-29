@@ -36,19 +36,4 @@ $params['list_class'] = 'mlm';
 $params['full_view'] = false;
 $params['pagination'] = false;
 
-if (elgg_is_xhr()) {
-	// ajax view, set some additional params
-	$params['show_toggle_content'] = true;
-	
-	$context = false;
-	if (!elgg_in_context('widgets')) {
-		$context = true;
-		elgg_push_context('widgets');
-	}
-}
-
 echo elgg_view_entity_list($entities, $params);
-
-if ($context) {
-	elgg_pop_context();
-}

@@ -10,7 +10,6 @@ if (empty($folder_guids)) {
 }
 
 $show_content = (bool) $widget->show_content;
-$toggle_contents = (bool) $widget->toggle_contents;
 
 if (!is_array($folder_guids)) {
 	$folder_guids = [$folder_guids];
@@ -25,8 +24,6 @@ $folder_options = [
 	'container_guid' => $widget->getOwnerGUID(),
 	'limit' => false,
 	'full_view' => true,
-	
-	'show_toggle_content' => $toggle_contents,
 ];
 
 if ($show_content) {
@@ -37,10 +34,6 @@ $folders = elgg_get_entities($folder_options);
 if (empty($folders)) {
 	echo elgg_echo('notfound');
 	return;
-}
-
-if ($toggle_contents) {
-	elgg_require_js('file_tools/file_tree');
 }
 
 $sorted_result = [];
@@ -64,9 +57,13 @@ echo elgg_view_entity_list($sorted_result, $folder_options);
 $more_url = '';
 $owner = $widget->getOwnerEntity();
 if ($owner instanceof ElggUser) {
-	$more_url = "file/owner/{$owner->username}";
+	$more_url = elgg_generate_url('collection:object:file:owner', [
+		'username' => $owner->username,
+	]);
 } elseif ($owner instanceof ElggGroup) {
-	$more_url = "file/group/{$owner->guid}/all";
+	$more_url = elgg_generate_url('collection:object:file:group', [
+		'guid' => $owner->guid,
+	]);
 }
 
 if (empty($more_url)) {

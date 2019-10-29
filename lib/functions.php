@@ -4,85 +4,6 @@
  */
 
 /**
- * Read a folder structure for a zip file
- *
- * @param ElggObject $folder  the folder to read
- * @param string     $prepend current prefix
- *
- * @return array
- */
-function file_tools_get_zip_structure($folder, $prepend) {
-	$entries = [];
-	
-	if (!empty($prepend)) {
-		$prepend = ltrim(sanitise_filepath($prepend), '/');
-	}
-	
-	if (empty($folder)) {
-		$parent_guid = 0;
-	} else {
-		$parent_guid = $folder->guid;
-	}
-	
-	// get subfolder of this folder
-	$entities = new ElggBatch('elgg_get_entities', [
-		'type' => 'object',
-		'subtype' => \FileToolsFolder::SUBTYPE,
-		'limit' => false,
-		'metadata_name_value_pairs' => [
-			'parent_guid' => $parent_guid,
-		],
-	]);
-	/* @var $subfolder ElggObject */
-	foreach ($entities as $subfolder) {
-		$path = $prepend . $subfolder->title;
-		$entries[] = [
-			'directory' => $path,
-			'files' => file_tools_has_files($subfolder->guid),
-		];
-		
-		$entries = array_merge($entries, file_tools_get_zip_structure($subfolder, $path));
-	}
-	
-	return $entries;
-}
-
-/**
- * Check if a folder has files
- *
- * @param int $folder the folder to check
- *
- * @return false|array
- */
-function file_tools_has_files($folder_guid) {
-	
-	$folder_guid = (int) $folder_guid;
-	
-	$files_options = [
-		'type' => 'object',
-		'subtype' => 'file',
-		'limit' => false,
-		'relationship' => FileToolsFolder::RELATIONSHIP,
-		'relationship_guid' => $folder_guid,
-		'inverse_relationship' => false,
-	];
-	
-	$file_guids = [];
-	
-	$files = new ElggBatch('elgg_get_entities', $files_options);
-	/* @var $file ElggFile */
-	foreach ($files as $file) {
-		$file_guids[] = $file->guid;
-	}
-	
-	if (!empty($file_guids)) {
-		return $file_guids;
-	}
-	
-	return false;
-}
-
-/**
  * Get the folders in a container
  *
  * @param int $container_guid the container to check
@@ -273,12 +194,24 @@ function file_tools_get_sub_folders($folder = false, $list = false) {
 		// Each group has its own sorting settings
 		$order_by = $page_owner->file_tools_sort;
 		$order_direction = $page_owner->file_tools_sort_direction;
-
-		$dbprefix = get_config('dbprefix');
-		$options['joins'] = [
-			"JOIN {$dbprefix}objects_entity oe ON e.guid = oe.guid",
-		];
-		$options['order_by'] = "{$order_by} {$order_direction}";
+		
+		switch ($order_by) {
+			case 'simpletype':
+				$options['order_by_metadata'] = [
+					'name' => 'mimetype',
+					'direction' => $order_direction,
+				];
+				break;
+			case 'oe.title':
+				$options['order_by_metadata'] = [
+					'name' => 'title',
+					'direction' => $order_direction,
+				];
+				break;
+			default:
+				$options['order_by'] = new OrderByClause('e.time_created', $order_direction);
+				break;
+		}
 	} else {
 		// Default to sorting by 'order' metadata
 		$options['order_by_metadata'] = [
@@ -305,78 +238,6 @@ function file_tools_get_sub_folders($folder = false, $list = false) {
 	}
 	
 	return elgg_get_entities($options);
-}
-
-/**
- * Recursivly change the access of subfolders (and files)
- *
- * @param ElggObject $folder       the folder to change the access for
- * @param bool       $change_files include files in this folder (default: false)
- *
- * @return void
- */
-function file_tools_change_children_access($folder, $change_files = false) {
-	
-	if (!$folder instanceof FileToolsFolder) {
-		return;
-	}
-		
-	// get children folders
-	$children = new ElggBatch('elgg_get_entities', [
-		'type' => 'object',
-		'subtype' => \FileToolsFolder::SUBTYPE,
-		'container_guid' => $folder->getContainerGUID(),
-		'limit' => false,
-		'metadata_name_value_pairs' => [
-			'parent_guid' => $folder->guid,
-		],
-	]);
-	/* @var $child ElggObject */
-	foreach ($children as $child) {
-		$child->access_id = $folder->access_id;
-		$child->save();
-		
-		file_tools_change_children_access($child, $change_files);
-	}
-	
-	if ($change_files) {
-		// change access on files in this folder
-		file_tools_change_files_access($folder);
-	}
-}
-
-/**
- * Change the access of all file in a folder
- *
- * @param ElggObject $folder the folder to change the file access for
- *
- * @return void
- */
-function file_tools_change_files_access($folder) {
-	
-	if (!$folder instanceof FileToolsFolder) {
-		return;
-	}
-	
-	// change access on files in this folder
-	$files = new ElggBatch('elgg_get_entities', [
-		'type' => 'object',
-		'subtype' => 'file',
-		'container_guid' => $folder->getContainerGUID(),
-		'limit' => false,
-		'relationship' => FileToolsFolder::RELATIONSHIP,
-		'relationship_guid' => $folder->guid,
-	]);
-	
-	// need to unregister an event listener
-	elgg_unregister_event_handler('update', 'object', '\ColdTrick\FileTools\ElggFile::update');
-	
-	/* @var $file ElggFile */
-	foreach ($files as $file) {
-		$file->access_id = $folder->access_id;
-		
-		$file->save();
-	}
 }
 
 /**
@@ -422,11 +283,8 @@ function file_tools_check_foldertitle_exists($title, $container_guid, $parent_gu
 		'subtype' => \FileToolsFolder::SUBTYPE,
 		'container_guid' => $container_guid,
 		'limit' => 1,
-		'joins' => [
-			'JOIN ' . elgg_get_config('dbprefix') . 'objects_entity oe ON e.guid = oe.guid',
-		],
-		'wheres' => [
-			'oe.title = "' . sanitise_string($title) . '"',
+		'metadata_name_value_pairs' => [
+			'title' => $title,
 		],
 		'order_by_metadata' => [
 			'name' => 'order',
@@ -603,6 +461,9 @@ function file_tools_unzip($file, $container_guid, $parent_guid = 0) {
 		$zip_entry_name = zip_entry_name($zip_entry);
 		$filename = basename($zip_entry_name);
 		
+		error_log($zip_entry_name);
+		error_log($filename);
+		
 		// check for folder structure
 		if (strlen($zip_entry_name) != strlen($filename)) {
 			// there is a folder structure, check it and create missing items
@@ -680,7 +541,7 @@ function file_tools_unzip($file, $container_guid, $parent_guid = 0) {
 					$mime_type = 'application/vnd.ms-powerpoint';
 				}
 				
-				$simple_type = file_get_simple_type($mime_type);
+				$simple_type = elgg_get_file_simple_type($mime_type);
 				
 				$filehandler->setMimeType($mime_type);
 				$filehandler->simpletype = $simple_type;
@@ -715,28 +576,6 @@ function file_tools_unzip($file, $container_guid, $parent_guid = 0) {
 }
 
 /**
- * Helper function to check if we use a folder structure
- * Result is cached to increase performance
- *
- * @return bool
- */
-function file_tools_use_folder_structure() {
-	static $result;
-	
-	if (!isset($result)) {
-		$result = false;
-		
-		// this plugin setting has a typo, should be use_folder_struture
-		// @todo: update the plugin setting name
-		if (elgg_get_plugin_setting('user_folder_structure', 'file_tools') == 'yes') {
-			$result = true;
-		}
-	}
-	
-	return $result;
-}
-
-/**
  * Add a folder to a zip file
  *
  * @param ZipArchive &$zip_archive the zip file to add files/folder to
@@ -756,16 +595,15 @@ function file_tools_add_folder_to_zip(ZipArchive &$zip_archive, ElggObject $fold
 	$zip_archive->addEmptyDir($folder_path . $folder_title);
 	$folder_path .= $folder_title . DIRECTORY_SEPARATOR;
 	
-	$file_options = [
+	// add files from this folder to the zip
+	$files = elgg_get_entities([
 		'type' => 'object',
 		'subtype' => 'file',
 		'limit' => false,
 		'relationship' => FileToolsFolder::RELATIONSHIP,
 		'relationship_guid' => $folder->guid,
-	];
-	
-	// add files from this folder to the zip
-	$files = new ElggBatch('elgg_get_entities', $file_options);
+		'batch' => true,
+	]);
 	foreach ($files as $file) {
 		// check if the file exists
 		if ($zip_archive->statName($folder_path . $file->originalfilename) === false) {
@@ -781,39 +619,16 @@ function file_tools_add_folder_to_zip(ZipArchive &$zip_archive, ElggObject $fold
 	}
 	
 	// check if there are subfolders
-	$folder_options = [
+	$sub_folders = elgg_get_entities([
 		'type' => 'object',
 		'subtype' => \FileToolsFolder::SUBTYPE,
 		'limit' => false,
 		'metadata_name_value_pairs' => [
 			'parent_guid' => $folder->guid,
 		],
-	];
-	
-	$sub_folders = new ElggBatch('elgg_get_entities', $folder_options);
+		'batch' => true,
+	]);
 	foreach ($sub_folders as $sub_folder) {
 		file_tools_add_folder_to_zip($zip_archive, $sub_folder, $folder_path);
 	}
-}
-
-/**
- * Get the listing max length from the plugin settings
- *
- * @return int
- */
-function file_tools_get_list_length() {
-	static $result;
-	
-	if (!isset($result)) {
-		$result = 50;
-		
-		$setting = (int) elgg_get_plugin_setting('list_length', 'file_tools');
-		if ($setting < 0) {
-			$result = false;
-		} elseif ($setting > 0) {
-			$result = $setting;
-		}
-	}
-	
-	return $result;
 }

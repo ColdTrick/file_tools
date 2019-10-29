@@ -131,7 +131,7 @@ return array(
 	
 	//settings
 	'file_tools:settings:allowed_extensions' => "Extensions autorisées (séparées par des virgules)",
-	'file_tools:settings:user_folder_structure' => "Utiliser les dossiers",
+	'file_tools:settings:use_folder_structure' => "Utiliser les dossiers",
 	'file_tools:settings:sort:default' => "Tri par défaut dans les dossiers",
 	'file_tools:settings:list_length' => 'Nombre de fichiers affichés dans le listing',
 	'file_tools:settings:list_length:unlimited' => 'Illimité',

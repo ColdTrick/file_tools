@@ -9,22 +9,21 @@ if ($count < 1) {
 }
 
 $files = elgg_list_entities([
-	"type" => "object",
-	"subtype" => "file",
-	"limit" => $count,
-	"full_view" => false,
-	"pagination" => false,
+	'type' => 'object',
+	'subtype' => 'file',
+	'limit' => $count,
+	'pagination' => false,
 ]);
 
 if (empty($files)) {
-	echo elgg_echo("file:none");
+	echo elgg_echo('file:none');
 	return;
 }
 
 echo $files;
 
-echo elgg_format_element('div', ['class' => 'elgg-widget-more'], elgg_view("output/url", [
-	"href" => "file/all",
-	"text" => elgg_echo("file:more"),
-	"is_trusted" => true,
+echo elgg_format_element('div', ['class' => 'elgg-widget-more'], elgg_view('output/url', [
+	'href' => elgg_generate_url('collection:object:file:all'),
+	'text' => elgg_echo('file:more'),
+	'is_trusted' => true,
 ]));

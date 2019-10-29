@@ -20,7 +20,9 @@ echo elgg_list_entities([
 ]);
 
 echo elgg_format_element('div', ['class' => 'elgg-widget-more'], elgg_view('output/url', [
-	'href' => "file/add/{$group->guid}",
-	'text' => elgg_echo('file:add'),
+	'href' => elgg_generate_url('add:object:file', [
+		'guid' => $group->guid,
+	]),
+	'text' => elgg_echo('add:object:file'),
 	'is_trusted' => true,
 ]));

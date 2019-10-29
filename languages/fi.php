@@ -131,7 +131,7 @@ return array(
 
 	//settings
 	'file_tools:settings:allowed_extensions' => 'Allowed extensions (comma seperated)',
-	'file_tools:settings:user_folder_structure' => 'Use folder structure',
+	'file_tools:settings:use_folder_structure' => 'Use folder structure',
 	'file_tools:settings:sort:default' => 'Hakemistojen järjestys',
 	'file_tools:settings:list_length' => 'How many files to show in the listing',
 	'file_tools:settings:list_length:unlimited' => 'Unlimited',

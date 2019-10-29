@@ -6,15 +6,13 @@ $file_guids = get_input('file_guids');
 $folder_guids = get_input('folder_guids');
 
 if (empty($file_guids) && empty($folder_guids)) {
-	register_error(elgg_echo('error:missing_data'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('error:missing_data'));
 }
 
 $zip = new ZipArchive();
 
 if ($zip->open($zip_filename, ZIPARCHIVE::CREATE) !== true) {
-	register_error(elgg_echo('file:downloadfailed'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('file:downloadfailed'));
 }
 
 // building the zip could take a while
@@ -23,11 +21,12 @@ set_time_limit(0);
 // add files to the zip
 if (!empty($file_guids)) {
 	
-	$files = new ElggBatch('elgg_get_entities', [
+	$files = elgg_get_entities([
 		'type' => 'object',
 		'subtype' => 'file',
 		'guids' => $file_guids,
 		'limit' => false,
+		'batch' => true,
 	]);
 	/* @var $file ElggFile */
 	foreach ($files as $file) {
@@ -47,11 +46,12 @@ if (!empty($file_guids)) {
 
 // add folder (and their content) to the zip
 if (!empty($folder_guids)) {
-	$folders = new ElggBatch('elgg_get_entities', [
+	$folders = elgg_get_entities([
 		'type' => 'object',
 		'subtype' => \FileToolsFolder::SUBTYPE,
 		'guids' => $folder_guids,
 		'limit' => false,
+		'batch' => true,
 	]);
 	/* @var $folder ElggObject */
 	foreach ($folders as $folder) {
@@ -63,8 +63,7 @@ if (!empty($folder_guids)) {
 $zip->close();
 
 if (!file_exists($zip_filename)) {
-	register_error(elgg_echo('file:downloadfailed'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('file:downloadfailed'));
 }
 
 // output the correct headers
@@ -79,3 +78,6 @@ readfile($zip_filename);
 
 // remove file from system
 unlink($zip_filename);
+
+exit();
+

@@ -2,30 +2,28 @@
 
 namespace ColdTrick\FileTools;
 
+use Elgg\Groups\Tool;
+
 class Groups {
 	
 	/**
 	 * Add the folder management option to groups (if enabled)
 	 *
-	 * @param string $hook         the name of the hook
-	 * @param string $type         the type of the hook
-	 * @param array  $return_value current return value
-	 * @param arary  $params       supplied params
+	 * @param \Elgg\Hook $hook         the name of the hook
 	 *
 	 * @return void|array
 	 */
-	public static function tools($hook, $type, $return_value, $params) {
+	public static function tools(\Elgg\Hook $hook) {
 		
-		if (!file_tools_use_folder_structure()) {
+		if (elgg_get_plugin_setting('use_folder_structure', 'file_tools') !== 'yes') {
 			return;
 		}
 		
-		$folder_management = new \stdClass;
-		$folder_management->name = 'file_tools_structure_management';
-		$folder_management->label = elgg_echo('file_tools:group_tool_option:structure_management');
-		$folder_management->default_on = true;
+		$return_value = $hook->getValue();
 		
-		$return_value[] = $folder_management;
+		$return_value[] = new Tool('file_tools_structure_management', [
+			'label' => elgg_echo('file_tools:group_tool_option:structure_management'),
+		]);;
 		
 		return $return_value;
 	}

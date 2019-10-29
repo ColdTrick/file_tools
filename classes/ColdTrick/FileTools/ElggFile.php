@@ -5,49 +5,17 @@ namespace ColdTrick\FileTools;
 class ElggFile {
 	
 	/**
-	 * Listen to the create event of a file
-	 *
-	 * @param string      $event  the name of the event
-	 * @param string      $type   the type of the event
-	 * @param \ElggObject $object supplied entity
-	 *
-	 * @return void
-	 */
-	public static function create($event, $type, $object) {
-		
-		if (!($object instanceof \ElggFile)) {
-			return;
-		}
-		
-		self::setFolderGUID($object);
-	}
-	
-	/**
 	 * Listen to the update event of a file
 	 *
-	 * @param string      $event  the name of the event
-	 * @param string      $type   the type of the event
-	 * @param \ElggObject $object supplied entity
+	 * @param \Elgg\Event $event 'create'|'update', 'object'
 	 *
 	 * @return void
 	 */
-	public static function update($event, $type, $object) {
-		
-		if (!($object instanceof \ElggFile)) {
+	public static function setFolderGUID(\Elgg\Event $event) {
+		$entity = $event->getObject();
+		if (!$entity instanceof \ElggFile) {
 			return;
 		}
-		
-		self::setFolderGUID($object);
-	}
-	
-	/**
-	 * Set the folder for the file
-	 *
-	 * @param \ElggFile $entity the file to edit
-	 *
-	 * @return void
-	 */
-	protected static function setFolderGUID(\ElggFile $entity) {
 		
 		$folder_guid = get_input('folder_guid', false);
 		if ($folder_guid === false) {

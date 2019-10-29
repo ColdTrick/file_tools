@@ -7,34 +7,22 @@ class FolderBreadcrumb {
 	/**
 	 * Set folder breadcrumb menu
 	 *
-	 * @param string         $hook        the name of the hook
-	 * @param string         $type        the type of the hook
-	 * @param ElggMenuItem[] $return_value current return value
-	 * @param array          $params      supplied params
+	 * @param \Elgg\Hook $hook 'register', 'menu:file_tools_folder_breadcrumb'
 	 *
 	 * @return void|ElggMenuItem[]
 	 */
-	public static function register($hook, $type, $return_value, $params) {
-		
-		if (empty($params) || !is_array($params)) {
-			return;
-		}
+	public static function register(\Elgg\Hook $hook) {
 		
 		$container = elgg_get_page_owner_entity();
 		
+		$return_value = $hook->getValue();
+		
 		/* @var $folder \ElggObject */
-		$folder = elgg_extract('entity', $params);
+		$folder = $hook->getEntityParam();
 		if ($folder instanceof \FileToolsFolder) {
 			$container = $folder->getContainerEntity();
 			
 			$priority = 9999999;
-			
-			$return_value[] = \ElggMenuItem::factory([
-				'name' => "folder_{$folder->guid}",
-				'text' => $folder->getDisplayName(),
-				'href' => false,
-				'priority' => $priority,
-			]);
 			
 			$parent_guid = (int) $folder->parent_guid;
 			while (!empty($parent_guid)) {
@@ -63,9 +51,13 @@ class FolderBreadcrumb {
 		];
 		
 		if ($container instanceof \ElggGroup) {
-			$main_folder_options['href'] = "file/group/{$container->guid}/all#";
+			$main_folder_options['href'] = elgg_generate_url('collection:object:file:group', [
+				'guid' => $container->guid,
+			]);
 		} else {
-			$main_folder_options['href'] = "file/owner/{$container->username}/all#";
+			$main_folder_options['href'] = elgg_generate_url('collection:object:file:owner', [
+				'username' => $container->username,
+			]);
 		}
 		
 		$return_value[] = \ElggMenuItem::factory($main_folder_options);

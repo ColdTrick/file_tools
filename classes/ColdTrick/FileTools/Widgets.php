@@ -7,22 +7,19 @@ class Widgets {
 	/**
 	 * get the URL of a widget
 	 *
-	 * @param string $hook         the name of the hook
-	 * @param string $type         the type of the hook
-	 * @param string $return_value current return value
-	 * @param array  $params       supplied params
+	 * @param \Elgg\Hook $hook 'entity:url', 'object'
 	 *
 	 * @return void|string
 	 */
-	public static function wigetGetURL($hook, $type, $return_value, $params) {
+	public static function widgetGetURL(\Elgg\Hook $hook) {
 		
-		if (!empty($return_value)) {
+		if (!empty($hook->getValue())) {
 			// url already set
 			return;
 		}
 		
-		$widget = elgg_extract('entity', $params);
-		if (!($widget instanceof \ElggWidget)) {
+		$widget = $hook->getEntityParam();
+		if (!$widget instanceof \ElggWidget) {
 			return;
 		}
 		
@@ -32,48 +29,36 @@ class Widgets {
 			case 'file_tree':
 			case 'filerepo':
 				if ($owner instanceof \ElggUser) {
-					return "file/owner/{$owner->username}";
+					return elgg_generate_url('collection:object:file:owner', ['username' => $owner->username]);
 				} elseif ($owner instanceof \ElggGroup) {
-					return "file/group/{$owner->guid}/all";
+					return elgg_generate_url('collection:object:file:group', ['guid' => $owner->guid]);
 				}
 				
 				break;
 			case 'group_files':
-				return "file/group/{$owner->guid}/all";
-				break;
+				return elgg_generate_url('collection:object:file:group', ['guid' => $owner->guid]);
 			case 'index_file':
-				return 'file/all';
-				break;
+				return elgg_generate_url('collection:object:file:all');
 		}
 	}
 	
 	/**
-	 * get registered widgets
+	 * Get widgets types
 	 *
-	 * @param string $hook         the name of the hook
-	 * @param string $type         the type of the hook
-	 * @param string $return_value current return value
-	 * @param array  $params       supplied params
+	 * @param \Elgg\Hook $hook 'handlers', 'widgets'
 	 *
 	 * @return void|\Elgg\WidgetDefinition[]
 	 */
-	public static function getHandlers($hook, $type, $return_value, $params) {
+	public static function getHandlers(\Elgg\Hook $hook) {
 		
 		$page_owner = elgg_get_page_owner_entity();
 		
-		$context = elgg_extract('context', $params);
+		$context = $hook->getParam('context');
+		
+		$return_value = $hook->getValue();
+		
 		switch ($context) {
-			case 'index':
-				
-				$return_value[] = \Elgg\WidgetDefinition::factory([
-					'id' => 'index_file',
-					'name' => elgg_echo('file'),
-					'description' => elgg_echo('widgets:index_file:description'),
-					'context' => [$context],
-					'multiple' => true,
-				]);
-				
-				break;
+
 			case 'groups':
 				
 				if (($page_owner instanceof \ElggGroup) && ($page_owner->files_enable === 'no')) {
@@ -81,33 +66,10 @@ class Widgets {
 					break;
 				}
 				
-				$return_value[] = \Elgg\WidgetDefinition::factory([
-					'id' => 'file_tree',
-					'name' => elgg_echo('widgets:file_tree:title'),
-					'description' => elgg_echo('widgets:file_tree:description'),
-					'context' => [$context],
-					'multiple' => true,
-				]);
-				
-				$return_value[] = \Elgg\WidgetDefinition::factory([
-					'id' => 'group_files',
-					'name' => elgg_echo('file:group'),
-					'description' => elgg_echo('widgets:group_files:description'),
-					'context' => [$context],
-				]);
-				
+				//'id' => 'file_tree',
+				// 'id' => 'group_files',
 				break;
-			case 'profile':
-			case 'dashboard':
-				
-				$return_value[] = \Elgg\WidgetDefinition::factory([
-					'id' => 'file_tree',
-					'name' => elgg_echo('widgets:file_tree:title'),
-					'description' => elgg_echo('widgets:file_tree:description'),
-					'context' => [$context],
-					'multiple' => true,
-				]);
-				break;
+			
 		}
 		
 		return $return_value;

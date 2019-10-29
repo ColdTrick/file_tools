@@ -49,7 +49,7 @@ if (!empty($folder_guids)) {
 	]);
 	
 	foreach ($folders as $folder) {
-		if ($folder->canDelete()) {
+		if (!$folder->canDelete()) {
 			continue;
 		}
 		
@@ -65,6 +65,6 @@ if (!empty($folder_guids)) {
 	}
 }
 
-$msg = !empty($success_msgs) ? implode(' ', $success_msgs) : '';
+$msg = !empty($success_msgs) ? implode('<br />', $success_msgs) : '';
 
 return elgg_ok_response('', $msg);

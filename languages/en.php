@@ -4,6 +4,8 @@ return array(
 	'file_tools' => "File Tools",
 
 	'file_tools:file:actions' => 'Actions',
+	
+	'add:object:file:zip' => 'Upload a zip file',
 
 	'file_tools:list:sort:type' => 'Type',
 	'file_tools:list:sort:time_created' => 'Time created',
@@ -131,7 +133,7 @@ return array(
 	//settings
 	'file_tools:settings:allowed_extensions' => 'Allowed extensions',
 	'file_tools:settings:allowed_extensions:help' => 'Which file extensions are allowed to be uploaded using the ZIP upload. This is a comma separated list.',
-	'file_tools:settings:user_folder_structure' => 'Use folder structure',
+	'file_tools:settings:use_folder_structure' => 'Use folder structure',
 	'file_tools:settings:sort:default' => 'Default folder sorting options',
 	'file_tools:settings:list_length' => 'How many files to show in the listing',
 	'file_tools:settings:list_length:unlimited' => 'Unlimited',

@@ -1,15 +1,9 @@
 <?php
 
-elgg_gatekeeper();
-
-$folder_guid = (int) elgg_extract('folder_guid', $vars);
-elgg_entity_gatekeeper($folder_guid, 'object', \FileToolsFolder::SUBTYPE);
+$folder_guid = (int) elgg_extract('guid', $vars);
+elgg_entity_gatekeeper($folder_guid, 'object', \FileToolsFolder::SUBTYPE, true);
 
 $folder = get_entity($folder_guid);
-if (!$folder->canEdit()) {
-	register_error(elgg_echo('limited_access'));
-	forward(REFERER);
-}
 		
 // set context and page_owner
 elgg_set_context('file');
@@ -18,15 +12,12 @@ elgg_set_page_owner_guid($folder->getContainerGUID());
 // build page elements
 $title_text = elgg_echo('file_tools:edit:title');
 
-$form_vars = [
-	'id' => 'file_tools_edit_form'
-];
 $body_vars = [
 	'folder' => $folder,
-	'page_owner_entity' => elgg_get_page_owner_entity(),
+	'page_owner' => elgg_get_page_owner_guid(),
 ];
 
-$edit = elgg_view_form('file_tools/folder/edit', $form_vars, $body_vars);
+$edit = elgg_view_form('file_tools/folder/edit', [], $body_vars);
 
 // build page
 $body = elgg_view_layout('one_sidebar', [
