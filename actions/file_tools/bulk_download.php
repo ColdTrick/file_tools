@@ -12,7 +12,7 @@ if (empty($file_guids) && empty($folder_guids)) {
 $zip = new ZipArchive();
 
 if ($zip->open($zip_filename, ZIPARCHIVE::CREATE) !== true) {
-	return elgg_error_response(elgg_echo('file:downloadfailed'));
+	return elgg_error_response(elgg_echo('save:fail'));
 }
 
 // building the zip could take a while
@@ -63,7 +63,7 @@ if (!empty($folder_guids)) {
 $zip->close();
 
 if (!file_exists($zip_filename)) {
-	return elgg_error_response(elgg_echo('file:downloadfailed'));
+	return elgg_error_response(elgg_echo('save:fail'));
 }
 
 // output the correct headers
