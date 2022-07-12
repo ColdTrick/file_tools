@@ -9,7 +9,7 @@ class Filter {
 	 *
 	 * @param \Elgg\Hook $hook 'register', 'menu:filter'
 	 *
-	 * @return void|ElggMenuItem[]
+	 * @return void|\ElggMenuItem[]
 	 */
 	public static function addZipUpload(\Elgg\Hook $hook) {
 		if (!$hook->getParam('identifier') === 'file') {

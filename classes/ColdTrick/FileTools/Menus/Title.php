@@ -9,7 +9,7 @@ class Title {
 	 *
 	 * @param \Elgg\Hook $hook 'register', 'menu:title'
 	 *
-	 * @return void|ElggMenuItem[]
+	 * @return void|\ElggMenuItem[]
 	 */
 	public static function updateFileAdd(\Elgg\Hook $hook) {
 		$entity = $hook->getEntityParam();

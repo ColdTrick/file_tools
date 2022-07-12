@@ -9,7 +9,7 @@ class FolderBreadcrumb {
 	 *
 	 * @param \Elgg\Hook $hook 'register', 'menu:file_tools_folder_breadcrumb'
 	 *
-	 * @return void|ElggMenuItem[]
+	 * @return void|\ElggMenuItem[]
 	 */
 	public static function register(\Elgg\Hook $hook) {
 		

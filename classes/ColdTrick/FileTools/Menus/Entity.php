@@ -9,7 +9,7 @@ class Entity {
 	 *
 	 * @param \Elgg\Hook $hook 'register', 'menu:entity'
 	 *
-	 * @return void|ElggMenuItem[]
+	 * @return void|\ElggMenuItem[]
 	 */
 	public static function registerFile(\Elgg\Hook $hook) {
 		
