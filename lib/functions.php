@@ -3,6 +3,8 @@
  * All helper functions are bundled here
  */
 
+use Elgg\Database\Clauses\OrderByClause;
+
 /**
  * Get the folders in a container
  *
@@ -310,9 +312,9 @@ function file_tools_check_foldertitle_exists($title, $container_guid, $parent_gu
 /**
  * Create folders from a zip file structure
  *
- * @param zip_entry $zip_entry      the zip file entry
- * @param int       $container_guid the container where the folders need to be created
- * @param int       $parent_guid    the parent folder
+ * @param resource $zip_entry      the zip file entry
+ * @param int      $container_guid the container where the folders need to be created
+ * @param int      $parent_guid    the parent folder
  *
  * @return void
  */
